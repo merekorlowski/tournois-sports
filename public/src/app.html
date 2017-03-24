@@ -1,0 +1,17 @@
+<template>
+  <require from="styles.css"></require>
+  <header>
+    <nav>
+      <h1 id="logo">T<span>ournois</span> S<span>ports</span></h1>
+      <ul class="nav-bar">
+        <li repeat.for="route of router.navigation" class="${route.isActive ? 'active' : ''}">
+          <a href.bind="route.href">${route.title}</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <section id="main">
+    <router-view></router-view>
+  </section>
+  <footer></footer>
+</template>

@@ -1,0 +1,36 @@
+#sectionUsagers {
+  margin-top: 50px;
+}
+
+.usagers {
+  list-style-type: none;
+}
+
+.usagers li {
+  display: block;
+  border-bottom: 1px solid #333;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px #222;
+}
+
+.usagers li span {
+  margin-right: 30px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.usagers li span i {
+  margin-right: 10px;
+}
+
+.usagers a {
+  float: right;
+  text-decoration: none;
+  color: #333;
+  display: inline-flex;
+  vertical-align: middle;
+}
+

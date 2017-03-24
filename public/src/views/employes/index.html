@@ -1,0 +1,38 @@
+<template>
+  <require from="./styles.css"></require>
+  <require from="../../resources/value-converters/filter"></require>
+  <section>
+    <h2 class="title">${title}</h2>
+    <div>
+      <label>
+        Filtrer:
+        <input type="text" value.bind="filtrer" placeholder="Nom, prenom, role"/>
+      </label>
+      <button id="ajouterEmployeBtn" class="icon-btn" click.trigger="ajouterEmploye()"><i class="material-icons">add</i></button>
+    </div>
+    <div id="ajouterEmploye" if.bind="montrerAjouterEmploye">
+     <label>
+        IDEmployé:
+        <input type="text" value.bind="nouveauEmploye.IDEmploye"/>
+      </label>
+      <label>
+        Nom:
+        <input type="text" value.bind="nouveauEmploye.nom"/>
+      </label>
+      <label>
+        Prénom:
+        <input type="text" value.bind="nouveauEmploye.prenom"/>
+      </label>
+      <label>
+        Role:
+        <input type="text" value.bind="nouveauEmploye.role"/>
+      </label>
+    </div>
+    <div class="employes">
+      <div class="employe" repeat.for="employe of employes | filter: filtrer">
+        <h3>${employe.nom}, ${employe.prenom}</h3>
+        ${employe.role}
+      </div>
+    </div>
+  </section>
+</template>

@@ -1,0 +1,20 @@
+<template>
+  <require from="./styles.css"></require>
+  <section id="sectionUsagers">
+    <h1>Usagers</h1>
+    <div class="container">
+      <div class="search-bar">
+        <input type="text" placeholder="Mots clés" value.bind="query" />
+        <button><i class="material-icons">search</i></button>
+      </div>
+    </div>
+    <ul class="usagers">
+      <li repeat.for="usager of usagers">
+        <h3>${usager.nom}, ${usager.prenom}</h3>
+        <span if.bind="usager.courriel"><i class="material-icons">email</i> Courriel: ${usager.courriel}</span>
+        <span if.bind="usager.numTel"><i class="material-icons">phone</i> Numéro de téléphone: ${usager.numTel}</span>
+        <a href="">Voir profile <i class="material-icons">keyboard_arrow_right</i></a>
+      </li>
+    </ul>
+  </section>
+</template>

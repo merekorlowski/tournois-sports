@@ -1,0 +1,44 @@
+.employe {
+  background-color: #fff;
+  display: inline-block;
+  width: 23%;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px #222;
+  margin: 5px;
+  position: relative;
+}
+
+.employe h3 {
+  margin: none;
+}
+
+.employes {
+  margin-top: 25px;
+  width: 100%;
+}
+
+#ajouterEmploye {
+  margin: 15px;
+}
+
+#ajouterEmploye label {
+  display: block;
+  width: 50px;
+  margin: 5px;
+}
+
+#ajouterEmployeBtn {
+  float: right;
+  margin-right: 50px;
+}
+
+#ajouterEmployeBtn i.material-icons {
+  font-size: 30px;
+}
+
+.retirer-employe {
+  position: absolute;
+  right: 5px;
+  top: 30px;
+}

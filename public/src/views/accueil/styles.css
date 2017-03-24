@@ -1,0 +1,39 @@
+#inscription {
+  width: 300px;
+  text-align: center;
+  background-color: #333;
+  display: inline-block;
+  padding: 15px;
+}
+
+#inscription input {
+  margin: 5px;
+  width: 100%;
+}
+
+#inscription .btn {
+  width: 100%;
+  color: #fff;
+  text-shadow: 1px 1px 5px #222;
+  background-color: #00994d;
+}
+
+.type-inscription {
+  text-align: left;
+  padding: 3px;
+  border-bottom: 1px solid #fff;
+}
+
+#mainTitle {
+  display: inline-block;
+  text-align: left;
+  margin: 0;
+  font-size: 50px;
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+#mainInstructions {
+  display: block;
+  float: left;
+}

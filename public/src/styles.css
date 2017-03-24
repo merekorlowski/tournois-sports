@@ -1,0 +1,189 @@
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  font-size: 16px;
+  background-color: #f2f2f2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.title {
+  border-bottom: 1px solid #333;
+  padding: 5px;
+}
+
+.container {
+  width: 100%;
+  position: relative;
+}
+
+#mainTitle {
+  float: left;
+}
+
+input {
+  padding: 5px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 300px;
+}
+
+header, footer {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.nav-bar, section {
+  margin: 0 auto;
+  width: 1000px;
+}
+
+header {
+  margin: 0;
+  padding: 0;
+  background-color: #444;
+  box-shadow: 1px 1px 5px #222;
+  height: 50px;
+}
+
+nav {
+  margin: 0 auto;
+  padding: 0;
+  width: 1000px;
+}
+
+ul, li {
+  padding: 0;
+  margin: 0;
+}
+
+.nav-bar {
+  list-style-type: none;
+  height: 50px;
+  float: right;
+  width: 800px;
+}
+
+.nav-bar li {
+  display: inline-block;
+  height: 50px;
+}
+
+.nav-bar li:hover a {
+  background-color: #333;
+}
+
+.nav-bar li a {
+  font-weight: bold;
+  display: block;
+  height: 100%;
+  padding: 15px 30px;
+  margin: 0;
+  text-decoration: none;
+  color: #fff;
+  text-shadow: 1px 1px 5px #222;
+  transition: background-color 0.2s;
+}
+
+.active, .nav-bar li.active:hover {
+  background-color: #222;
+}
+
+#main {
+  padding: 0;
+  margin: 0 auto;
+  min-height: 800px;
+  padding-bottom: 200px;
+  margin-bottom: -100px;
+}
+
+footer {
+  background-color: #222;
+  height: 100px;
+}
+
+.icon-btn {
+  background-color: transparent;
+  border: none;
+}
+
+.left-section {
+  width: 700px;
+  height: 100%;
+  display: inline-block;
+}
+
+.right-section {
+  width: 300px;
+  padding: 15px;
+  display: inline-block;
+  background-color: #333;
+  height: 100%;
+  color: #fff;
+}
+
+.btn {
+  padding: 15px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+#logo {
+  margin: 0;
+  float: left;
+  color: #fff;
+  line-height: 50px;
+}
+
+#logo span {
+  font-size: 15px;
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.3em; }
+h4 { font-size: 1em; }
+h5 { font-size: 0.8em; }
+h6 { font-size: 0.7em; }
+
+.search-bar {
+  position: absolute;
+  right: 0;
+  height: 40px;
+  margin: 15px;
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-bar input {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0; 
+  width: 300px;
+  margin: 0;
+  padding: 5px 15px;
+  height: 100%;
+}
+
+.search-bar button {
+  padding: 5px;
+  margin: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px; 
+  height: 100%;
+  width: 100px;
+  border: 1px solid #aaa;
+  border-left: none;
+}
+
+

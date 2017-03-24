@@ -1,0 +1,51 @@
+#equipe {
+  list-style-type: none;
+}
+
+.equipe {
+  display: block;
+  border-bottom: 1px solid #333;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px #222;
+}
+
+.equipe h3 {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.equipe span {
+  margin-right: 30px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.equipe span i {
+  margin-right: 10px;
+}
+
+.equipe a {
+  float: right;
+  text-decoration: none;
+  color: #333;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+#joueurs {
+  margin-left: 50px;
+  list-style-type: none;
+  display: inline-block;
+  width: 200px;
+  height: 100%;
+}
+
+#joueurs li {
+  display: inline-block;
+  margin: 10px;
+}
+
+

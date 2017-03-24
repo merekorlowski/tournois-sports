@@ -1,0 +1,15 @@
+<template>
+  <require from="./styles.css"></require>
+  <h1>Équipes</h1>
+  <section>
+    <ul id="equipes">
+      <li class="equipe" repeat.for="equipe of equipes">
+        <h3>${equipe.nom}</h3>
+        <ul id="joueurs">
+          <li repeat.for="joueur of equipe.joueurs">${joueur.nom}</li>
+        </ul>
+        <a href="">Voir profile <i class="material-icons">keyboard_arrow_right</i></a>
+      </li>
+    </ul>
+  </section>
+</template>
