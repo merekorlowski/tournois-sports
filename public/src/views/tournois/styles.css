@@ -1,8 +1,8 @@
-.employes {
+.tournois {
   list-style-type: none;
 }
 
-.employes li {
+.tournois li {
   display: block;
   border-bottom: 1px solid #333;
   padding: 20px;
@@ -12,17 +12,17 @@
   box-shadow: 1px 1px 5px #222;
 }
 
-.employes li span {
+.tournois li span {
   margin-right: 30px;
   display: inline-flex;
   vertical-align: middle;
 }
 
-.employes li span i {
+.tournois li span i {
   margin-right: 10px;
 }
 
-.employes a {
+.tournois a {
   float: right;
   text-decoration: none;
   color: #333;

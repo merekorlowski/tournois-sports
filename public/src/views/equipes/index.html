@@ -2,6 +2,19 @@
   <require from="./styles.css"></require>
   <h1>Équipes</h1>
   <section>
+    <div class="container search-bar-container">
+      <form class="search-bar">
+        <input type="text" placeholder="Mots clés" value.bind="query" />
+        <button type="submit" click.trigger="getEquipes()"><i class="material-icons">search</i></button>
+      </form>
+      <div class="sort-list">
+        <label>Trier:</label>
+        <select value.bind="sort" change.trigger="getEquipes()">
+          <option value.bind="1">Ascendante</option>
+          <option value.bind="-1">Descendante</option>
+        </select>
+      </div>
+    </div>
     <ul id="equipes">
       <li class="equipe" repeat.for="equipe of equipes">
         <h3>${equipe.nom}</h3>

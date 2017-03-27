@@ -154,10 +154,10 @@ h6 { font-size: 0.7em; }
 
 .search-bar {
   position: absolute;
-  right: 0;
+  left: 0;
+  top: 0;
   height: 40px;
-  margin: 15px;
-  width: 400px;
+  width: 500px;
   display: flex;
   justify-content: space-between;
 }
@@ -167,7 +167,7 @@ h6 { font-size: 0.7em; }
   border-bottom-left-radius: 5px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0; 
-  width: 300px;
+  width: 400px;
   margin: 0;
   padding: 5px 15px;
   height: 100%;
@@ -186,4 +186,32 @@ h6 { font-size: 0.7em; }
   border-left: none;
 }
 
+.search-bar-container {
+  height: 75px;
+}
 
+.sort-list {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 40px;
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sort-list label {
+  display: inline-block;
+  width: 50px;
+  height: 40px;
+  line-height: 40px;
+  font-weight: bold;
+}
+
+.sort-list select {
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  width: 250px;
+  height: 40px;
+  padding: 5px 15px;
+}

@@ -1,80 +1,24 @@
-import {Employe} from '../../models/employe';
+import {inject} from 'aurelia-framework';
 
+import {Employe} from '../../models/employe';
+import {ServiceEmployes} from '../../services/employes';
+
+@inject(ServiceEmployes)
 export class Employes {
+  constructor(serviceEmployes) {
+    this.serviceEmployes = serviceEmployes;
+  }
+
   activate(params, navigation) {
-    this.title = navigation.title;
-    this.filtrer = '';
-    this.montrerAjouterEmploye = false;
-    this.nouveauEmploye = new Employe();
-    this.employes = this.getEmployes();
+    this.query = '';
+    this.sort = 1;
+    this.getEmployes();
   }
 
   getEmployes() {
-    return [
-      new Employe({
-        IDEmploye: 'E1',
-        prenom: 'Merek',
-        nom: 'Orlowski',
-        role: 'Gestionnaire'
-      }),
-      new Employe({
-        IDEmploye: 'E2',
-        prenom: 'Karim',
-        nom: 'Ben Hassine',
-        role: 'Arbitre'
-      }),
-      new Employe({
-        IDEmploye: 'E1',
-        prenom: 'Merek',
-        nom: 'Orlowski',
-        role: 'Gestionnaire'
-      }),
-      new Employe({
-        IDEmploye: 'E1',
-        prenom: 'Merek',
-        nom: 'Orlowski',
-        role: 'Gestionnaire'
-      }),
-      new Employe({
-        IDEmploye: 'E1',
-        prenom: 'Merek',
-        nom: 'Orlowski',
-        role: 'Gestionnaire'
-      }),
-      new Employe({
-        IDEmploye: 'E1',
-        prenom: 'Merek',
-        nom: 'Orlowski',
-        role: 'Gestionnaire'
-      }),
-      new Employe({
-        IDEmploye: 'E1',
-        prenom: 'Merek',
-        nom: 'Orlowski',
-        role: 'Gestionnaire'
-      }),
-      new Employe({
-        IDEmploye: 'E1',
-        prenom: 'Merek',
-        nom: 'Orlowski',
-        role: 'Gestionnaire'
-      })
-    ];
-  }
-
-  
-
-  ajouterEmploye() {
-    if (this.montrerAjouterEmploye) {
-      this.montrerAjouterEmploye = false;
-      this.employes.push(this.nouveauEmploye);
-    } else {
-      this.montrerAjouterEmploye = true;
-    }
-  }
-
-  retirerEmploye(index) {
-    this.employes.splice(index, 1);
+    this.serviceEmployes.get(this.query, this.sort).then(employes => {
+      this.employes = employes;
+    });  
   }
 
 }

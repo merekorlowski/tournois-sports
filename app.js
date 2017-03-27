@@ -5,10 +5,15 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
 const usagers = require('./routes/usagers');
+const equipes = require('./routes/equipes');
+const employes = require('./routes/employes');
+const ligues = require('./routes/ligues');
+const tournois = require('./routes/tournois');
 
 // set up database
 
@@ -26,10 +31,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 // define routes
 
 app.use(usagers);
+app.use(equipes);
+app.use(employes);
+app.use(ligues);
+app.use(tournois);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

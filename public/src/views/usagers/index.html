@@ -2,10 +2,17 @@
   <require from="./styles.css"></require>
   <section id="sectionUsagers">
     <h1>Usagers</h1>
-    <div class="container">
-      <div class="search-bar">
+    <div class="container search-bar-container">
+      <form class="search-bar">
         <input type="text" placeholder="Mots clés" value.bind="query" />
-        <button><i class="material-icons">search</i></button>
+        <button type="submit" click.trigger="getUsagers()"><i class="material-icons">search</i></button>
+      </form>
+      <div class="sort-list">
+        <label>Trier:</label>
+        <select value.bind="sort" change.trigger="getUsagers()">
+          <option value.bind="1">Ascendante</option>
+          <option value.bind="-1">Descendante</option>
+        </select>
       </div>
     </div>
     <ul class="usagers">

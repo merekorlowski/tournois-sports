@@ -1,38 +1,26 @@
 <template>
   <require from="./styles.css"></require>
-  <require from="../../resources/value-converters/filter"></require>
   <section>
-    <h2 class="title">${title}</h2>
-    <div>
-      <label>
-        Filtrer:
-        <input type="text" value.bind="filtrer" placeholder="Nom, prenom, role"/>
-      </label>
-      <button id="ajouterEmployeBtn" class="icon-btn" click.trigger="ajouterEmploye()"><i class="material-icons">add</i></button>
-    </div>
-    <div id="ajouterEmploye" if.bind="montrerAjouterEmploye">
-     <label>
-        IDEmployé:
-        <input type="text" value.bind="nouveauEmploye.IDEmploye"/>
-      </label>
-      <label>
-        Nom:
-        <input type="text" value.bind="nouveauEmploye.nom"/>
-      </label>
-      <label>
-        Prénom:
-        <input type="text" value.bind="nouveauEmploye.prenom"/>
-      </label>
-      <label>
-        Role:
-        <input type="text" value.bind="nouveauEmploye.role"/>
-      </label>
-    </div>
-    <div class="employes">
-      <div class="employe" repeat.for="employe of employes | filter: filtrer">
-        <h3>${employe.nom}, ${employe.prenom}</h3>
-        ${employe.role}
+    <h1>Employés</h1>
+    <div class="container search-bar-container">
+      <form class="search-bar">
+        <input type="text" placeholder="Mots clés" value.bind="query" />
+        <button type="submit" click.trigger="getEmployes()"><i class="material-icons">search</i></button>
+      </form>
+      <div class="sort-list">
+        <label>Trier:</label>
+        <select value.bind="sort" change.trigger="getEmployes()">
+          <option value.bind="1">Ascendante</option>
+          <option value.bind="-1">Descendante</option>
+        </select>
       </div>
     </div>
+    <ul class="employes">
+      <li repeat.for="employe of employes">
+        <h3>${employe.nom}, ${employe.prenom}</h3>
+        <span>${employe.role}</span>
+        <a href="">Voir profile <i class="material-icons">keyboard_arrow_right</i></a>
+      </li>
+    </ul>
   </section>
 </template>

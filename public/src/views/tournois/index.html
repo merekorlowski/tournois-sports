@@ -1,0 +1,26 @@
+<template>
+  <require from="./styles.css"></require>
+  <section>
+    <h1>Tournois</h1>
+    <div class="container search-bar-container">
+      <form class="search-bar">
+        <input type="text" placeholder="Mots clés" value.bind="query" />
+        <button type="submit" click.trigger="getTournois()"><i class="material-icons">search</i></button>
+      </form>
+      <div class="sort-list">
+        <label>Trier:</label>
+        <select value.bind="sort" change.trigger="getTournois()">
+          <option value.bind="1">Ascendante</option>
+          <option value.bind="-1">Descendante</option>
+        </select>
+      </div>
+    </div>
+    <ul class="tournoi">
+      <li repeat.for="tournoi of tournois">
+        <h3>${tournoi.oeuvreCharite}</h3>
+        <span>${tournoi.dateDebut} - ${tournoi.dateFin}</span>
+        <span>$ ${tournoi.fondsAccumules}</span>
+      </li>
+    </ul>
+  </section>
+</template>
