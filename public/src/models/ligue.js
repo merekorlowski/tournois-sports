@@ -1,5 +1,5 @@
 export class Ligue {
-  constructor(Ligue) {
+  constructor(ligue) {
     if (ligue) {
       Object.assign(this, ligue);
     } else {

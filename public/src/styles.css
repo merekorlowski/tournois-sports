@@ -21,6 +21,10 @@ html, body {
   position: relative;
 }
 
+button {
+  margin: 0;
+}
+
 #mainTitle {
   float: left;
 }
@@ -46,7 +50,7 @@ header, footer {
 header {
   margin: 0;
   padding: 0;
-  background-color: #444;
+  background-color: #006633;
   box-shadow: 1px 1px 5px #222;
   height: 50px;
 }
@@ -75,7 +79,7 @@ ul, li {
 }
 
 .nav-bar li:hover a {
-  background-color: #333;
+  background-color: #004d28;
 }
 
 .nav-bar li a {
@@ -91,7 +95,7 @@ ul, li {
 }
 
 .active, .nav-bar li.active:hover {
-  background-color: #222;
+  background-color: #00331a;
 }
 
 #main {
@@ -100,6 +104,7 @@ ul, li {
   min-height: 800px;
   padding-bottom: 200px;
   margin-bottom: -100px;
+  margin-top: 50px;
 }
 
 footer {
@@ -129,9 +134,14 @@ footer {
 
 .btn {
   padding: 15px;
-  border: 1px solid #aaa;
   border-radius: 5px;
-  margin: 5px;
+  background-color: #006633;
+  color: #fff;
+  text-shadow: 1px 1px 5px #222;
+  box-shadow: 1px 1px 5px #222;
+  text-align: center;
+  font-size: 14px;
+  border: none;
 }
 
 #logo {
@@ -139,6 +149,7 @@ footer {
   float: left;
   color: #fff;
   line-height: 50px;
+  text-shadow: 1px 1px 5px #222;
 }
 
 #logo span {
@@ -183,7 +194,12 @@ h6 { font-size: 0.7em; }
   height: 100%;
   width: 100px;
   border: 1px solid #aaa;
+  background-color: #006633;
   border-left: none;
+}
+
+.search-bar button .material-icons {
+  color: #fff;
 }
 
 .search-bar-container {
@@ -214,4 +230,102 @@ h6 { font-size: 0.7em; }
   width: 250px;
   height: 40px;
   padding: 5px 15px;
+  background-color: #fff;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  height: 20px;
+}
+
+.top-right, .bottom-right, .top-left, .bottom-left {
+  position: absolute;
+}
+
+.top-right {
+  right: 10px;
+  top: 10px;
+}
+
+.bottom-right {
+  right: 10px;
+  bottom: 10px;
+}
+
+.top-left {
+  left: 10px;
+  top: 10px;
+}
+
+.bottom-left {
+  left: 10px;
+  bottom: 10px;
+}
+
+.space-evenly {
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.btn-inscription {
+  float: right;
+}
+
+.popup-background {
+  position: absolute;
+  background-color: rgba(0, 0, 0, .7);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.popup-background .popup {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  margin-left: -300px;
+  width: 600px;
+  box-shadow: 1px 1px 10px #222;
+  border-radius: 5px;
+  z-index: 2;
+  padding: 20px;
+  background-color: #fff;
+  opacity: 1;
+}
+
+.popup input {
+  margin-bottom: 5px;
+}
+
+.popup .icon-btn {
+  float: right;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+}
+
+.btn-inscription-container {
+  height: 75px;
+}
+
+.btn-flotante {
+  background-color: #006633;
+  padding: 15px;
+  border-radius: 100%;
+  border: none;
+  box-shadow: 1px 1px 5px #222; 
+  margin: 30px;
+  position: fixed;
+}
+
+.btn-flotante i.material-icons {
+  color: #fff;
+  font-size: 28px;
 }

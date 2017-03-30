@@ -4,7 +4,9 @@ const express = require('express');
 const router = express.Router();
 const pg = require('pg');
 
-const connectionString = process.env.DATABASE_URL || 'postgres://postgres:Woodlergh17!@localhost:5432/tournois_sports';
+const config = require('../config');
+
+const connectionString = process.env.DATABASE_URL || config.dbUrl;
 
 router.get('/equipes', (req, res, next) => {
 
@@ -21,9 +23,7 @@ router.get('/equipes', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Equipe 
-      WHERE nom LIKE '%${req.query.query}%' OR prenom LIKE '%${req.query.query}'
-      ORDER BY nom ${req.query.sort === 1 ? 'ASC' : 'DESC'}
+      FROM TOURNOIS_SPORTSDB.Equipe
     `);
 
     query.on('row', row => {

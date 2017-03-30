@@ -19,7 +19,7 @@ define('app',['exports'], function (exports) {
     App.prototype.configureRouter = function configureRouter(config, router) {
       this.router = router;
       config.title = 'Tournois de sports';
-      config.map([{ route: ['', 'accueil'], name: 'accueil', moduleId: 'views/accueil/index', nav: true, title: 'Accueil' }, { route: 'tournois', name: 'tournois', moduleId: 'views/tournois/index', nav: true, title: 'Tournois' }, { route: 'equipes', name: 'equipes', moduleId: 'views/equipes/index', nav: true, title: 'Équipes' }, { route: 'usagers', name: 'usagers', moduleId: 'views/usagers/index', nav: true, title: 'Usagers' }, { route: 'employes', name: 'employes', moduleId: 'views/employes/index', nav: true, title: 'Employés' }]);
+      config.map([{ route: ['', 'accueil'], name: 'accueil', moduleId: 'views/accueil/index', nav: true, title: 'Accueil' }, { route: 'tournois', name: 'tournois', moduleId: 'views/tournois/index', nav: true, title: 'Tournois' }, { route: 'ligues', name: 'ligues', moduleId: 'views/ligues/index', nav: true, title: 'Ligues' }, { route: 'equipes', name: 'equipes', moduleId: 'views/equipes/index', nav: true, title: 'Équipes' }, { route: 'usagers', name: 'usagers', moduleId: 'views/usagers/index', nav: true, title: 'Usagers' }, { route: 'employes', name: 'employes', moduleId: 'views/employes/index', nav: true, title: 'Employés' }]);
     };
 
     return App;
@@ -132,8 +132,31 @@ define('models/arbitre',['exports', './employe'], function (exports, _employe) {
     return Arbitre;
   }(_employe.Employe);
 });
-define('models/commanditaire',[], function () {
+define('models/commanditaire',["exports"], function (exports) {
   "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var Commanditaire = exports.Commanditaire = function () {
+    function Commanditaire(commanditaire) {
+      _classCallCheck(this, Commanditaire);
+
+      Object.assign(this, commanditaire);
+      this.contributions = [];
+    }
+
+    Commanditaire.prototype.getContributions = function getContributions() {};
+
+    return Commanditaire;
+  }();
 });
 define('models/employe',['exports'], function (exports) {
   'use strict';
@@ -182,6 +205,8 @@ define('models/equipe',['exports', './usager'], function (exports, _usager) {
       Object.assign(this, equipe);
       this.joueurs = [];
     }
+
+    Equipe.prototype.getLigue = function getLigue() {};
 
     Equipe.prototype.getJoueurs = function getJoueurs() {};
 
@@ -262,7 +287,7 @@ define('models/ligue',['exports'], function (exports) {
     }
   }
 
-  var Ligue = function Ligue(_Ligue) {
+  var Ligue = exports.Ligue = function Ligue(ligue) {
     _classCallCheck(this, Ligue);
 
     if (ligue) {
@@ -272,11 +297,36 @@ define('models/ligue',['exports'], function (exports) {
       this.niveauDifficulte = '';
     }
   };
-
-  exports.Ligue = _Ligue;
 });
-define('models/match',[], function () {
+define('models/match',["exports"], function (exports) {
   "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var Match = exports.Match = function () {
+    function Match(match) {
+      _classCallCheck(this, Match);
+
+      Object.assign(this, match);
+      this.equipes = [];
+    }
+
+    Match.prototype.getEquipes = function getEquipes() {};
+
+    Match.prototype.getTournoi = function getTournoi() {};
+
+    Match.prototype.getArbitres = function getArbitres() {};
+
+    return Match;
+  }();
 });
 define('models/paiement',[], function () {
   "use strict";
@@ -327,8 +377,8 @@ define('models/tournoi',['exports'], function (exports) {
     return Tournoi;
   }();
 });
-define('models/usager',["exports"], function (exports) {
-  "use strict";
+define('models/usager',['exports'], function (exports) {
+  'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -340,11 +390,30 @@ define('models/usager',["exports"], function (exports) {
     }
   }
 
-  var Usager = exports.Usager = function Usager(usager) {
-    _classCallCheck(this, Usager);
+  var Usager = exports.Usager = function () {
+    function Usager(usager) {
+      _classCallCheck(this, Usager);
 
-    Object.assign(this, usager);
-  };
+      if (usager) {
+        Object.assign(this, usager);
+        this.sports = [];
+        this.equipes = [];
+        this.afficherProfile = false;
+      } else {
+        this.idusager = '';
+        this.nom = '';
+        this.prenom = '';
+        this.courriel = '';
+        this.numtel = '';
+      }
+    }
+
+    Usager.prototype.getSports = function getSports() {};
+
+    Usager.prototype.getEquipes = function getEquipes() {};
+
+    return Usager;
+  }();
 });
 define('resources/index',["exports"], function (exports) {
   "use strict";
@@ -532,6 +601,27 @@ define('services/usagers',['exports', 'aurelia-fetch-client', '../models/usager'
       });
     };
 
+    ServiceUsagers.prototype.delete = function _delete(usager) {
+      return this.http.fetch('', {
+        method: 'delete',
+        body: (0, _aureliaFetchClient.json)(usager)
+      });
+    };
+
+    ServiceUsagers.prototype.post = function post(usager) {
+      return this.http.fetch('', {
+        method: 'post',
+        body: (0, _aureliaFetchClient.json)(usager)
+      });
+    };
+
+    ServiceUsagers.prototype.put = function put(usager) {
+      return this.http.fetch('', {
+        method: 'put',
+        body: (0, _aureliaFetchClient.json)(usager)
+      });
+    };
+
     return ServiceUsagers;
   }();
 });
@@ -671,6 +761,49 @@ define('views/equipes/index',['exports', 'aurelia-framework', '../../models/equi
     return Equipes;
   }()) || _class);
 });
+define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue', '../../services/ligues'], function (exports, _aureliaFramework, _ligue, _ligues) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.Ligues = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var Ligues = exports.Ligues = (_dec = (0, _aureliaFramework.inject)(_ligues.ServiceLigues), _dec(_class = function () {
+    function Ligues(serviceLigues) {
+      _classCallCheck(this, Ligues);
+
+      this.serviceLigues = serviceLigues;
+    }
+
+    Ligues.prototype.activate = function activate(params, navigation) {
+      this.query = '';
+      this.sort = 1;
+      this.getLigues();
+    };
+
+    Ligues.prototype.getLigues = function getLigues() {
+      var _this = this;
+
+      this.serviceLigues.get(this.query, this.sort).then(function (ligues) {
+        _this.ligues = ligues;
+      });
+    };
+
+    return Ligues;
+  }()) || _class);
+});
+define('views/requetes/index',[], function () {
+  "use strict";
+});
 define('views/tournois/index',['exports', 'aurelia-framework', '../../models/tournoi', '../../services/tournois'], function (exports, _aureliaFramework, _tournoi, _tournois) {
   'use strict';
 
@@ -737,6 +870,9 @@ define('views/usagers/index',['exports', 'aurelia-framework', '../../models/usag
     Usagers.prototype.activate = function activate(params, navigation) {
       this.query = '';
       this.sort = 1;
+      this.nouveauUsager = new _usager.Usager();
+      this.usagerAModifier = new _usager.Usager();
+      this.afficherModification = false;
       this.getUsagers();
     };
 
@@ -745,7 +881,38 @@ define('views/usagers/index',['exports', 'aurelia-framework', '../../models/usag
 
       this.serviceUsagers.get(this.query, this.sort).then(function (usagers) {
         _this.usagers = usagers;
-        console.log(usagers);
+      });
+    };
+
+    Usagers.prototype.retirer = function retirer(index, usager) {
+      var _this2 = this;
+
+      this.serviceUsagers.delete(usager).then(function () {
+        _this2.usagers.splice(index, 1);
+      });
+    };
+
+    Usagers.prototype.inscrire = function inscrire() {
+      var _this3 = this;
+
+      this.serviceUsagers.post(this.nouveauUsager).then(function (usager) {
+        _this3.afficherInscription = false;
+        _this3.usagers.push(_this3.nouveauUsager);
+      });
+    };
+
+    Usagers.prototype.modifier = function modifier(usager) {
+      this.afficherModification = true;
+      this.usagerAModifier = usager;
+      window.onwheel = preventDefault;
+      document.onkeydown = preventDefaultForScrollKeys;
+    };
+
+    Usagers.prototype.sauvegarder = function sauvegarder() {
+      var _this4 = this;
+
+      this.serviceUsagers.put(this.usagerAModifier).then(function (usager) {
+        _this4.afficherModification = false;
       });
     };
 
@@ -753,15 +920,19 @@ define('views/usagers/index',['exports', 'aurelia-framework', '../../models/usag
   }()) || _class);
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <header>\n    <nav>\n      <h1 id=\"logo\">T<span>ournois</span> S<span>ports</span></h1>\n      <ul class=\"nav-bar\">\n        <li repeat.for=\"route of router.navigation\" class=\"${route.isActive ? 'active' : ''}\">\n          <a href.bind=\"route.href\">${route.title}</a>\n        </li>\n      </ul>\n    </nav>\n  </header>\n  <section id=\"main\">\n    <router-view></router-view>\n  </section>\n  <footer></footer>\n</template>\n"; });
-define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #333;\n  font-size: 16px;\n  background-color: #f2f2f2;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n  border-bottom: 1px solid #333;\n  padding: 5px;\n}\n\n.container {\n  width: 100%;\n  position: relative;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #444;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #333;\n}\n\n.nav-bar li a {\n  font-weight: bold;\n  display: block;\n  height: 100%;\n  padding: 15px 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #222;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n}\n\nfooter {\n  background-color: #222;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  margin: 5px;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  border-left: none;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\n.sort-list select {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n}\n"; });
+define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #333;\n  font-size: 16px;\n  background-color: #f2f2f2;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n  border-bottom: 1px solid #333;\n  padding: 5px;\n}\n\n.container {\n  width: 100%;\n  position: relative;\n}\n\nbutton {\n  margin: 0;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #006633;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #004d28;\n}\n\n.nav-bar li a {\n  font-weight: bold;\n  display: block;\n  height: 100%;\n  padding: 15px 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #00331a;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n  margin-top: 50px;\n}\n\nfooter {\n  background-color: #222;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border-radius: 5px;\n  background-color: #006633;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  box-shadow: 1px 1px 5px #222;\n  text-align: center;\n  font-size: 14px;\n  border: none;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n  text-shadow: 1px 1px 5px #222;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  background-color: #006633;\n  border-left: none;\n}\n\n.search-bar button .material-icons {\n  color: #fff;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\n.sort-list select {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n  background-color: #fff;\n}\n\n.delete-btn {\n  background: none;\n  border: none;\n  height: 20px;\n}\n\n.top-right, .bottom-right, .top-left, .bottom-left {\n  position: absolute;\n}\n\n.top-right {\n  right: 10px;\n  top: 10px;\n}\n\n.bottom-right {\n  right: 10px;\n  bottom: 10px;\n}\n\n.top-left {\n  left: 10px;\n  top: 10px;\n}\n\n.bottom-left {\n  left: 10px;\n  bottom: 10px;\n}\n\n.space-evenly {\n  display: inline-flex;\n  justify-content: space-between;\n}\n\n.btn-inscription {\n  float: right;\n}\n\n.popup-background {\n  position: absolute;\n  background-color: rgba(0, 0, 0, .7);\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  bottom: 0;\n  z-index: 1;\n  overflow: hidden;\n}\n\n.popup-background .popup {\n  position: absolute;\n  top: 150px;\n  left: 50%;\n  margin-left: -300px;\n  width: 600px;\n  box-shadow: 1px 1px 10px #222;\n  border-radius: 5px;\n  z-index: 2;\n  padding: 20px;\n  background-color: #fff;\n  opacity: 1;\n}\n\n.popup input {\n  margin-bottom: 5px;\n}\n\n.popup .icon-btn {\n  float: right;\n}\n\n.icon-btn {\n  background: none;\n  border: none;\n}\n\n.btn-inscription-container {\n  height: 75px;\n}\n\n.btn-flotante {\n  background-color: #006633;\n  padding: 15px;\n  border-radius: 100%;\n  border: none;\n  box-shadow: 1px 1px 5px #222; \n  margin: 30px;\n  position: fixed;\n}\n\n.btn-flotante i.material-icons {\n  color: #fff;\n  font-size: 28px;\n}\n"; });
 define('text!views/accueil/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n  </section>\n</template>\n"; });
-define('text!views/accueil/styles.css', ['module'], function(module) { module.exports = "#inscription {\n  width: 300px;\n  text-align: center;\n  background-color: #333;\n  display: inline-block;\n  padding: 15px;\n}\n\n#inscription input {\n  margin: 5px;\n  width: 100%;\n}\n\n#inscription .btn {\n  width: 100%;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  background-color: #00994d;\n}\n\n.type-inscription {\n  text-align: left;\n  padding: 3px;\n  border-bottom: 1px solid #fff;\n}\n\n#mainTitle {\n  display: inline-block;\n  text-align: left;\n  margin: 0;\n  font-size: 50px;\n  margin-top: 50px;\n  margin-bottom: 10px;\n}\n\n#mainInstructions {\n  display: block;\n  float: left;\n}\n"; });
 define('text!views/employes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Employés</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEmployes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEmployes()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"employes\">\n      <li repeat.for=\"employe of employes\">\n        <h3>${employe.nom}, ${employe.prenom}</h3>\n        <span>${employe.role}</span>\n        <a href=\"\">Voir profile <i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/accueil/styles.css', ['module'], function(module) { module.exports = "#inscription {\n  width: 300px;\n  text-align: center;\n  background-color: #333;\n  display: inline-block;\n  padding: 15px;\n}\n\n#inscription input {\n  margin: 5px;\n  width: 100%;\n}\n\n#inscription .btn {\n  width: 100%;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  background-color: #00994d;\n}\n\n.type-inscription {\n  text-align: left;\n  padding: 3px;\n  border-bottom: 1px solid #fff;\n}\n\n#mainTitle {\n  display: inline-block;\n  text-align: left;\n  margin: 0;\n  font-size: 50px;\n  margin-top: 50px;\n  margin-bottom: 10px;\n}\n\n#mainInstructions {\n  display: block;\n  float: left;\n}\n"; });
+define('text!views/equipes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Équipes</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEquipes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEquipes()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul id=\"equipes\">\n      <li class=\"equipe\" repeat.for=\"equipe of equipes\">\n        <h3>${equipe.nom}</h3>\n        <ul id=\"joueurs\">\n          <li repeat.for=\"joueur of equipe.joueurs\">${joueur.nom}</li>\n        </ul>\n        <a href=\"\">Voir profile <i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
 define('text!views/employes/styles.css', ['module'], function(module) { module.exports = ".employes {\n  list-style-type: none;\n}\n\n.employes li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.employes li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.employes li span i {\n  margin-right: 10px;\n}\n\n.employes a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
-define('text!views/equipes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <h1>Équipes</h1>\n  <section>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEquipes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEquipes()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul id=\"equipes\">\n      <li class=\"equipe\" repeat.for=\"equipe of equipes\">\n        <h3>${equipe.nom}</h3>\n        <ul id=\"joueurs\">\n          <li repeat.for=\"joueur of equipe.joueurs\">${joueur.nom}</li>\n        </ul>\n        <a href=\"\">Voir profile <i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/ligues/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Ligues</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getLigues()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getLigues()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"ligues\">\n      <li repeat.for=\"ligue of ligues\">\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
 define('text!views/equipes/styles.css', ['module'], function(module) { module.exports = "#equipe {\n  list-style-type: none;\n}\n\n.equipe {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.equipe h3 {\n  display: inline-block;\n  margin-top: 5px;\n}\n\n.equipe span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.equipe span i {\n  margin-right: 10px;\n}\n\n.equipe a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n#joueurs {\n  margin-left: 50px;\n  list-style-type: none;\n  display: inline-block;\n  width: 200px;\n  height: 100%;\n}\n\n#joueurs li {\n  display: inline-block;\n  margin: 10px;\n}\n\n\n"; });
-define('text!views/tournois/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Tournois</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getTournois()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getTournois()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"tournoi\">\n      <li repeat.for=\"tournoi of tournois\">\n        <h3>${tournoi.oeuvreCharite}</h3>\n        <span>${tournoi.dateDebut} - ${tournoi.dateFin}</span>\n        <span>$ ${tournoi.fondsAccumules}</span>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
-define('text!views/usagers/styles.css', ['module'], function(module) { module.exports = "#sectionUsagers {\n  margin-top: 50px;\n}\n\n.usagers {\n  list-style-type: none;\n}\n\n.usagers li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.usagers li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.usagers li span i {\n  margin-right: 10px;\n}\n\n.usagers a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n"; });
-define('text!views/usagers/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section id=\"sectionUsagers\">\n    <h1>Usagers</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getUsagers()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getUsagers()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"usagers\">\n      <li repeat.for=\"usager of usagers\">\n        <h3>${usager.nom}, ${usager.prenom}</h3>\n        <span if.bind=\"usager.courriel\"><i class=\"material-icons\">email</i> Courriel: ${usager.courriel}</span>\n        <span if.bind=\"usager.numTel\"><i class=\"material-icons\">phone</i> Numéro de téléphone: ${usager.numTel}</span>\n        <a href=\"\">Voir profile <i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/requetes/index.html', ['module'], function(module) { module.exports = ""; });
+define('text!views/tournois/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Tournois</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getTournois()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getTournois()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"tournois\">\n      <li repeat.for=\"tournoi of tournois\">\n        <h3>${tournoi.oeuvreCharite}</h3>\n        <span>${tournoi.dateDebut} - ${tournoi.dateFin}</span>\n        <span>$ ${tournoi.fondsAccumules}</span>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/ligues/styles.css', ['module'], function(module) { module.exports = ".ligues {\n  list-style-type: none;\n}\n\n.ligues li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.ligues li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.ligues li span i {\n  margin-right: 10px;\n}\n\n.ligues a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
+define('text!views/requetes/styles.css', ['module'], function(module) { module.exports = ""; });
 define('text!views/tournois/styles.css', ['module'], function(module) { module.exports = ".tournois {\n  list-style-type: none;\n}\n\n.tournois li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.tournois li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.tournois li span i {\n  margin-right: 10px;\n}\n\n.tournois a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
+define('text!views/usagers/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Usagers</h1>\n    <button class=\"btn-flotante bottom-right\" click.trigger=\"afficherInscription=true\">\n      <i class=\"material-icons\">add</i>\n    </button>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getUsagers()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getUsagers()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"usagers\">\n      <li repeat.for=\"usager of usagers\">\n        <h3>${usager.nom}, ${usager.prenom}</h3>\n        <span if.bind=\"usager.courriel\"><i class=\"material-icons\">email</i> Courriel: ${usager.courriel}</span>\n        <span if.bind=\"usager.numTel\"><i class=\"material-icons\">phone</i> Numéro de téléphone: ${usager.numTel}</span>\n        <div class=\"top-right\">\n          <button class=\"icon-btn\" click.trigger=\"modifier(usager)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, usager)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n        <button class=\"icon-btn bottom-right\" click.trigger=\"usager.afficherProfile=!usager.afficherProfile\">\n          <i if.bind=\"!usager.afficherProfile\" class=\"material-icons\">expand_more</i>\n          <i if.bind=\"usager.afficherProfile\" class=\"material-icons\">expand_less</i>\n        </button>\n        <div class=\"profile-usager\" if.bind=\"usager.afficherProfile\">\n          <h4>Sports préférés</h4>\n          <ul>\n            <li repeat.for=\"sport of usager.sports\">\n              \n            </li>\n          </ul>\n\n          <h4>Équipes</h4>\n          <ul>\n            <li repeat.for=\"equipe of usager.equipes\">\n              \n            </li>\n          </ul>\n        </div>\n      </li>\n    </ul>\n   \n    <!-- Ajouter un usager -->\n    <div class=\"popup-background\" if.bind=\"afficherInscription\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"afficherInscription=false\"><i class=\"material-icons\">clear</i></button>\n        <h3>Inscription</h3>\n        <input value.bind=\"nouveauUsager.idusager\" placeholder=\"IDUsager\"/>\n        <input value.bind=\"nouveauUsager.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"nouveauUsager.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"nouveauUsager.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"nouveauUsager.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"inscrire()\">INSCRIRE</button>\n      </div>\n    </div>\n\n    <!-- Modifier un usager -->\n    <div class=\"popup-background\" if.bind=\"afficherModification\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"afficherModification=false\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'usager ${usagerAModifier.idusager}</h3>\n        <input value.bind=\"usagerAModifier.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"usagerAModifier.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"usagerAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"usagerAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n  </section>\n</template>\n"; });
+define('text!views/usagers/styles.css', ['module'], function(module) { module.exports = "#sectionUsagers {\n  margin-top: 50px;\n}\n\n.usagers {\n  list-style-type: none;\n}\n\n.usagers li {\n  position: relative;\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.usagers li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.usagers li span i {\n  margin-right: 10px;\n}\n\n.profile-usager {\n  \n}\n\n"; });
 //# sourceMappingURL=app-bundle.js.map

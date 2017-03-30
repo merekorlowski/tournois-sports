@@ -6,6 +6,10 @@ export class Equipe {
     this.joueurs = [];
   }
 
+  getLigue() {
+    
+  }
+
   getJoueurs() {
     
   }

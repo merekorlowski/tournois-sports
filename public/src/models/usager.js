@@ -1,5 +1,25 @@
 export class Usager {
   constructor(usager) {
-    Object.assign(this, usager);
+    if (usager) {
+      Object.assign(this, usager);
+      this.sports = [];
+      this.equipes = [];
+      this.afficherProfile = false;
+    } else {
+      this.idusager = '';
+      this.nom = '';
+      this.prenom = '';
+      this.courriel = '';
+      this.numtel = '';
+    }
   }
+
+  getSports() {
+
+  }
+
+  getEquipes() {
+
+  }
+
 }

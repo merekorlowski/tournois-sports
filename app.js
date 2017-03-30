@@ -9,6 +9,8 @@ const cors = require('cors');
 
 const app = express();
 
+const config = require('./config');
+
 const usagers = require('./routes/usagers');
 const equipes = require('./routes/equipes');
 const employes = require('./routes/employes');
@@ -18,7 +20,7 @@ const tournois = require('./routes/tournois');
 // set up database
 
 const pg = require('pg');
-const connectionString = process.env.DATABASE_URL || 'postgres://postgres:Woodlergh17!@localhost:5432/tournois_sports';
+const connectionString = process.env.DATABASE_URL || config.dbUrl;
 
 const client = new pg.Client(connectionString);
 client.connect();

@@ -1,4 +1,4 @@
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 
 import {Usager} from '../models/usager';
 
@@ -14,6 +14,27 @@ export class ServiceUsagers {
       return data.map(usager => {
         return new Usager(usager);
       }) || [];
+    });
+  }
+
+  delete(usager) {
+    return this.http.fetch('', {
+      method: 'delete',
+      body: json(usager)
+    });
+  }
+
+  post(usager) {
+    return this.http.fetch('', {
+      method: 'post',
+      body: json(usager)
+    });
+  }
+
+  put(usager) {
+    return this.http.fetch('', {
+      method: 'put',
+      body: json(usager)
     });
   }
 

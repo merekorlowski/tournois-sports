@@ -1,13 +1,8 @@
-#sectionUsagers {
-  margin-top: 50px;
-}
-
-.usagers {
+.ligues {
   list-style-type: none;
 }
 
-.usagers li {
-  position: relative;
+.ligues li {
   display: block;
   border-bottom: 1px solid #333;
   padding: 20px;
@@ -17,17 +12,20 @@
   box-shadow: 1px 1px 5px #222;
 }
 
-.usagers li span {
+.ligues li span {
   margin-right: 30px;
   display: inline-flex;
   vertical-align: middle;
 }
 
-.usagers li span i {
+.ligues li span i {
   margin-right: 10px;
 }
 
-.profile-usager {
-  
+.ligues a {
+  float: right;
+  text-decoration: none;
+  color: #333;
+  display: inline-flex;
+  vertical-align: middle;
 }
-
