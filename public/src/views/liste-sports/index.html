@@ -1,22 +1,28 @@
 <template>
   <require from="./styles.css"></require>
   <section>
-    <h1>Ligues</h1>
+    <h1>Sports</h1>
+    <button class="btn-flotante bottom-right" click.trigger="afficherInscription=true">
+      <i class="material-icons">add</i>
+    </button>
     <div class="container search-bar-container">
       <form class="search-bar">
         <input type="text" placeholder="Mots clés" value.bind="query" />
-        <button type="submit" click.trigger="getLigues()"><i class="material-icons">search</i></button>
+        <button type="submit" click.trigger="getSports()"><i class="material-icons">search</i></button>
       </form>
       <div class="sort-list">
         <label>Trier:</label>
-        <select value.bind="sort" change.trigger="getLigues()">
+        <select value.bind="sort" change.trigger="getSports()">
           <option value.bind="1">Ascendante</option>
           <option value.bind="-1">Descendante</option>
         </select>
       </div>
     </div>
     <ul class="list">
-      <li repeat.for="ligue of ligues">
+      <li repeat.for="sport of sports">
+        <h3>${sport.nom}</h3>
+        <h4>Ligues</h4>
+        <h4>Tournois</h4>
       </li>
     </ul>
   </section>

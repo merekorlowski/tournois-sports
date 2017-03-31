@@ -9,8 +9,8 @@ export class ServiceTournois {
     });
   }
 
-  get(query, sort) {
-    return this.http.fetch(`?query=${query}&sort=${sort}`).then(response => response.json()).then(data => {
+  get(idsport) {
+    return this.http.fetch(`?idsport=${idsport}`).then(response => response.json()).then(data => {
       return data.map(tournoi => {
         return new Tournoi(tournoi);
       }) || [];

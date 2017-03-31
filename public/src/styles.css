@@ -285,7 +285,7 @@ h6 { font-size: 0.7em; }
 }
 
 .popup-background .popup {
-  position: absolute;
+  position: fixed;
   top: 150px;
   left: 50%;
   margin-left: -300px;
@@ -328,4 +328,29 @@ h6 { font-size: 0.7em; }
 .btn-flotante i.material-icons {
   color: #fff;
   font-size: 28px;
+}
+
+
+.list {
+  list-style-type: none;
+}
+
+.list li {
+  position: relative;
+  display: block;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px #222;
+}
+
+.list li span {
+  margin-right: 30px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.list li span i {
+  margin-right: 10px;
 }
