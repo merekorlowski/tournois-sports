@@ -19,9 +19,8 @@
       <li repeat.for="ligue of ligues">
         <h3>${ligue.idligue}</h3>
         <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>
-        <div class="top-right">
-          <button class="icon-btn" click.trigger="retirer($index, ligue.idligue)"><i class="material-icons">clear</i></button>
-        </div>
+        <button class="icon-btn top-right" click.trigger="retirer($index, ligue.idligue)"><i class="material-icons">clear</i></button>
+				<a class="bottom-right" href="/#/sports/ligue/${ligue.idligue}"><i class="material-icons">keyboard_arrow_right</i></a>
       </li>
     </ul>
   </section>

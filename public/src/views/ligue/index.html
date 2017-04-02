@@ -1,0 +1,28 @@
+<template>
+	<section>
+		<h1>${title}</h1>
+		<h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>
+		<div class="container">
+			<div class="half-width top-left">
+				<h3>Saisons</h3>
+				<hr/>
+				<ul class="list">
+					<li repeat.for="saison of saisons">
+						<h3>${saison.idsaison}</h3>
+						<button class="icon-btn top-right" click.trigger="retirerSaison($index, saison.idsaison)"><i class="material-icons">clear</i></button>
+					</li>
+				</ul>
+			</div>
+			<div class="half-width top-right">
+				<h3>Équipes</h3>
+				<hr/>
+				<ul class="list">
+					<li repeat.for="equipe of equipes">
+						<h3>${equipe.nom}</h3>
+						<button class="icon-btn top-right" click.trigger="retirerEquipe($index, saison.idequipe)"><i class="material-icons">clear</i></button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</template>

@@ -354,3 +354,14 @@ h6 { font-size: 0.7em; }
 .list li span i {
   margin-right: 10px;
 }
+
+.list h3 {
+	margin-top: 0;
+}
+
+.half-width {
+	width: 45%;
+	height: 100%;
+	display: inline-block;
+	margin-right: 15px;
+}
