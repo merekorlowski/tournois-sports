@@ -1,7 +1,7 @@
 <template>
   <require from="./styles.css"></require>
   <section>
-    <h1>Ligues</h1>
+    <h1>${title}</h1>
     <div class="container search-bar-container">
       <form class="search-bar">
         <input type="text" placeholder="Mots clés" value.bind="query" />
@@ -17,6 +17,11 @@
     </div>
     <ul class="list">
       <li repeat.for="ligue of ligues">
+        <h3>${ligue.idligue}</h3>
+        <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>
+        <div class="top-right">
+          <button class="icon-btn" click.trigger="retirer($index, ligue.idligue)"><i class="material-icons">clear</i></button>
+        </div>
       </li>
     </ul>
   </section>

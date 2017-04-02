@@ -40,6 +40,38 @@ router.get('/ligues', (req, res, next) => {
   });
 });
 
+router.delete('/ligues', (req, res, next) => {
+
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      DELETE
+      FROM TOURNOIS_SPORTSDB.Ligue
+      WHERE idligue = '${req.query.idligue}'
+    `);
+
+    query.on('row', row => {
+      results.push(row);
+    });
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+
+  });
+});
+
 router.get('/ligues/gestionnaires', (req, res, next) => {
 
   const results = [];

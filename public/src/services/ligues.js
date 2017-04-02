@@ -11,11 +11,18 @@ export class ServiceLigues {
     });
   }
 
-  get(idsport) {
-    return this.http.fetch(`?idsport=${idsport}`).then(response => response.json()).then(data => {
+  get(query, sort, idsport) {
+    return this.http.fetch(`?query=${query}&sort=${sort}&idsport=${idsport}`).then(response => response.json()).then(data => {
       return data.map(ligue => {
         return new Ligue(ligue);
       }) || [];
+    });
+  }
+
+  delete(ligue) {
+    return this.http.fetch('', {
+      method: 'delete',
+      body: json(ligue)
     });
   }
 

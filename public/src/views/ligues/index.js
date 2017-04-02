@@ -12,12 +12,19 @@ export class Ligues {
   activate(params, navigation) {
     this.query = '';
     this.sort = 1;
-    this.getLigues();
+    this.title = `Ligues de ${params.id}`;
+    this.getLigues(params.id);
   }
 
-  getLigues() {
-    this.serviceLigues.get(this.query, this.sort).then(ligues => {
+  getLigues(sport) {
+    this.serviceLigues.get(this.query, this.sort, sport).then(ligues => {
       this.ligues = ligues;
+    });
+  }
+
+  retirer(index, ligue) {
+    this.serviceLigues.delete(ligue).then(() => {
+      this.ligues.splice(index, 1);
     });
   }
 
