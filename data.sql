@@ -31,6 +31,8 @@ INSERT INTO TOURNOIS_SPORTSDB.Gerant VALUES('U11', 'Diplome');
 INSERT INTO TOURNOIS_SPORTSDB.Equipe VALUES('Equ2', 'Équipe 2', FALSE, 'U11', 'L1');
 INSERT INTO TOURNOIS_SPORTSDB.Saison VALUES('S1', 'L1', (to_date('2017-04-01', 'YYYY-MM-DD')), (to_date('2017-04-03', 'YYYY-MM-DD')), (to_date('2017-07-3', 'YYYY-MM-DD')), 10);
 INSERT INTO TOURNOIS_SPORTSDB.Match VALUES('M1', (to_date('2017-04-03', 'YYYY-MM-DD')), '13:00', '193 First Ave., Ottawa', 'S1');
+INSERT INTO TOURNOIS_SPORTSDB.Tournoi VALUES('T1', 'Diabetes', '0', (to_date('2017-05-01', 'YYYY-MM-DD')), (to_date('2017-06-01', 'YYYY-MM-DD')), 'Sp1');
+INSERT INTO TOURNOIS_SPORTSDB.Tournoi VALUES('T2', 'Cancer', '0', (to_date('2017-07-01', 'YYYY-MM-DD')), (to_date('2017-08-01', 'YYYY-MM-DD')), 'Sp2');
 
 INSERT INTO TOURNOIS_SPORTSDB.GestionnaireLigue VALUES('Emp1', 'L1');
 INSERT INTO TOURNOIS_SPORTSDB.ArbitreLigue VALUES('Emp2', 'L1');
