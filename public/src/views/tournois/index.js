@@ -22,4 +22,10 @@ export class Tournois {
     });
   }
 
+  retirer(index, tournoi) {
+    this.serviceTournois.delete(tournoi).then(() => {
+      this.tournois.splice(index, 1);
+    });
+  }
+
 }
