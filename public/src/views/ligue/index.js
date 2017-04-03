@@ -16,7 +16,6 @@ export class LigueView {
   getLigue(idligue) {
     this.serviceLigues.getLigue(idligue).then(ligue => {
       this.ligue = ligue;
-			console.log(JSON.stringify(this.ligue));
 			this.serviceLigues.getSaisons(idligue).then(saisons => {
 				this.saisons = saisons;
 			});
