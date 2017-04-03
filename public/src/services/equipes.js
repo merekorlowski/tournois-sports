@@ -17,4 +17,25 @@ export class ServiceEquipes {
     });
   }
 
+  delete(equipe) {
+    return this.http.fetch('', {
+      method: 'delete',
+      body: json(equipe)
+    });
+  }
+
+  post(equipe) {
+    return this.http.fetch('', {
+      method: 'post',
+      body: json(equipe)
+    });
+  }
+
+  put(equipe) {
+    return this.http.fetch('', {
+      method: 'put',
+      body: json(equipe)
+    });
+  }
+
 }
