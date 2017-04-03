@@ -19,7 +19,7 @@ define('app',['exports'], function (exports) {
     App.prototype.configureRouter = function configureRouter(config, router) {
       this.router = router;
       config.title = 'Tournois de sports';
-      config.map([{ route: ['', 'accueil'], name: 'accueil', moduleId: 'views/accueil/index', nav: true, title: 'Accueil' }, { route: 'sports', name: 'sports', moduleId: 'views/sports/index', nav: true, title: 'Sports' }, { route: 'equipes', name: 'equipes', moduleId: 'views/equipes/index', nav: true, title: 'Équipes' }, { route: 'usagers', name: 'usagers', moduleId: 'views/usagers/index', nav: true, title: 'Usagers' }, { route: 'employes', name: 'employes', moduleId: 'views/employes/index', nav: true, title: 'Employés' }]);
+      config.map([{ route: ['', 'accueil'], name: 'accueil', moduleId: 'views/accueil/index', nav: true, title: 'Accueil' }, { route: 'sports', name: 'sports', moduleId: 'views/sports/index', nav: true, title: 'Sports' }, { route: 'equipes', name: 'equipes', moduleId: 'views/equipes/index', nav: true, title: 'Équipes' }, { route: 'usagers', name: 'usagers', moduleId: 'views/usagers/index', nav: true, title: 'Usagers' }, { route: 'employes', name: 'employes', moduleId: 'views/employes/index', nav: true, title: 'Employés' }, { route: 'equipe/:id', name: 'equipe', moduleId: 'views/equipe/index', title: 'Équipe' }, { route: 'saison/:id', name: 'saison', moduleId: 'views/saison/index', title: 'Saison' }]);
     };
 
     return App;
@@ -311,22 +311,11 @@ define('models/match',["exports"], function (exports) {
     }
   }
 
-  var Match = exports.Match = function () {
-    function Match(match) {
-      _classCallCheck(this, Match);
+  var Match = exports.Match = function Match(match) {
+    _classCallCheck(this, Match);
 
-      Object.assign(this, match);
-      this.equipes = [];
-    }
-
-    Match.prototype.getEquipes = function getEquipes() {};
-
-    Match.prototype.getTournoi = function getTournoi() {};
-
-    Match.prototype.getArbitres = function getArbitres() {};
-
-    return Match;
-  }();
+    Object.assign(this, match);
+  };
 });
 define('models/paiement',[], function () {
   "use strict";
@@ -501,7 +490,7 @@ define('services/employes',['exports', 'aurelia-fetch-client', '../models/employ
     return ServiceEmployes;
   }();
 });
-define('services/equipes',['exports', 'aurelia-fetch-client', '../models/equipe'], function (exports, _aureliaFetchClient, _equipe) {
+define('services/equipes',['exports', 'aurelia-fetch-client', '../models/equipe', '../models/usager'], function (exports, _aureliaFetchClient, _equipe, _usager) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -520,17 +509,42 @@ define('services/equipes',['exports', 'aurelia-fetch-client', '../models/equipe'
       _classCallCheck(this, ServiceEquipes);
 
       this.http = new _aureliaFetchClient.HttpClient().configure(function (config) {
-        config.withBaseUrl('http://localhost:3000/equipes/');
+        config.withBaseUrl('http://localhost:3000/');
       });
     }
 
     ServiceEquipes.prototype.get = function get(query, sort) {
-      return this.http.fetch('?query=' + query + '&sort=' + sort).then(function (response) {
+      return this.http.fetch('equipes?query=' + query + '&sort=' + sort).then(function (response) {
         return response.json();
       }).then(function (data) {
         return data.map(function (equipe) {
           return new _equipe.Equipe(equipe);
         }) || [];
+      });
+    };
+
+    ServiceEquipes.prototype.getEquipe = function getEquipe(idequipe) {
+      return this.http.fetch('equipe?idequipe=' + idequipe).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return new _equipe.Equipe(data[0]);
+      });
+    };
+
+    ServiceEquipes.prototype.getJoueurs = function getJoueurs(idequipe) {
+      return this.http.fetch('equipe/joueurs?idequipe=' + idequipe).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return data.map(function (usager) {
+          return new _usager.Usager(usager);
+        }) || [];
+      });
+    };
+
+    ServiceEquipes.prototype.deleteJoueur = function deleteJoueur(idusager) {
+      return this.http.fetch('equipe/joueur', {
+        method: 'delete',
+        body: json(idusager)
       });
     };
 
@@ -642,6 +656,67 @@ define('services/ligues',['exports', 'aurelia-fetch-client', '../models/ligue', 
     return ServiceLigues;
   }();
 });
+define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison', '../models/match'], function (exports, _aureliaFetchClient, _saison, _match) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ServiceSaisons = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var ServiceSaisons = exports.ServiceSaisons = function () {
+    function ServiceSaisons() {
+      _classCallCheck(this, ServiceSaisons);
+
+      this.http = new _aureliaFetchClient.HttpClient().configure(function (config) {
+        config.withBaseUrl('http://localhost:3000/');
+      });
+    }
+
+    ServiceSaisons.prototype.get = function get(idligue) {
+      return this.http.fetch('saisons?idligue=' + idligue).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return data.map(function (saison) {
+          return new _saison.Saison(saison);
+        }) || [];
+      });
+    };
+
+    ServiceSaisons.prototype.delete = function _delete(ligue) {
+      return this.http.fetch('saison', {
+        method: 'delete',
+        body: json(ligue)
+      });
+    };
+
+    ServiceSaisons.prototype.getSaison = function getSaison(idsaison) {
+      return this.http.fetch('saison?idsaison=' + idsaison).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return new _saison.Saison(data[0]);
+      });
+    };
+
+    ServiceSaisons.prototype.getMatchs = function getMatchs(idsaison) {
+      return this.http.fetch('saison/matchs?idsaison=' + idsaison).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return data.map(function (match) {
+          return new _match.Match(match);
+        }) || [];
+      });
+    };
+
+    return ServiceSaisons;
+  }();
+});
 define('services/sports',['exports', 'aurelia-fetch-client', '../models/sport', '../models/ligue', '../models/tournoi'], function (exports, _aureliaFetchClient, _sport, _ligue, _tournoi) {
   'use strict';
 
@@ -661,12 +736,12 @@ define('services/sports',['exports', 'aurelia-fetch-client', '../models/sport', 
       _classCallCheck(this, ServiceSports);
 
       this.http = new _aureliaFetchClient.HttpClient().configure(function (config) {
-        config.withBaseUrl('http://localhost:3000/sports/');
+        config.withBaseUrl('http://localhost:3000/');
       });
     }
 
     ServiceSports.prototype.get = function get(query, sort) {
-      return this.http.fetch('?query=' + query + '&sort=' + sort).then(function (response) {
+      return this.http.fetch('sports?query=' + query + '&sort=' + sort).then(function (response) {
         return response.json();
       }).then(function (data) {
         return data.map(function (sport) {
@@ -675,24 +750,24 @@ define('services/sports',['exports', 'aurelia-fetch-client', '../models/sport', 
       });
     };
 
-    ServiceSports.prototype.delete = function _delete(sport) {
-      return this.http.fetch('', {
-        method: 'delete',
-        body: (0, _aureliaFetchClient.json)(sport)
-      });
-    };
-
     ServiceSports.prototype.post = function post(sport) {
-      return this.http.fetch('', {
+      return this.http.fetch('sport', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(sport)
       });
     };
 
     ServiceSports.prototype.put = function put(sport) {
-      return this.http.fetch('', {
+      return this.http.fetch('sport', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(sport)
+      });
+    };
+
+    ServiceSports.prototype.deleteSport = function deleteSport(idsport) {
+      return this.http.fetch('sport', {
+        method: 'delete',
+        body: (0, _aureliaFetchClient.json)(idsport)
       });
     };
 
@@ -928,244 +1003,6 @@ define('views/equipes/index',['exports', 'aurelia-framework', '../../models/equi
     return Equipes;
   }()) || _class);
 });
-define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue', '../../services/ligues'], function (exports, _aureliaFramework, _ligue, _ligues) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.Ligues = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var Ligues = exports.Ligues = (_dec = (0, _aureliaFramework.inject)(_ligues.ServiceLigues), _dec(_class = function () {
-    function Ligues(serviceLigues) {
-      _classCallCheck(this, Ligues);
-
-      this.serviceLigues = serviceLigues;
-    }
-
-    Ligues.prototype.activate = function activate(params, navigation) {
-      this.query = '';
-      this.sort = 1;
-      this.title = 'Ligues de ' + params.id;
-      this.getLigues(params.id);
-    };
-
-    Ligues.prototype.getLigues = function getLigues(sport) {
-      var _this = this;
-
-      this.serviceLigues.get(this.query, this.sort, sport).then(function (ligues) {
-        _this.ligues = ligues;
-      });
-    };
-
-    Ligues.prototype.retirer = function retirer(index, ligue) {
-      var _this2 = this;
-
-      this.serviceLigues.delete(ligue).then(function () {
-        _this2.ligues.splice(index, 1);
-      });
-    };
-
-    return Ligues;
-  }()) || _class);
-});
-define('views/liste-sports/index',['exports', 'aurelia-framework', '../../models/sport', '../../services/sports'], function (exports, _aureliaFramework, _sport, _sports) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.ListeSports = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var ListeSports = exports.ListeSports = (_dec = (0, _aureliaFramework.inject)(_sports.ServiceSports), _dec(_class = function () {
-    function ListeSports(serviceSports) {
-      _classCallCheck(this, ListeSports);
-
-      this.serviceSports = serviceSports;
-    }
-
-    ListeSports.prototype.activate = function activate(params, navigation) {
-      this.query = '';
-      this.sort = 1;
-      this.getSports();
-    };
-
-    ListeSports.prototype.getSports = function getSports() {
-      var _this = this;
-
-      this.serviceSports.get(this.query, this.sort).then(function (sports) {
-        _this.sports = sports;
-      });
-    };
-
-    return ListeSports;
-  }()) || _class);
-});
-define('views/requetes/index',[], function () {
-  "use strict";
-});
-define('views/sports/index',['exports'], function (exports) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var Sports = exports.Sports = function () {
-    function Sports() {
-      _classCallCheck(this, Sports);
-    }
-
-    Sports.prototype.configureRouter = function configureRouter(config, router) {
-      this.router = router;
-      config.title = 'Tournois de sports';
-      config.map([{ route: '', moduleId: 'views/liste-sports/index', nav: true }, { route: 'ligues/:id', name: 'ligues', moduleId: 'views/ligues/index', title: 'Ligues' }, { route: 'tournois/:id', name: 'tournois', moduleId: 'views/tournois/index', title: 'Tournois' }, { route: 'ligue/:id', name: 'ligue', moduleId: 'views/ligue/index', title: 'Ligue' }, { route: 'tournoi/:id', name: 'tournoi', moduleId: 'views/tournoi/index', title: 'Tournoi' }]);
-    };
-
-    return Sports;
-  }();
-});
-define('views/tournois/index',['exports', 'aurelia-framework', '../../models/tournoi', '../../services/tournois'], function (exports, _aureliaFramework, _tournoi, _tournois) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.Tournois = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var Tournois = exports.Tournois = (_dec = (0, _aureliaFramework.inject)(_tournois.ServiceTournois), _dec(_class = function () {
-    function Tournois(serviceTournois) {
-      _classCallCheck(this, Tournois);
-
-      this.serviceTournois = serviceTournois;
-    }
-
-    Tournois.prototype.activate = function activate(params, navigation) {
-      this.query = '';
-      this.sort = 1;
-      this.title = 'Tournois de ' + params.id;
-      this.getTournois(params.id);
-    };
-
-    Tournois.prototype.getTournois = function getTournois(idsport) {
-      var _this = this;
-
-      this.serviceTournois.get(this.query, this.sort, idsport).then(function (tournois) {
-        _this.tournois = tournois;
-      });
-    };
-
-    return Tournois;
-  }()) || _class);
-});
-define('views/usagers/index',['exports', 'aurelia-framework', '../../models/usager', '../../services/usagers'], function (exports, _aureliaFramework, _usager, _usagers) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.Usagers = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var Usagers = exports.Usagers = (_dec = (0, _aureliaFramework.inject)(_usagers.ServiceUsagers), _dec(_class = function () {
-    function Usagers(serviceUsagers) {
-      _classCallCheck(this, Usagers);
-
-      this.serviceUsagers = serviceUsagers;
-    }
-
-    Usagers.prototype.activate = function activate(params, navigation) {
-      this.query = '';
-      this.sort = 1;
-      this.nouveauUsager = new _usager.Usager();
-      this.usagerAModifier = new _usager.Usager();
-      this.afficherModification = false;
-      this.getUsagers();
-    };
-
-    Usagers.prototype.getUsagers = function getUsagers() {
-      var _this = this;
-
-      this.serviceUsagers.get(this.query, this.sort).then(function (usagers) {
-        _this.usagers = usagers;
-      });
-    };
-
-    Usagers.prototype.retirer = function retirer(index, usager) {
-      var _this2 = this;
-
-      this.serviceUsagers.delete(usager).then(function () {
-        _this2.usagers.splice(index, 1);
-      });
-    };
-
-    Usagers.prototype.inscrire = function inscrire() {
-      var _this3 = this;
-
-      this.serviceUsagers.post(this.nouveauUsager).then(function (usager) {
-        _this3.afficherInscription = false;
-        _this3.usagers.push(_this3.nouveauUsager);
-      });
-    };
-
-    Usagers.prototype.modifier = function modifier(usager) {
-      this.afficherModification = true;
-      this.usagerAModifier = usager;
-      window.onwheel = preventDefault;
-      document.onkeydown = preventDefaultForScrollKeys;
-    };
-
-    Usagers.prototype.sauvegarder = function sauvegarder() {
-      var _this4 = this;
-
-      this.serviceUsagers.put(this.usagerAModifier).then(function (usager) {
-        _this4.afficherModification = false;
-      });
-    };
-
-    return Usagers;
-  }()) || _class);
-});
-define('views/tournoi/index',[], function () {
-  "use strict";
-});
 define('views/ligue/index',['exports', 'aurelia-framework', '../../services/ligues'], function (exports, _aureliaFramework, _ligues) {
 	'use strict';
 
@@ -1228,13 +1065,13 @@ define('views/ligue/index',['exports', 'aurelia-framework', '../../services/ligu
 		return LigueView;
 	}()) || _class);
 });
-define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison'], function (exports, _aureliaFetchClient, _saison) {
+define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue', '../../services/ligues'], function (exports, _aureliaFramework, _ligue, _ligues) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.ServiceSaisons = undefined;
+  exports.Ligues = undefined;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1242,55 +1079,508 @@ define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison'
     }
   }
 
-  var ServiceSaisons = exports.ServiceSaisons = function () {
-    function ServiceSaisons() {
-      _classCallCheck(this, ServiceSaisons);
+  var _dec, _class;
+
+  var Ligues = exports.Ligues = (_dec = (0, _aureliaFramework.inject)(_ligues.ServiceLigues), _dec(_class = function () {
+    function Ligues(serviceLigues) {
+      _classCallCheck(this, Ligues);
+
+      this.serviceLigues = serviceLigues;
+    }
+
+    Ligues.prototype.activate = function activate(params, navigation) {
+      this.query = '';
+      this.sort = 1;
+      this.title = 'Ligues de ' + params.id;
+      this.afficherAjouter = false;
+      this.getLigues(params.id);
+    };
+
+    Ligues.prototype.getLigues = function getLigues(sport) {
+      var _this = this;
+
+      this.serviceLigues.get(this.query, this.sort, sport).then(function (ligues) {
+        _this.ligues = ligues;
+      });
+    };
+
+    Ligues.prototype.retirer = function retirer(index, ligue) {
+      var _this2 = this;
+
+      this.serviceLigues.delete(ligue).then(function () {
+        _this2.ligues.splice(index, 1);
+      });
+    };
+
+    return Ligues;
+  }()) || _class);
+});
+define('views/liste-sports/index',['exports', 'aurelia-framework', '../../models/sport', '../../services/sports'], function (exports, _aureliaFramework, _sport, _sports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ListeSports = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var ListeSports = exports.ListeSports = (_dec = (0, _aureliaFramework.inject)(_sports.ServiceSports), _dec(_class = function () {
+    function ListeSports(serviceSports) {
+      _classCallCheck(this, ListeSports);
+
+      this.serviceSports = serviceSports;
+    }
+
+    ListeSports.prototype.activate = function activate(params, navigation) {
+      this.query = '';
+      this.sort = 1;
+      this.nouveauSport = new _sport.Sport();
+      this.afficherInscription = false;
+      this.getSports();
+    };
+
+    ListeSports.prototype.getSports = function getSports() {
+      var _this = this;
+
+      this.serviceSports.get(this.query, this.sort).then(function (sports) {
+        _this.sports = sports;
+      });
+    };
+
+    ListeSports.prototype.retirerSport = function retirerSport(index, idsport) {
+      var _this2 = this;
+
+      this.serviceSports.deleteSport(idsport).then(function () {
+        _this2.sports.splice(index, 1);
+      });
+    };
+
+    ListeSports.prototype.ajouter = function ajouter() {
+      var _this3 = this;
+
+      this.serviceSports.post(this.nouveauSport).then(function (sport) {
+        _this3.afficherInscription = false;
+        _this3.sports.push(_this3.nouveauSport);
+      });
+    };
+
+    return ListeSports;
+  }()) || _class);
+});
+define('views/requetes/index',[], function () {
+  "use strict";
+});
+define('views/sports/index',['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var Sports = exports.Sports = function () {
+    function Sports() {
+      _classCallCheck(this, Sports);
+    }
+
+    Sports.prototype.configureRouter = function configureRouter(config, router) {
+      this.router = router;
+      config.title = 'Tournois de sports';
+      config.map([{ route: '', moduleId: 'views/liste-sports/index', nav: true }, { route: 'ligues/:id', name: 'ligues', moduleId: 'views/ligues/index', title: 'Ligues' }, { route: 'tournois/:id', name: 'tournois', moduleId: 'views/tournois/index', title: 'Tournois' }, { route: 'ligue/:id', name: 'ligue', moduleId: 'views/ligue/index', title: 'Ligue' }, { route: 'tournoi/:id', name: 'tournoi', moduleId: 'views/tournoi/index', title: 'Tournoi' }]);
+    };
+
+    return Sports;
+  }();
+});
+define('views/tournoi/index',[], function () {
+  "use strict";
+});
+define('views/tournois/index',['exports', 'aurelia-framework', '../../models/tournoi', '../../services/tournois'], function (exports, _aureliaFramework, _tournoi, _tournois) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.Tournois = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var Tournois = exports.Tournois = (_dec = (0, _aureliaFramework.inject)(_tournois.ServiceTournois), _dec(_class = function () {
+    function Tournois(serviceTournois) {
+      _classCallCheck(this, Tournois);
+
+      this.serviceTournois = serviceTournois;
+    }
+
+    Tournois.prototype.activate = function activate(params, navigation) {
+      this.query = '';
+      this.sort = 1;
+      this.title = 'Tournois de ' + params.id;
+      this.getTournois(params.id);
+    };
+
+    Tournois.prototype.getTournois = function getTournois(idsport) {
+      var _this = this;
+
+      this.serviceTournois.get(this.query, this.sort, idsport).then(function (tournois) {
+        _this.tournois = tournois;
+      });
+    };
+
+    Tournois.prototype.retirer = function retirer(index, tournoi) {
+      var _this2 = this;
+
+      this.serviceTournois.delete(tournoi).then(function () {
+        _this2.tournois.splice(index, 1);
+      });
+    };
+
+    return Tournois;
+  }()) || _class);
+});
+define('views/usagers/index',['exports', 'aurelia-framework', '../../models/usager', '../../services/usagers'], function (exports, _aureliaFramework, _usager, _usagers) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.Usagers = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var Usagers = exports.Usagers = (_dec = (0, _aureliaFramework.inject)(_usagers.ServiceUsagers), _dec(_class = function () {
+    function Usagers(serviceUsagers) {
+      _classCallCheck(this, Usagers);
+
+      this.serviceUsagers = serviceUsagers;
+    }
+
+    Usagers.prototype.activate = function activate(params, navigation) {
+      this.query = '';
+      this.sort = 1;
+      this.nouveauUsager = new _usager.Usager();
+      this.usagerAModifier = new _usager.Usager();
+      this.afficherModification = false;
+      this.getUsagers();
+    };
+
+    Usagers.prototype.detached = function detached() {
+      window.removeEventListener('scroll', this.scrollTo);
+    };
+
+    Usagers.prototype.getUsagers = function getUsagers() {
+      var _this = this;
+
+      this.serviceUsagers.get(this.query, this.sort).then(function (usagers) {
+        _this.usagers = usagers;
+      });
+    };
+
+    Usagers.prototype.retirer = function retirer(index, usager) {
+      var _this2 = this;
+
+      this.serviceUsagers.delete(usager).then(function () {
+        _this2.usagers.splice(index, 1);
+      });
+    };
+
+    Usagers.prototype.afficherInscription = function afficherInscription() {
+      this.inscriptionAffiche = true;
+
+      window.addEventListener('scroll', this.scrollTo);
+    };
+
+    Usagers.prototype.cancelerInscription = function cancelerInscription() {
+      this.inscriptionAffiche = false;
+      this.nouveauUsager = new _usager.Usager();
+
+      window.removeEventListener('scroll', this.scrollTo);
+    };
+
+    Usagers.prototype.scrollTo = function scrollTo() {
+      window.scrollTo(0, 0);
+    };
+
+    Usagers.prototype.inscrire = function inscrire() {
+      var _this3 = this;
+
+      this.serviceUsagers.post(this.nouveauUsager).then(function (usager) {
+        _this3.inscriptionAffiche = false;
+        _this3.usagers.push(_this3.nouveauUsager);
+
+        window.removeEventListener('scroll', function () {
+          window.scrollTo(0, 0);
+        });
+      });
+    };
+
+    Usagers.prototype.modifier = function modifier(usager) {
+      this.afficherModification = true;
+      this.usagerAModifier = usager;
+      window.onwheel = preventDefault;
+      document.onkeydown = preventDefaultForScrollKeys;
+    };
+
+    Usagers.prototype.sauvegarder = function sauvegarder() {
+      var _this4 = this;
+
+      this.serviceUsagers.put(this.usagerAModifier).then(function (usager) {
+        _this4.afficherModification = false;
+      });
+    };
+
+    return Usagers;
+  }()) || _class);
+});
+define('views/equipe/index',['exports', 'aurelia-framework', '../../services/equipes'], function (exports, _aureliaFramework, _equipes) {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.EquipeView = undefined;
+
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
+
+	var _dec, _class;
+
+	var EquipeView = exports.EquipeView = (_dec = (0, _aureliaFramework.inject)(_equipes.ServiceEquipes), _dec(_class = function () {
+		function EquipeView(serviceEquipes) {
+			_classCallCheck(this, EquipeView);
+
+			this.serviceEquipes = serviceEquipes;
+		}
+
+		EquipeView.prototype.activate = function activate(params, navigation) {
+			this.getEquipe(params.id);
+		};
+
+		EquipeView.prototype.getEquipe = function getEquipe(idequipe) {
+			var _this = this;
+
+			this.serviceEquipes.getEquipe(idequipe).then(function (equipe) {
+				_this.equipe = equipe;
+				_this.title = equipe.nom;
+				_this.serviceEquipes.getJoueurs(idequipe).then(function (joueurs) {
+					_this.joueurs = joueurs;
+				});
+			});
+		};
+
+		EquipeView.prototype.retirerJoueur = function retirerJoueur(index, idusager) {
+			var _this2 = this;
+
+			this.serviceEquipes.deleteJoueur(idusager).then(function (equipe) {
+				_this2.joueurs.splice(index, 1);
+			});
+		};
+
+		return EquipeView;
+	}()) || _class);
+});
+define('views/saison/index',['exports', 'aurelia-framework', '../../services/saisons', '../../services/matchs'], function (exports, _aureliaFramework, _saisons, _matchs) {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.SaisonView = undefined;
+
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
+
+	var _dec, _class;
+
+	var SaisonView = exports.SaisonView = (_dec = (0, _aureliaFramework.inject)(_saisons.ServiceSaisons, _matchs.ServiceMatchs), _dec(_class = function () {
+		function SaisonView(serviceSaisons, serviceMatchs) {
+			_classCallCheck(this, SaisonView);
+
+			this.serviceSaisons = serviceSaisons;
+			this.serviceMatchs = serviceMatchs;
+		}
+
+		SaisonView.prototype.activate = function activate(params, navigation) {
+			this.getSaison(params.id);
+		};
+
+		SaisonView.prototype.getSaison = function getSaison(idsaison) {
+			var _this = this;
+
+			this.serviceSaisons.getSaison(idsaison).then(function (saison) {
+				_this.saison = saison;
+				_this.title = saison.idsaison;
+				_this.serviceSaisons.getMatchs(idsaison).then(function (matchs) {
+					_this.matchs = matchs;
+
+					var _loop = function _loop() {
+						if (_isArray) {
+							if (_i >= _iterator.length) return 'break';
+							_ref = _iterator[_i++];
+						} else {
+							_i = _iterator.next();
+							if (_i.done) return 'break';
+							_ref = _i.value;
+						}
+
+						var match = _ref;
+
+						_this.serviceMatchs.getEquipes(match.idmatch).then(function (equipes) {
+							match.equipes = equipes;
+
+							var _loop2 = function _loop2() {
+								if (_isArray2) {
+									if (_i2 >= _iterator2.length) return 'break';
+									_ref2 = _iterator2[_i2++];
+								} else {
+									_i2 = _iterator2.next();
+									if (_i2.done) return 'break';
+									_ref2 = _i2.value;
+								}
+
+								var equipe = _ref2;
+
+								_this.serviceMatchs.getPoints(match.idmatch, equipe.idequipe).then(function (points) {
+									equipe.points = points;
+								});
+							};
+
+							for (var _iterator2 = match.equipes, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+								var _ref2;
+
+								var _ret2 = _loop2();
+
+								if (_ret2 === 'break') break;
+							}
+						});
+					};
+
+					for (var _iterator = _this.matchs, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+						var _ref;
+
+						var _ret = _loop();
+
+						if (_ret === 'break') break;
+					}
+				});
+			});
+		};
+
+		SaisonView.prototype.retirerMatch = function retirerMatch(index, idmatch) {
+			var _this2 = this;
+
+			this.serviceSaisons.deleteMatch(idmatch).then(function () {
+				_this2.matchs.splice(index, 1);
+			});
+		};
+
+		return SaisonView;
+	}()) || _class);
+});
+define('services/matchs',['exports', 'aurelia-fetch-client', '../models/match', '../models/equipe'], function (exports, _aureliaFetchClient, _match, _equipe) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ServiceMatchs = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var ServiceMatchs = exports.ServiceMatchs = function () {
+    function ServiceMatchs() {
+      _classCallCheck(this, ServiceMatchs);
 
       this.http = new _aureliaFetchClient.HttpClient().configure(function (config) {
         config.withBaseUrl('http://localhost:3000/');
       });
     }
 
-    ServiceSaisons.prototype.get = function get(idligue) {
-      return this.http.fetch('saisons?idligue=' + idligue).then(function (response) {
+    ServiceMatchs.prototype.getEquipes = function getEquipes(idmatch) {
+      return this.http.fetch('match/equipes?idmatch=' + idmatch).then(function (response) {
         return response.json();
       }).then(function (data) {
-        return data.map(function (saison) {
-          return new _saison.Saison(saison);
+        return data.map(function (equipe) {
+          return new _equipe.Equipe(equipe);
         }) || [];
       });
     };
 
-    ServiceSaisons.prototype.delete = function _delete(ligue) {
-      return this.http.fetch('saison', {
+    ServiceMatchs.prototype.deleteMatch = function deleteMatch(idmatch) {
+      return this.http.fetch('match', {
         method: 'delete',
-        body: json(ligue)
+        body: json(idmatch)
       });
     };
 
-    return ServiceSaisons;
+    ServiceMatchs.prototype.getPoints = function getPoints(idmatch, idequipe) {
+      return this.http.fetch('match/equipe/points?idmatch=' + idmatch + '&idequipe=' + idequipe).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return data[0].nbrpoints;
+      });
+    };
+
+    return ServiceMatchs;
   }();
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <header>\n    <nav>\n      <h1 id=\"logo\">T<span>ournois</span> S<span>ports</span></h1>\n      <ul class=\"nav-bar\">\n        <li repeat.for=\"route of router.navigation\" class=\"${route.isActive ? 'active' : ''}\">\n          <a href.bind=\"route.href\">${route.title}</a>\n        </li>\n      </ul>\n    </nav>\n  </header>\n  <section id=\"main\">\n    <router-view></router-view>\n  </section>\n  <footer></footer>\n</template>\n"; });
-define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #333;\n  font-size: 16px;\n  background-color: #f2f2f2;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n  border-bottom: 1px solid #333;\n  padding: 5px;\n}\n\n.container {\n  width: 100%;\n  position: relative;\n}\n\nbutton {\n  margin: 0;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #006633;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #004d28;\n}\n\n.nav-bar li a {\n  font-weight: bold;\n  display: block;\n  height: 100%;\n  padding: 15px 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #00331a;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n  margin-top: 50px;\n}\n\nfooter {\n  background-color: #222;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border-radius: 5px;\n  background-color: #006633;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  box-shadow: 1px 1px 5px #222;\n  text-align: center;\n  font-size: 14px;\n  border: none;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n  text-shadow: 1px 1px 5px #222;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  background-color: #006633;\n  border-left: none;\n}\n\n.search-bar button .material-icons {\n  color: #fff;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\n.sort-list select {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n  background-color: #fff;\n}\n\n.delete-btn {\n  background: none;\n  border: none;\n  height: 20px;\n}\n\n.top-right, .bottom-right, .top-left, .bottom-left {\n  position: absolute;\n}\n\n.top-right {\n  right: 10px;\n  top: 10px;\n}\n\n.bottom-right {\n  right: 10px;\n  bottom: 10px;\n}\n\n.top-left {\n  left: 10px;\n  top: 10px;\n}\n\n.bottom-left {\n  left: 10px;\n  bottom: 10px;\n}\n\n.space-evenly {\n  display: inline-flex;\n  justify-content: space-between;\n}\n\n.btn-inscription {\n  float: right;\n}\n\n.popup-background {\n  position: absolute;\n  background-color: rgba(0, 0, 0, .7);\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  bottom: 0;\n  z-index: 1;\n  overflow: hidden;\n}\n\n.popup-background .popup {\n  position: fixed;\n  top: 150px;\n  left: 50%;\n  margin-left: -300px;\n  width: 600px;\n  box-shadow: 1px 1px 10px #222;\n  border-radius: 5px;\n  z-index: 2;\n  padding: 20px;\n  background-color: #fff;\n  opacity: 1;\n}\n\n.popup input {\n  margin-bottom: 5px;\n}\n\n.popup .icon-btn {\n  float: right;\n}\n\n.icon-btn {\n  background: none;\n  border: none;\n}\n\n.btn-inscription-container {\n  height: 75px;\n}\n\n.btn-flotante {\n  background-color: #006633;\n  padding: 15px;\n  border-radius: 100%;\n  border: none;\n  box-shadow: 1px 1px 5px #222; \n  margin: 30px;\n  position: fixed;\n}\n\n.btn-flotante i.material-icons {\n  color: #fff;\n  font-size: 28px;\n}\n\n\n.list {\n  list-style-type: none;\n}\n\n.list li {\n  position: relative;\n  display: block;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.list li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.list li span i {\n  margin-right: 10px;\n}\n\n.list h3 {\n\tmargin-top: 0;\n}\n\n.half-width {\n\twidth: 45%;\n\theight: 100%;\n\tdisplay: inline-block;\n\tmargin-right: 15px;\n}\n"; });
+define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #333;\n  font-size: 16px;\n  background-color: #f2f2f2;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n  border-bottom: 1px solid #333;\n  padding: 5px;\n}\n\n.container {\n  width: 100%;\n  position: relative;\n}\n\nbutton {\n  margin: 0;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #008080;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #006666;\n}\n\n.nav-bar li a {\n  font-weight: bold;\n  display: block;\n  height: 100%;\n  padding: 15px 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #004d4d;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n  margin-top: 50px;\n}\n\nfooter {\n  background-color: #222;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border-radius: 5px;\n  background-color: #008080;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  box-shadow: 1px 1px 5px #222;\n  text-align: center;\n  font-size: 14px;\n  border: none;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n  text-shadow: 1px 1px 5px #222;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  background-color: #008080;\n  border-left: none;\n}\n\n.search-bar button .material-icons {\n  color: #fff;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\nselect {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n  background-color: #fff;\n}\n\n.delete-btn {\n  background: none;\n  border: none;\n  height: 20px;\n}\n\n.top-right, .bottom-right, .top-left, .bottom-left {\n  position: absolute;\n}\n\n.top-right {\n  right: 10px;\n  top: 10px;\n}\n\n.bottom-right {\n  right: 10px;\n  bottom: 10px;\n}\n\n.top-left {\n  left: 10px;\n  top: 10px;\n}\n\n.bottom-left {\n  left: 10px;\n  bottom: 10px;\n}\n\n.space-evenly {\n  display: inline-flex;\n  justify-content: space-between;\n}\n\n.btn-inscription {\n  float: right;\n}\n\n.popup-background {\n  position: absolute;\n  background-color: rgba(0, 0, 0, .7);\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  bottom: 0;\n  z-index: 1;\n  overflow: hidden;\n}\n\n.popup-background .popup {\n  position: fixed;\n  top: 150px;\n  left: 50%;\n  margin-left: -300px;\n  width: 600px;\n  box-shadow: 1px 1px 10px #222;\n  border-radius: 5px;\n  z-index: 2;\n  padding: 20px;\n  background-color: #fff;\n  opacity: 1;\n\toverflow: hidden;\n}\n\n.popup input, .popup select {\n  margin-bottom: 5px;\n\tdisplay: block;\n\twidth: 400px;\n\theight: 40px;\n  padding: 5px 15px;\n}\n\n.popup .icon-btn {\n  float: right;\n}\n\n.icon-btn {\n  background: none;\n  border: none;\n}\n\n.btn-inscription-container {\n  height: 75px;\n}\n\n.btn-flotante {\n  background-color: #008080;\n  padding: 15px;\n  border-radius: 100%;\n  border: none;\n  box-shadow: 1px 1px 5px #222; \n  margin: 30px;\n  position: fixed;\n}\n\n.btn-flotante i.material-icons {\n  color: #fff;\n  font-size: 28px;\n}\n\n\n.list {\n  list-style-type: none;\n}\n\n.list li {\n  position: relative;\n  display: block;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.list li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.list li span i {\n  margin-right: 10px;\n}\n\n.list h3 {\n\tmargin-top: 0;\n}\n\n.half-width {\n\twidth: 45%;\n\theight: 100%;\n\tdisplay: inline-block;\n\tpadding-right: 15px;\n}\n\n.equipes-match {\n\theight: 50px;\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\twidth: 100%;\n\tpadding: 30px;\n}\n"; });
 define('text!views/accueil/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n  </section>\n</template>\n"; });
 define('text!views/accueil/styles.css', ['module'], function(module) { module.exports = "#inscription {\n  width: 300px;\n  text-align: center;\n  background-color: #333;\n  display: inline-block;\n  padding: 15px;\n}\n\n#inscription input {\n  margin: 5px;\n  width: 100%;\n}\n\n#inscription .btn {\n  width: 100%;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  background-color: #00994d;\n}\n\n.type-inscription {\n  text-align: left;\n  padding: 3px;\n  border-bottom: 1px solid #fff;\n}\n\n#mainTitle {\n  display: inline-block;\n  text-align: left;\n  margin: 0;\n  font-size: 50px;\n  margin-top: 50px;\n  margin-bottom: 10px;\n}\n\n#mainInstructions {\n  display: block;\n  float: left;\n}\n"; });
-define('text!views/employes/styles.css', ['module'], function(module) { module.exports = ".employes {\n  list-style-type: none;\n}\n\n.employes li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.employes li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.employes li span i {\n  margin-right: 10px;\n}\n\n.employes a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
 define('text!views/employes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Employés</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEmployes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEmployes()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"employe of employes\">\n        <h3>${employe.nom}, ${employe.prenom}</h3>\n        <span>${employe.role}</span>\n        <a href=\"\">Voir profile <i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/employes/styles.css', ['module'], function(module) { module.exports = ".employes {\n  list-style-type: none;\n}\n\n.employes li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.employes li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.employes li span i {\n  margin-right: 10px;\n}\n\n.employes a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
 define('text!views/equipes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Équipes</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEquipes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEquipes()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul id=\"list\">\n      <li class=\"equipe\" repeat.for=\"equipe of equipes\">\n        <h3>${equipe.nom}</h3>\n        <ul id=\"joueurs\">\n          <li repeat.for=\"joueur of equipe.joueurs\">${joueur.nom}</li>\n        </ul>\n        <a href=\"\">Voir profile <i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
 define('text!views/equipes/styles.css', ['module'], function(module) { module.exports = "#equipe {\n  list-style-type: none;\n}\n\n.equipe {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.equipe h3 {\n  display: inline-block;\n  margin-top: 5px;\n}\n\n.equipe span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.equipe span i {\n  margin-right: 10px;\n}\n\n.equipe a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n#joueurs {\n  margin-left: 50px;\n  list-style-type: none;\n  display: inline-block;\n  width: 200px;\n  height: 100%;\n}\n\n#joueurs li {\n  display: inline-block;\n  margin: 10px;\n}\n\n\n"; });
+define('text!views/ligue/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./styles.css\"></require>\n\t<section>\n\t\t<h1 id=\"ligueTitle\">${title}</h1>\n\t\t<h4 id=\"difficulteLigue\">${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n\t\t<div class=\"container\">\n\t\t\t<div class=\"half-width top-left\">\n\t\t\t\t<h3>Saisons</h3>\n\t\t\t\t<hr/>\n\t\t\t\t<ul class=\"list\">\n\t\t\t\t\t<li repeat.for=\"saison of saisons\">\n\t\t\t\t\t\t<h3>${saison.idsaison}</h3>\n\t\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerSaison($index, saison.idsaison)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/saison/${saison.idsaison}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"half-width top-right\">\n\t\t\t\t<h3>Équipes</h3>\n\t\t\t\t<hr/>\n\t\t\t\t<ul class=\"list\">\n\t\t\t\t\t<li repeat.for=\"equipe of equipes\">\n\t\t\t\t\t\t<h3>${equipe.nom}</h3>\n\t\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerEquipe($index, saison.idequipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idequipe}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t</section>\n</template>\n"; });
 define('text!views/ligues/styles.css', ['module'], function(module) { module.exports = ".ligues {\n  list-style-type: none;\n}\n\n.ligues li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.ligues li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.ligues li span i {\n  margin-right: 10px;\n}\n\n.ligues a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
-define('text!views/ligues/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getLigues()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getLigues()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"ligue of ligues\">\n        <h3>${ligue.idligue}</h3>\n        <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n        <button class=\"icon-btn top-right\" click.trigger=\"retirer($index, ligue.idligue)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/sports/ligue/${ligue.idligue}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/ligues/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getLigues()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getLigues()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"ligue of ligues\">\n        <h3>${ligue.idligue}</h3>\n        <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n        <button class=\"icon-btn top-right\" click.trigger=\"retirer($index, ligue.idligue)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/sports/ligue/${ligue.idligue}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherAjouter=true\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t <div class=\"popup-background\" if.bind=\"afficherAjouter\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"afficherAjouter=false\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter une ligue</h3>\n        <input value.bind=\"nouveauLigue.idligue\" placeholder=\"IDLigue\"/>\n\t\t\t\t<select value.bind=\"nouveauLigue.niveaudifficulte\">\t\t\n\t\t\t\t\t<option value.bind=\"C\">Compétitive</option>\n\t\t\t\t\t<option value.bind=\"R\">Récréative</option>\n\t\t\t\t</select>\t\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/liste-sports/styles.css', ['module'], function(module) { module.exports = ""; });
+define('text!views/liste-sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Sports</h1>\n    <button class=\"btn-flotante bottom-right\" click.trigger=\"afficherInscription=true\">\n      <i class=\"material-icons\">add</i>\n    </button>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getSports()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getSports()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"sport of sports\">\n        <h3>${sport.nom}</h3>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerSport($index, sport.idsport)\"><i class=\"material-icons\">clear</i></button>\n        <a href=\"/#/sports/ligues/${sport.idsport}\">Ligues</a>\n        <a href=\"/#/sports/tournois/${sport.idsport}\">Tournois</a>\n      </li>\n    </ul>\n\n\t\t<div class=\"popup-background\" if.bind=\"afficherInscription\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"afficherInscription=false\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un sport</h3>\n        <input value.bind=\"nouveauSport.idsport\" placeholder=\"IDSport\"/>\n        <input value.bind=\"nouveauSport.nom\" placeholder=\"Nom\"/>\n        <input type=\"number\" value.bind=\"nouveauSport.nbrminjoueurs\"/>\n        <input type=\"number\" value.bind=\"nouveauSport.nbrmaxjoueurs\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/requetes/styles.css', ['module'], function(module) { module.exports = ""; });
+define('text!views/requetes/index.html', ['module'], function(module) { module.exports = ""; });
 define('text!views/sports/styles.css', ['module'], function(module) { module.exports = ""; });
 define('text!views/tournois/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/usagers/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/liste-sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Sports</h1>\n    <button class=\"btn-flotante bottom-right\" click.trigger=\"afficherInscription=true\">\n      <i class=\"material-icons\">add</i>\n    </button>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getSports()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getSports()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"sport of sports\">\n        <h3>${sport.nom}</h3>\n        <a href=\"/#/sports/ligues/${sport.idsport}\">Ligues</a>\n        <a href=\"/#/sports/tournois/${sport.idsport}\">Tournois</a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
-define('text!views/requetes/index.html', ['module'], function(module) { module.exports = ""; });
 define('text!views/sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <router-view></router-view>\n  </section>\n</template>\n"; });
-define('text!views/tournois/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getTournois()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getTournois()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"tournoi of tournois\">\n        <h3>${tournoi.oeuvreCharite}</h3>\n        <span>${tournoi.dateDebut} - ${tournoi.dateFin}</span>\n        <span>$ ${tournoi.fondsAccumules}</span>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
-define('text!views/usagers/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Usagers</h1>\n    <button class=\"btn-flotante bottom-right\" click.trigger=\"afficherInscription=true\">\n      <i class=\"material-icons\">add</i>\n    </button>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getUsagers()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getUsagers()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"usager of usagers\">\n        <h3>${usager.nom}, ${usager.prenom}</h3>\n        <span if.bind=\"usager.courriel\"><i class=\"material-icons\">email</i> Courriel: ${usager.courriel}</span>\n        <span if.bind=\"usager.numtel\"><i class=\"material-icons\">phone</i> Numéro de téléphone: ${usager.numtel}</span>\n        <div class=\"top-right\">\n          <button class=\"icon-btn\" click.trigger=\"modifier(usager)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, usager)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n        <button class=\"icon-btn bottom-right\" click.trigger=\"usager.afficherProfile=!usager.afficherProfile\">\n          <i if.bind=\"!usager.afficherProfile\" class=\"material-icons\">expand_more</i>\n          <i if.bind=\"usager.afficherProfile\" class=\"material-icons\">expand_less</i>\n        </button>\n        <div class=\"profile-usager\" if.bind=\"usager.afficherProfile\">\n          <h4>Sports préférés</h4>\n          <ul>\n            <li repeat.for=\"sport of usager.sports\">\n              \n            </li>\n          </ul>\n\n          <h4>Équipes</h4>\n          <ul>\n            <li repeat.for=\"equipe of usager.equipes\">\n              \n            </li>\n          </ul>\n        </div>\n      </li>\n    </ul>\n   \n    <!-- Ajouter un usager -->\n    <div class=\"popup-background\" if.bind=\"afficherInscription\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"afficherInscription=false\"><i class=\"material-icons\">clear</i></button>\n        <h3>Inscription</h3>\n        <input value.bind=\"nouveauUsager.idusager\" placeholder=\"IDUsager\"/>\n        <input value.bind=\"nouveauUsager.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"nouveauUsager.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"nouveauUsager.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"nouveauUsager.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"inscrire()\">INSCRIRE</button>\n      </div>\n    </div>\n\n    <!-- Modifier un usager -->\n    <div class=\"popup-background\" if.bind=\"afficherModification\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"afficherModification=false\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'usager ${usagerAModifier.idusager}</h3>\n        <input value.bind=\"usagerAModifier.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"usagerAModifier.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"usagerAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"usagerAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n  </section>\n</template>\n"; });
 define('text!views/tournoi/index.html', ['module'], function(module) { module.exports = ""; });
-define('text!views/ligue/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<h1>${title}</h1>\n\t\t<h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n\t\t<div class=\"container\">\n\t\t\t<div class=\"half-width top-left\">\n\t\t\t\t<h3>Saisons</h3>\n\t\t\t\t<hr/>\n\t\t\t\t<ul class=\"list\">\n\t\t\t\t\t<li repeat.for=\"saison of saisons\">\n\t\t\t\t\t\t<h3>${saison.idsaison}</h3>\n\t\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerSaison($index, saison.idsaison)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"half-width top-right\">\n\t\t\t\t<h3>Équipes</h3>\n\t\t\t\t<hr/>\n\t\t\t\t<ul class=\"list\">\n\t\t\t\t\t<li repeat.for=\"equipe of equipes\">\n\t\t\t\t\t\t<h3>${equipe.nom}</h3>\n\t\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerEquipe($index, saison.idequipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t</section>\n</template>\n"; });
+define('text!views/usagers/styles.css', ['module'], function(module) { module.exports = ""; });
+define('text!views/tournois/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getTournois()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getTournois()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"tournoi of tournois\">\n        <h3>${tournoi.oeuvrecharite}</h3>\n        <span>${tournoi.datedebut.split('T')[0]} - ${tournoi.datefin.split('T')[0]}</span>\n        <span>$ ${tournoi.fondsaccumules}</span>\n        <div class=\"top-right\">\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, tournoi.idtournoi)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/usagers/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Usagers</h1>\n    <button class=\"btn-flotante bottom-right\" click.trigger=\"afficherInscription()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getUsagers()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getUsagers()\">\n          <option value.bind=\"1\">Ascendante</option>\n          <option value.bind=\"-1\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"usager of usagers\">\n        <h3>${usager.nom}, ${usager.prenom}</h3>\n        <span if.bind=\"usager.courriel\"><i class=\"material-icons\">email</i> Courriel: ${usager.courriel}</span>\n        <span if.bind=\"usager.numtel\"><i class=\"material-icons\">phone</i> Numéro de téléphone: ${usager.numtel}</span>\n        <div class=\"top-right\">\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, usager)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n   \n    <!-- Ajouter un usager -->\n    <div class=\"popup-background\" if.bind=\"inscriptionAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerInscription()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Inscription</h3>\n        <input value.bind=\"nouveauUsager.idusager\" placeholder=\"IDUsager\"/>\n        <input value.bind=\"nouveauUsager.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"nouveauUsager.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"nouveauUsager.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"nouveauUsager.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"inscrire()\">INSCRIRE</button>\n      </div>\n    </div>\n\n    <!-- Modifier un usager -->\n    <div class=\"popup-background\" if.bind=\"afficherModification\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"afficherModification=false\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'usager ${usagerAModifier.idusager}</h3>\n        <input value.bind=\"usagerAModifier.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"usagerAModifier.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"usagerAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"usagerAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n  </section>\n</template>\n"; });
+define('text!views/ligue/styles.css', ['module'], function(module) { module.exports = "#ligueTitle {\n\tmargin: 0;\n}\n\n#difficulteLigue {\n\tmargin: 10px 0;\n}\n"; });
+define('text!views/equipe/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<h1>${title}</h1>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"joueur of joueurs\">\n\t\t\t\t<h3>${joueur.nom}, ${joueur.prenom}</h3>\n\t\t\t\t<span if.bind=\"joueur.courriel\"><i class=\"material-icons\">email</i> Courriel: ${joueur.courriel}</span>\n        <span if.bind=\"joueur.numtel\"><i class=\"material-icons\">phone</i> Numéro de téléphone: ${joueur.numtel}</span>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerJoueur($index, joueur.idusager)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t</li>\n\t\t</ul>\n\t</section>\n</template>\n"; });
+define('text!views/saison/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<h1>${title}</h1>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date.split('T')[0]}</span>\n\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[0].points} - ${match.equipes[1].points}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t</div>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerMatch($index, match.idmatch)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t</li>\n\t\t</ul>\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherInscription=true\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\t</section>\n</template>\n"; });
 //# sourceMappingURL=app-bundle.js.map

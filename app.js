@@ -18,6 +18,7 @@ const ligues = require('./routes/ligues');
 const sports = require('./routes/sports');
 const tournois = require('./routes/tournois');
 const saisons = require('./routes/saisons');
+const matchs = require('./routes/matchs');
 
 // set up database
 
@@ -46,6 +47,7 @@ app.use(ligues);
 app.use(sports);
 app.use(tournois);
 app.use(saisons);
+app.use(matchs);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

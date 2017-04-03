@@ -13,6 +13,7 @@ export class Ligues {
     this.query = '';
     this.sort = 1;
     this.title = `Ligues de ${params.id}`;
+		this.afficherAjouter = false;
     this.getLigues(params.id);
   }
 

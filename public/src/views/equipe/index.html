@@ -1,0 +1,13 @@
+<template>
+	<section>
+		<h1>${title}</h1>
+		<ul class="list">
+			<li repeat.for="joueur of joueurs">
+				<h3>${joueur.nom}, ${joueur.prenom}</h3>
+				<span if.bind="joueur.courriel"><i class="material-icons">email</i> Courriel: ${joueur.courriel}</span>
+        <span if.bind="joueur.numtel"><i class="material-icons">phone</i> Numéro de téléphone: ${joueur.numtel}</span>
+				<button class="icon-btn top-right" click.trigger="retirerJoueur($index, joueur.idusager)"><i class="material-icons">clear</i></button>
+			</li>
+		</ul>
+	</section>
+</template>
