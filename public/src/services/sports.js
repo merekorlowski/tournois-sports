@@ -1,40 +1,42 @@
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 
-import {Equipe} from '../models/equipe';
+import {Sport} from '../models/sport';
+import {Ligue} from '../models/ligue';
+import {Tournoi} from '../models/tournoi';
 
-export class ServiceEquipes {
+export class ServiceSports {
   constructor() {
     this.http = new HttpClient().configure(config => {
-      config.withBaseUrl('http://localhost:3000/equipes/');
+      config.withBaseUrl('http://localhost:3000/sports/');
     });
   }
 
   get(query, sort) {
     return this.http.fetch(`?query=${query}&sort=${sort}`).then(response => response.json()).then(data => {
-      return data.map(equipe => {
-        return new Equipe(equipe);
+      return data.map(sport => {
+        return new Sport(sport);
       }) || [];
     });
   }
 
-  delete(equipe) {
+  delete(sport) {
     return this.http.fetch('', {
       method: 'delete',
-      body: json(equipe)
+      body: json(sport)
     });
   }
 
-  post(equipe) {
+  post(sport) {
     return this.http.fetch('', {
       method: 'post',
-      body: json(equipe)
+      body: json(sport)
     });
   }
 
-  put(equipe) {
+  put(sport) {
     return this.http.fetch('', {
       method: 'put',
-      body: json(equipe)
+      body: json(sport)
     });
   }
 

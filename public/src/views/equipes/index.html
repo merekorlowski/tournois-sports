@@ -2,6 +2,9 @@
   <require from="./styles.css"></require>
   <section>
     <h1>Équipes</h1>
+    <button class="btn-flotante bottom-right" click.trigger="afficherInscription=true">
+      <i class="material-icons">add</i>
+    </button>
     <div class="container search-bar-container">
       <form class="search-bar">
         <input type="text" placeholder="Mots clés" value.bind="query" />
@@ -15,14 +18,39 @@
         </select>
       </div>
     </div>
-    <ul id="equipes">
+    <ul id="list">
       <li class="equipe" repeat.for="equipe of equipes">
         <h3>${equipe.nom}</h3>
+        <div class="top-right">
+          <button class="icon-btn" click.trigger="modifier(equipe)"><i class="material-icons">edit</i></button>
+          <button class="icon-btn" click.trigger="retirer($index, equipe)"><i class="material-icons">clear</i></button>
+        </div>
         <ul id="joueurs">
           <li repeat.for="joueur of equipe.joueurs">${joueur.nom}</li>
         </ul>
         <a href="">Voir profile <i class="material-icons">keyboard_arrow_right</i></a>
       </li>
     </ul>
+    <!-- Ajouter une equipe -->
+    <div class="popup-background" if.bind="afficherInscription">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="afficherInscription=false"><i class="material-icons">clear</i></button>
+        <h3>Inscription</h3>
+        <input value.bind="nouvelEquipe.idequipe" placeholder="IDUsager"/>
+        
+        <button class="btn btn-inscription" click.trigger="inscrire()">INSCRIRE</button>
+      </div>
+    </div>
+
+    <!-- Modifier une equipe -->
+    <div class="popup-background" if.bind="afficherModification">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="afficherModification=false"><i class="material-icons">clear</i></button>
+        <h3>Modification de l'equipe ${equipeAModifier.idequipe}</h3>
+        <input value.bind="equipeAModifier.idequipe" placeholder="ID"/>
+      
+        <button class="btn btn-inscription" click.trigger="sauvegarder()">SAUVERGARDER</button>
+      </div>
+    </div>
   </section>
 </template>

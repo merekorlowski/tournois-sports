@@ -8,7 +8,7 @@ const config = require('../config');
 
 const connectionString = process.env.DATABASE_URL || config.dbUrl;
 
-router.get('/tournois', (req, res, next) => {
+router.get('/sports', (req, res, next) => {
 
   const results = [];
 
@@ -23,8 +23,9 @@ router.get('/tournois', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Tournoi
-      WHERE idsport = '${req.query.idsport}'
+      FROM TOURNOIS_SPORTSDB.Sport
+      WHERE nom LIKE '%${req.query.query}%'
+      ORDER BY nom ${req.query.sort === 1 ? 'ASC' : 'DESC'}
     `);
 
     query.on('row', row => {

@@ -18,11 +18,11 @@
         </select>
       </div>
     </div>
-    <ul class="usagers">
+    <ul class="list">
       <li repeat.for="usager of usagers">
         <h3>${usager.nom}, ${usager.prenom}</h3>
         <span if.bind="usager.courriel"><i class="material-icons">email</i> Courriel: ${usager.courriel}</span>
-        <span if.bind="usager.numTel"><i class="material-icons">phone</i> Numéro de téléphone: ${usager.numTel}</span>
+        <span if.bind="usager.numtel"><i class="material-icons">phone</i> Numéro de téléphone: ${usager.numtel}</span>
         <div class="top-right">
           <button class="icon-btn" click.trigger="modifier(usager)"><i class="material-icons">edit</i></button>
           <button class="icon-btn" click.trigger="retirer($index, usager)"><i class="material-icons">clear</i></button>

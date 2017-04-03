@@ -3,8 +3,8 @@ export class Ligue {
     if (ligue) {
       Object.assign(this, ligue);
     } else {
-      this.IDLeague = '';
-      this.niveauDifficulte = '';
+      this.idligue = '';
+      this.niveaudifficulte = '';
     }
   }
 }
