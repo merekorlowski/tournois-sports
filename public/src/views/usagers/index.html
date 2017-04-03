@@ -2,7 +2,7 @@
   <require from="./styles.css"></require>
   <section>
     <h1>Usagers</h1>
-    <button class="btn-flotante bottom-right" click.trigger="afficherInscription=true">
+    <button class="btn-flotante bottom-right" click.trigger="afficherInscription()">
       <i class="material-icons">add</i>
     </button>
     <div class="container search-bar-container">
@@ -24,35 +24,15 @@
         <span if.bind="usager.courriel"><i class="material-icons">email</i> Courriel: ${usager.courriel}</span>
         <span if.bind="usager.numtel"><i class="material-icons">phone</i> Numéro de téléphone: ${usager.numtel}</span>
         <div class="top-right">
-          <button class="icon-btn" click.trigger="modifier(usager)"><i class="material-icons">edit</i></button>
           <button class="icon-btn" click.trigger="retirer($index, usager)"><i class="material-icons">clear</i></button>
-        </div>
-        <button class="icon-btn bottom-right" click.trigger="usager.afficherProfile=!usager.afficherProfile">
-          <i if.bind="!usager.afficherProfile" class="material-icons">expand_more</i>
-          <i if.bind="usager.afficherProfile" class="material-icons">expand_less</i>
-        </button>
-        <div class="profile-usager" if.bind="usager.afficherProfile">
-          <h4>Sports préférés</h4>
-          <ul>
-            <li repeat.for="sport of usager.sports">
-              
-            </li>
-          </ul>
-
-          <h4>Équipes</h4>
-          <ul>
-            <li repeat.for="equipe of usager.equipes">
-              
-            </li>
-          </ul>
         </div>
       </li>
     </ul>
    
     <!-- Ajouter un usager -->
-    <div class="popup-background" if.bind="afficherInscription">
+    <div class="popup-background" if.bind="inscriptionAffiche">
       <div class="popup">
-        <button class="icon-btn" click.trigger="afficherInscription=false"><i class="material-icons">clear</i></button>
+        <button class="icon-btn" click.trigger="cancelerInscription()"><i class="material-icons">clear</i></button>
         <h3>Inscription</h3>
         <input value.bind="nouveauUsager.idusager" placeholder="IDUsager"/>
         <input value.bind="nouveauUsager.nom" placeholder="Nom"/>

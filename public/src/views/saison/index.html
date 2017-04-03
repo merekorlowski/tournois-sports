@@ -1,0 +1,21 @@
+<template>
+	<section>
+		<h1>${title}</h1>
+		<ul class="list">
+			<li repeat.for="match of matchs">
+				<span><i class="material-icons">today</i>${match.date.split('T')[0]}</span>
+				<span><i class="material-icons">access_time</i>${match.heure}</span>
+				<span><i class="material-icons">location_on</i>${match.lieu}</span>
+				<div class="equipes-match">
+					<span><h3>${match.equipes[0].nom}</h3></span>
+					<span><h3>${match.equipes[0].points} - ${match.equipes[1].points}</h3></span>
+					<span><h3>${match.equipes[1].nom}</h3></span>
+				</div>
+				<button class="icon-btn top-right" click.trigger="retirerMatch($index, match.idmatch)"><i class="material-icons">clear</i></button>
+			</li>
+		</ul>
+		<button class="btn-flotante bottom-right" click.trigger="afficherInscription=true">
+      <i class="material-icons">add</i>
+    </button>
+	</section>
+</template>

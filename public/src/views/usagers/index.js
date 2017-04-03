@@ -18,6 +18,11 @@ export class Usagers {
     this.getUsagers();
   }
 
+	detached() {
+		// Remove listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
   getUsagers() {
     this.serviceUsagers.get(this.query, this.sort).then(usagers => {
       this.usagers = usagers;
@@ -30,10 +35,32 @@ export class Usagers {
     });
   }
 
+	afficherInscription() {
+		this.inscriptionAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerInscription() {
+		this.inscriptionAffiche = false;
+		this.nouveauUsager = new Usager();
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	scrollTo() {
+		window.scrollTo( 0, 0 );
+	}
+
   inscrire() {
     this.serviceUsagers.post(this.nouveauUsager).then(usager => {
-      this.afficherInscription = false;
+      this.inscriptionAffiche = false;
       this.usagers.push(this.nouveauUsager);
+			
+			// Remove listener to disable scroll
+			window.removeEventListener('scroll', () => {
+				window.scrollTo( 0, 0 );
+			});
     });
   }
 
