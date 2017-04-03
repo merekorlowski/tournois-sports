@@ -12,12 +12,19 @@ export class Tournois {
   activate(params, navigation) {
     this.query = '';
     this.sort = 1;
-    this.getTournois();
+    this.title = `Tournois de ${params.id}`;
+    this.getTournois(params.id);
   }
 
-  getTournois() {
-    this.serviceTournois.get(this.query, this.sort).then(tournois => {
+  getTournois(idsport) {
+    this.serviceTournois.get(this.query, this.sort, idsport).then(tournois => {
       this.tournois = tournois;
+    });
+  }
+
+  retirer(index, tournoi) {
+    this.serviceTournois.delete(tournoi).then(() => {
+      this.tournois.splice(index, 1);
     });
   }
 
