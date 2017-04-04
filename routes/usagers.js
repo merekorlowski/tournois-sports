@@ -25,7 +25,7 @@ router.get('/usagers', (req, res, next) => {
       SELECT * 
       FROM TOURNOIS_SPORTSDB.Usager 
       WHERE nom LIKE '%${req.query.query}%' OR prenom LIKE '%${req.query.query}'
-      ORDER BY nom ${req.query.sort === 1 ? 'ASC' : 'DESC'}
+      ORDER BY nom ${req.query.sort}
     `);
 
     query.on('row', row => {
@@ -41,7 +41,7 @@ router.get('/usagers', (req, res, next) => {
   });
 });
 
-router.post('/usagers', (req, res, next) => {
+router.post('/usager', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
 
@@ -73,7 +73,7 @@ router.post('/usagers', (req, res, next) => {
   });
 });
 
-router.delete('/usagers', (req, res, next) => {
+router.delete('/usager', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
 
@@ -99,7 +99,7 @@ router.delete('/usagers', (req, res, next) => {
   });
 });
 
-router.put('/usagers', (req, res, next) => {
+router.put('/usager', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
 

@@ -136,4 +136,54 @@ router.get('/saison/matchs', (req, res, next) => {
   });
 });
 
+router.post('/saison/match', (req, res, next) => {
+
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      INSERT
+      INTO TOURNOIS_SPORTSDB.Match
+      VALUES (
+        '${req.body.match.idmatch}',
+        '${req.body.match.date}',
+        '${req.body.match.heure}',
+        '${req.body.match.lieu}',
+        '${req.body.match.idsaison}'
+      );
+
+      INSERT
+      INTO TOURNOIS_SPORTSDB.EquipeMatch
+      VALUES (
+        '${req.body.match.idmatch}',
+        '${req.body.equipeA.idequipe}',
+        '${req.body.equipeA.nbrpoints}'
+      );
+
+      INSERT
+      INTO TOURNOIS_SPORTSDB.EquipeMatch
+      VALUES (
+        '${req.body.match.idmatch}',
+        '${req.body.equipeB.idequipe}',
+        '${req.body.equipeB.nbrpoints}'
+      );
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+
+  });
+});
+
 module.exports = router;

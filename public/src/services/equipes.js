@@ -1,4 +1,4 @@
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 
 import {Equipe} from '../models/equipe';
 import {Usager} from '../models/usager';
@@ -24,11 +24,35 @@ export class ServiceEquipes {
     });
 	}
 
+	getGerant(idequipe) {
+		return this.http.fetch(`equipe/gerant?idequipe=${idequipe}`).then(response => response.json()).then(data => {
+      return new Usager(data[0]);
+    });
+	}
+
 	getJoueurs(idequipe) {
 		return this.http.fetch(`equipe/joueurs?idequipe=${idequipe}`).then(response => response.json()).then(data => {
       return data.map(usager => {
         return new Usager(usager);
       }) || [];
+    });
+	}
+
+	getUsagersLibres(idligue) {
+		return this.http.fetch(`equipe/usagers-libres?idligue=${idligue}`).then(response => response.json()).then(data => {
+      return data.map(usager => {
+        return new Usager(usager);
+      }) || [];
+    });
+	}
+
+	post(idusager, idequipe) {
+		return this.http.fetch('equipe/joueur', {
+      method: 'post',
+      body: json({
+				idusager: idusager,
+				idequipe: idequipe
+			})
     });
 	}
 

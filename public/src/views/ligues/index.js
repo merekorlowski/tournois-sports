@@ -11,15 +11,43 @@ export class Ligues {
 
   activate(params, navigation) {
     this.query = '';
-    this.sort = 1;
+    this.sort = 'ASC';
     this.title = `Ligues de ${params.id}`;
-		this.afficherAjouter = false;
+		this.ajoutAffiche = false;
+		this.nouveauLigue = new Ligue();
+		this.nouveauLigue.idsport = params.id;
+		this.idsport = params.id;
     this.getLigues(params.id);
   }
 
-  getLigues(sport) {
-    this.serviceLigues.get(this.query, this.sort, sport).then(ligues => {
+	detached() {
+		// Remove listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+  getLigues() {
+    this.serviceLigues.get(this.query, this.sort, this.idsport).then(ligues => {
       this.ligues = ligues;
+    });
+  }
+
+	afficherAjout() {
+		this.ajoutAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerAjout() {
+		this.ajoutAffiche = false;
+		this.nouveauLigue = new Ligue();
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	ajouter() {
+    this.serviceLigues.post(this.nouveauLigue).then(() => {
+      this.ajoutAffiche = false;
+      this.ligues.push(this.nouveauLigue);
     });
   }
 
@@ -28,5 +56,9 @@ export class Ligues {
       this.ligues.splice(index, 1);
     });
   }
+
+	scrollTo() {
+		window.scrollTo( 0, 0 );
+	}
 
 }

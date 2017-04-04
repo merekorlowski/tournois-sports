@@ -2,9 +2,6 @@
   <require from="./styles.css"></require>
   <section>
     <h1>Usagers</h1>
-    <button class="btn-flotante bottom-right" click.trigger="afficherInscription()">
-      <i class="material-icons">add</i>
-    </button>
     <div class="container search-bar-container">
       <form class="search-bar">
         <input type="text" placeholder="Mots clés" value.bind="query" />
@@ -13,21 +10,26 @@
       <div class="sort-list">
         <label>Trier:</label>
         <select value.bind="sort" change.trigger="getUsagers()">
-          <option value.bind="1">Ascendante</option>
-          <option value.bind="-1">Descendante</option>
+          <option value="ASC">Ascendante</option>
+          <option value="DESC">Descendante</option>
         </select>
       </div>
     </div>
     <ul class="list">
       <li repeat.for="usager of usagers">
         <h3>${usager.nom}, ${usager.prenom}</h3>
-        <span if.bind="usager.courriel"><i class="material-icons">email</i> Courriel: ${usager.courriel}</span>
-        <span if.bind="usager.numtel"><i class="material-icons">phone</i> Numéro de téléphone: ${usager.numtel}</span>
+        <span if.bind="usager.courriel"><i class="material-icons">email</i>${usager.courriel}</span>
+        <span if.bind="usager.numtel"><i class="material-icons">phone</i>${usager.numtel}</span>
         <div class="top-right">
+					<button class="icon-btn" click.trigger="modifier(usager)"><i class="material-icons">edit</i></button>
           <button class="icon-btn" click.trigger="retirer($index, usager)"><i class="material-icons">clear</i></button>
         </div>
       </li>
     </ul>
+
+		<button class="btn-flotante bottom-right" click.trigger="afficherInscription()">
+      <i class="material-icons">add</i>
+    </button>
    
     <!-- Ajouter un usager -->
     <div class="popup-background" if.bind="inscriptionAffiche">

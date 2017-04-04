@@ -6,8 +6,9 @@ export class Sport {
     } else {
       this.idsport = '';
       this.nom = '';
-      this.nbrMinJoueurs = 0;
-      this.nbrMaxJoueurs = 0;
+			this.description = '';
+      this.nbrminjoueurs = 0;
+      this.nbrmaxjoueurs = 0;
     }
   }
 }

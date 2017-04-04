@@ -1,4 +1,4 @@
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 
 import {Tournoi} from '../models/tournoi';
 import {Commanditaire} from '../models/commanditaire';

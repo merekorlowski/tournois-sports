@@ -1,39 +1,32 @@
-#inscription {
-  width: 300px;
-  text-align: center;
-  background-color: #333;
-  display: inline-block;
-  padding: 15px;
+#sectionAccueil {
+	width: 100%;
 }
 
-#inscription input {
-  margin: 5px;
-  width: 100%;
+#sectionAccueil h1 {
+	margin: 0 auto;
+	width: 1000px;
+	text-align: center;
+	margin-top: 150px;
+	font-size: 50px;
 }
 
-#inscription .btn {
-  width: 100%;
-  color: #fff;
-  text-shadow: 1px 1px 5px #222;
-  background-color: #00994d;
+#sectionAccueil p {
+	text-align: center;
+	margin: 0 auto;
+	width: 100%;
+	margin-top: 15px;
 }
 
-.type-inscription {
-  text-align: left;
-  padding: 3px;
-  border-bottom: 1px solid #fff;
-}
-
-#mainTitle {
-  display: inline-block;
-  text-align: left;
-  margin: 0;
-  font-size: 50px;
-  margin-top: 50px;
-  margin-bottom: 10px;
-}
-
-#mainInstructions {
-  display: block;
-  float: left;
+#sectionAccueil a {
+	text-decoration: none;
+	display: block;
+	text-align: center;
+	padding: 15px;
+	color: #fff;
+	text-shadow: 1px 1px 5px #222;
+	background-color: #008080;
+	width: 250px;
+	margin: 75px auto;
+	border-radius: 3px;
+	box-shadow: 1px 1px 5px #222;
 }

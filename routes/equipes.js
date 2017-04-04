@@ -24,6 +24,8 @@ router.get('/equipes', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM TOURNOIS_SPORTSDB.Equipe
+      WHERE nom LIKE '%${req.query.query}%'
+      ORDER BY nom ${req.query.sort}
     `);
 
     query.on('row', row => {
@@ -89,7 +91,47 @@ router.get('/equipe/joueurs', (req, res, next) => {
       FROM TOURNOIS_SPORTSDB.Usager
       WHERE idusager IN (
         SELECT idusager
-        FROM TOURNOIS_SPORTSDB.Equipe
+        FROM TOURNOIS_SPORTSDB.UsagerEquipe
+        WHERE idequipe = '${req.query.idequipe}'
+      ) AND idusager NOT IN (
+        SELECT idusager
+        FROM TOURNOIS_SPORTSDB.Gerant
+      )
+    `);
+
+    query.on('row', row => {
+      results.push(row);
+    });
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      console.log(JSON.stringify(results));
+      return res.json(results);
+    });
+
+  });
+});
+
+router.get('/equipe/gerant', (req, res, next) => {
+
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      SELECT * 
+      FROM TOURNOIS_SPORTSDB.Gerant NATURAL JOIN TOURNOIS_SPORTSDB.Usager
+      WHERE idusager IN (
+        SELECT idusager
+        FROM TOURNOIS_SPORTSDB.UsagerEquipe
         WHERE idequipe = '${req.query.idequipe}'
       )
     `);
@@ -97,6 +139,74 @@ router.get('/equipe/joueurs', (req, res, next) => {
     query.on('row', row => {
       results.push(row);
     });
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      console.log(JSON.stringify(results));
+      return res.json(results);
+    });
+
+  });
+});
+
+router.get('/equipe/usagers-libres', (req, res, next) => {
+
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      SELECT * 
+      FROM TOURNOIS_SPORTSDB.Usager
+      WHERE idusager NOT IN (
+        SELECT idusager
+        FROM TOURNOIS_SPORTSDB.UsagerEquipe
+      )
+    `);
+
+    query.on('row', row => {
+      results.push(row);
+    });
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      console.log(JSON.stringify(results));
+      return res.json(results);
+    });
+
+  });
+});
+
+router.post('/equipe/joueur', (req, res, next) => {
+
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      INSERT
+      INTO TOURNOIS_SPORTSDB.UsagerEquipe
+      VALUES (
+        '${req.body.idusager}',
+        '${req.body.idequipe}'
+      )
+    `);
 
     // After all data is returned, close connection and return results
     query.on('end', () => {
@@ -125,10 +235,6 @@ router.delete('/equipe/joueur', (req, res, next) => {
       FROM TOURNOIS_SPORTSDB.Usager
       WHERE idusager = '${req.query.idusager}'
     `);
-
-    query.on('row', row => {
-      results.push(row);
-    });
 
     // After all data is returned, close connection and return results
     query.on('end', () => {

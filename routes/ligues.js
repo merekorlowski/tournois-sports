@@ -24,7 +24,8 @@ router.get('/ligues', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM TOURNOIS_SPORTSDB.Ligue
-      WHERE idsport = '${req.query.idsport}'
+      WHERE idsport = '${req.query.idsport}' AND (idligue LIKE '%${req.query.query}%' OR niveaudifficulte LIKE '%${req.query.query}%')
+      ORDER BY idligue ${req.query.sort}
     `);
 
     query.on('row', row => {
@@ -72,7 +73,73 @@ router.get('/ligue', (req, res, next) => {
   });
 });
 
-router.delete('/ligues', (req, res, next) => {
+router.post('/ligue', (req, res, next) => {
+
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      INSERT  
+      INTO TOURNOIS_SPORTSDB.Ligue(idligue, idsport, niveaudifficulte)
+      VALUES (
+        '${req.body.idligue}',
+        '${req.body.idsport}',
+        '${req.body.niveaudifficulte}'
+      ) 
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+
+  });
+});
+
+router.post('/ligue/equipe', (req, res, next) => {
+
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      INSERT
+      INTO TOURNOIS_SPORTSDB.Equipe(idequipe, nom, statutdeforfait, idusager, idligue)
+      VALUES (
+        '${req.body.idequipe}',
+        '${req.body.nom}',
+        '${req.body.statutdeforfait}',
+        '${req.body.idusager}',
+        '${req.body.idligue}'
+      )
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+
+  });
+});
+
+router.delete('/ligue', (req, res, next) => {
 
   const results = [];
 

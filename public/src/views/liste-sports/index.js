@@ -11,11 +11,16 @@ export class ListeSports {
 
   activate(params, navigation) {
     this.query = '';
-    this.sort = 1;
+    this.sort = 'ASC';
 		this.nouveauSport = new Sport();
-		this.afficherInscription = false;
+		this.ajoutAffiche = false;
     this.getSports();
   }
+
+	detached() {
+		// Remove listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
 
   getSports() {
     this.serviceSports.get(this.query, this.sort).then(sports => {
@@ -29,11 +34,45 @@ export class ListeSports {
     });
 	}
 
+	afficherAjout() {
+		this.ajoutAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerAjout() {
+		this.ajoutAffiche = false;
+		this.nouveauSport = new Sport();
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
 	ajouter() {
     this.serviceSports.post(this.nouveauSport).then(sport => {
-      this.afficherInscription = false;
+      this.ajoutAffiche = false;
       this.sports.push(this.nouveauSport);
     });
   }
+
+	afficherModification(sport) {
+		this.modificationAffiche = true;
+		this.sportAModifier = sport;
+	}
+
+	cancelerModification() {
+		this.modificationAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	modifier() {
+		this.serviceSports.put(this.sportAModifier).then(() => {
+			this.modificationAffiche = false;
+		});
+	}
+	
+	scrollTo() {
+		window.scrollTo( 0, 0 );
+	}
 
 }

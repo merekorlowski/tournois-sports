@@ -10,16 +10,16 @@
       <div class="sort-list">
         <label>Trier:</label>
         <select value.bind="sort" change.trigger="getTournois()">
-          <option value.bind="1">Ascendante</option>
-          <option value.bind="-1">Descendante</option>
+          <option value="ASC">Ascendante</option>
+          <option value="DESC">Descendante</option>
         </select>
       </div>
     </div>
     <ul class="list">
       <li repeat.for="tournoi of tournois">
         <h3>${tournoi.oeuvrecharite}</h3>
-        <span>${tournoi.datedebut.split('T')[0]} - ${tournoi.datefin.split('T')[0]}</span>
-        <span>$ ${tournoi.fondsaccumules}</span>
+        <span><i class="material-icons">date_range</i>${tournoi.datedebut.split('T')[0]} - ${tournoi.datefin.split('T')[0]}</span>
+        <span><i class="material-icons">attach_money</i> ${tournoi.fondsaccumules}</span>
         <div class="top-right">
           <button class="icon-btn" click.trigger="retirer($index, tournoi.idtournoi)"><i class="material-icons">clear</i></button>
         </div>

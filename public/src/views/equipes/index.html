@@ -10,18 +10,16 @@
       <div class="sort-list">
         <label>Trier:</label>
         <select value.bind="sort" change.trigger="getEquipes()">
-          <option value.bind="1">Ascendante</option>
-          <option value.bind="-1">Descendante</option>
+          <option value="ASC">Ascendante</option>
+          <option value="DESC">Descendante</option>
         </select>
       </div>
     </div>
-    <ul id="list">
-      <li class="equipe" repeat.for="equipe of equipes">
+    <ul class="list">
+      <li repeat.for="equipe of equipes">
         <h3>${equipe.nom}</h3>
-        <ul id="joueurs">
-          <li repeat.for="joueur of equipe.joueurs">${joueur.nom}</li>
-        </ul>
-        <a href="">Voir profile <i class="material-icons">keyboard_arrow_right</i></a>
+				<button class="icon-btn top-right" click.trigger="retirerEquipe($index, equipe.idequipe)"><i class="material-icons">clear</i></button>
+				<a class="bottom-right" href="/#/equipe/${equipe.idequipe}"><i class="material-icons">keyboard_arrow_right</i></a>
       </li>
     </ul>
   </section>

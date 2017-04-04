@@ -1,4 +1,4 @@
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 
 import {Saison} from '../models/saison';
 import {Match} from '../models/match';
@@ -37,6 +37,17 @@ export class ServiceSaisons {
         return new Match(match);
       }) || [];
     });
+	}
+
+	postMatch(match, equipeA, equipeB) {
+		return this.http.fetch('saison/match', {
+			method: 'post',
+			body: json({
+				match: JSON.stringify(match),
+				equipeA: JSON.stringify(equipeA),
+				equipeB: JSON.stringify(equipeB)
+			})
+		});
 	}
 
 }

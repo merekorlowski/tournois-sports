@@ -33,10 +33,10 @@ export class ServiceSports {
     });
   }
 
-	deleteSport(idsport) {
+	deleteSport(sport) {
 		return this.http.fetch('sport', {
       method: 'delete',
-      body: json(idsport)
+      body: json(sport)
     });
 	}
 

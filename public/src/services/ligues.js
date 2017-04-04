@@ -1,4 +1,4 @@
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 
 import {Ligue} from '../models/ligue';
 import {Gestionnaire} from '../models/gestionnaire';
@@ -20,6 +20,13 @@ export class ServiceLigues {
       }) || [];
     });
   }
+
+	post(ligue) {
+		return this.http.fetch('ligue', {
+      method: 'post',
+      body: json(ligue)
+    });
+	}
 
 	getLigue(idligue) {
 		return this.http.fetch(`ligue?idligue=${idligue}`).then(response => response.json()).then(data => {
@@ -56,6 +63,13 @@ export class ServiceLigues {
       body: json(idequipe)
     });
   }
+
+	postEquipe(equipe) {
+		return this.http.fetch('ligue/equipe', {
+      method: 'post',
+      body: json(equipe)
+    });
+	}
 	
 	deleteSaison(idsaison) {
     return this.http.fetch('ligue/saison', {

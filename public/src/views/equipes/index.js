@@ -11,7 +11,7 @@ export class Equipes {
 
   activate(params, navigation) {
     this.query = '';
-    this.sort = 1;
+    this.sort = 'ASC';
     this.getEquipes();
   }
 

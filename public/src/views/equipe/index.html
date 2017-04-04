@@ -1,13 +1,50 @@
 <template>
 	<section>
 		<h1>${title}</h1>
+		<h2>Joueurs</h2>
 		<ul class="list">
+			<li>
+				<h3>${gerant.nom}, ${gerant.prenom}</h3>
+				<p>Gérant</p>
+				<span><i class="material-icons">school</i>${gerant.diplomesportif}</span>
+				<span if.bind="gerant.courriel"><i class="material-icons">email</i>${gerant.courriel}</span>
+        <span if.bind="gerant.numtel"><i class="material-icons">phone</i>${gerant.numtel}</span>
+			</li>
 			<li repeat.for="joueur of joueurs">
 				<h3>${joueur.nom}, ${joueur.prenom}</h3>
-				<span if.bind="joueur.courriel"><i class="material-icons">email</i> Courriel: ${joueur.courriel}</span>
-        <span if.bind="joueur.numtel"><i class="material-icons">phone</i> Numéro de téléphone: ${joueur.numtel}</span>
+				<span if.bind="joueur.courriel"><i class="material-icons">email</i>${joueur.courriel}</span>
+        <span if.bind="joueur.numtel"><i class="material-icons">phone</i>${joueur.numtel}</span>
 				<button class="icon-btn top-right" click.trigger="retirerJoueur($index, joueur.idusager)"><i class="material-icons">clear</i></button>
 			</li>
 		</ul>
+
+		<button class="btn-flotante bottom-right" click.trigger="afficherAjout()">
+      <i class="material-icons">add</i>
+    </button>
+   
+    <!-- Ajouter un joueur -->
+    <div class="popup-background" if.bind="ajoutAffiche">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="cancelerAjout()"><i class="material-icons">clear</i></button>
+        <h3>Ajouter un joueur</h3>
+        <select value.bind="nouveauJoueur">
+					<option repeat.for="usager of usagersLibres" model.bind="usager">${usager.idusager}</option>
+        </select>
+        <button class="btn btn-inscription" click.trigger="ajouter()">AJOUTER</button>
+      </div>
+    </div>
+
+		 <!-- Modifier un equipe -->
+    <div class="popup-background" if.bind="modificationAffiche">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="cancelerModification()"><i class="material-icons">clear</i></button>
+        <h3>Modification de l'employé ${employe.idemploye}</h3>
+        <input value.bind="employeAModifier.nom" placeholder="Nom"/>
+        <input value.bind="employeAModifier.prenom" placeholder="Prénom"/>
+        <input value.bind="employeAModifier.role" placeholder="Role"/>
+        <button class="btn btn-inscription" click.trigger="sauvegarder()">SAUVERGARDER</button>
+      </div>
+    </div>
+
 	</section>
 </template>

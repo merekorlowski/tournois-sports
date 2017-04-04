@@ -11,7 +11,7 @@ export class Usagers {
 
   activate(params, navigation) {
     this.query = '';
-    this.sort = 1;
+    this.sort = 'ASC';
     this.nouveauUsager = new Usager();
     this.usagerAModifier = new Usager();
     this.afficherModification = false;
@@ -48,27 +48,19 @@ export class Usagers {
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
-	scrollTo() {
-		window.scrollTo( 0, 0 );
-	}
-
   inscrire() {
     this.serviceUsagers.post(this.nouveauUsager).then(usager => {
       this.inscriptionAffiche = false;
       this.usagers.push(this.nouveauUsager);
 			
 			// Remove listener to disable scroll
-			window.removeEventListener('scroll', () => {
-				window.scrollTo( 0, 0 );
-			});
+			window.removeEventListener('scroll', this.scrollTo);
     });
   }
 
   modifier(usager) {
     this.afficherModification = true;
     this.usagerAModifier = usager;
-    window.onwheel = preventDefault;  
-    document.onkeydown  = preventDefaultForScrollKeys;
   }
 
   sauvegarder() {
@@ -76,5 +68,10 @@ export class Usagers {
       this.afficherModification = false;
     });
   }
+
+	scrollTo() {
+		window.scrollTo( 0, 0 );
+	}
+
 
 }

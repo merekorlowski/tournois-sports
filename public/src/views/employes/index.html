@@ -10,17 +10,59 @@
       <div class="sort-list">
         <label>Trier:</label>
         <select value.bind="sort" change.trigger="getEmployes()">
-          <option value.bind="1">Ascendante</option>
-          <option value.bind="-1">Descendante</option>
+          <option value="ASC">Ascendante</option>
+          <option value="DESC">Descendante</option>
         </select>
       </div>
     </div>
     <ul class="list">
       <li repeat.for="employe of employes">
         <h3>${employe.nom}, ${employe.prenom}</h3>
-        <span>${employe.role}</span>
-        <a href="">Voir profile <i class="material-icons">keyboard_arrow_right</i></a>
+        <p>${employe.role}</p>
+				<span if.bind="employe.role==='Arbitre'"><strong>Nombre d'années:</strong>${employe.nbrannees}</span>
+				<span if.bind="employe.role==='Gestionnaire' && employe.numtel !== 'undefined'"><i class="material-icons">phone</i>${employe.numtel}</span>
+				<span if.bind="employe.role==='Gestionnaire' && employe.courriel !== 'undefined'"><i class="material-icons">email</i>${employe.courriel}</span>
+				<div class="top-right">
+					<button class="icon-btn" click.trigger="afficherModification(employe)"><i class="material-icons">edit</i></button>
+          <button class="icon-btn" click.trigger="retirer($index, employe)"><i class="material-icons">clear</i></button>
+        </div>
       </li>
     </ul>
+
+		<button class="btn-flotante bottom-right" click.trigger="afficherAjout()">
+      <i class="material-icons">add</i>
+    </button>
+   
+    <!-- Ajouter un employe -->
+    <div class="popup-background" if.bind="ajoutAffiche">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="cancelerAjout()"><i class="material-icons">clear</i></button>
+        <h3>Ajouter un employé</h3>
+        <input value.bind="nouveauEmploye.idemploye" placeholder="IDEmploye" required/>
+        <input value.bind="nouveauEmploye.nom" placeholder="Nom" required/>
+        <input value.bind="nouveauEmploye.prenom" placeholder="Prénom" required/>
+        <input value.bind="nouveauEmploye.role" placeholder="Role" required/>
+				<input if.bind="nouveauEmploye.role==='Arbitre'" type="number" value.bind="nouveauEmploye.nbrannees" placeholder="Nombre d'années" required/>
+				<input if.bind="nouveauEmploye.role==='Gestionnaire' && employe.numtel !== 'undefined'" value.bind="nouveauEmploye.numtel" placeholder="(XXX) XXX-XXXX"/>
+				<input if.bind="nouveauEmploye.role==='Gestionnaire' && employe.courriel !== 'undefined'" value.bind="nouveauEmploye.courriel" placeholder="example@gmail.com"/>
+        <button class="btn btn-inscription" click.trigger="ajouter()">AJOUTER</button>
+      </div>
+    </div>
+
+		<!-- Modifier un employe -->
+    <div class="popup-background" if.bind="modificationAffiche">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="cancelerModification()"><i class="material-icons">clear</i></button>
+        <h3>Modifier l'employé ${employeAModifier.idemploye}</h3>
+        <input value.bind="employeAModifier.nom" placeholder="Nom" required/>
+        <input value.bind="employeAModifier.prenom" placeholder="Prénom" required/>
+        <input value.bind="employeAModifier.role" placeholder="Role" required/>
+				<input if.bind="employeAModifier.role==='Arbitre'" type="number" value.bind="employeAModifier.nbrannees" placeholder="Nombre d'années" required/>
+				<input if.bind="employeAModifier.role==='Gestionnaire'" value.bind="employeAModifier.numtel" placeholder="(XXX) XXX-XXXX"/>
+				<input if.bind="employeAModifier.role==='Gestionnaire'" value.bind="employeAModifier.courriel" placeholder="example@gmail.com"/>
+        <button type="submit" class="btn btn-inscription" click.trigger="modifier()">SAUVEGARDER</button>
+      </div>
+    </div>
+
   </section>
 </template>

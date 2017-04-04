@@ -4,6 +4,7 @@ export class Ligue {
       Object.assign(this, ligue);
     } else {
       this.idligue = '';
+			this.idsport = '';
       this.niveaudifficulte = '';
     }
   }

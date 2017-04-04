@@ -1,39 +1,38 @@
 <template>
+	<require from="./styles.css"></require>
 	<section>
-		<h1>${title}</h1>
-		<h3>Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>
-        <span>Date de début: ${tournoi.datedebut.split('T')[0]} - Date de fin: ${tournoi.datefin.split('T')[0]}<br /></span>
-        <span>Fonds accumulés: $ ${tournoi.fondsaccumules}</span>
-		<div class="container">
-			<div class="half-width top-left">
-				<h3>Matchs</h3>
-				<hr/>
-				<ul class="list">
-					<li repeat.for="match of matchs">
-						<span><i class="material-icons">today</i>${match.date.split('T')[0]}</span>
-						<span><i class="material-icons">access_time</i>${match.heure}</span>
-						<span><i class="material-icons">location_on</i>${match.lieu}</span>
-						<div class="equipes-match">
-							<span><h3>${match.equipes[0].nom}</h3></span>
-							<span><h3>${match.equipes[0].points} - ${match.equipes[1].points}</h3></span>
-							<span><h3>${match.equipes[1].nom}</h3></span>
-						</div>
-						<button class="icon-btn top-right" click.trigger="retirerMatch($index, match.idmatch)"><i class="material-icons">clear</i></button>
-					</li>
-				</ul>
-			</div>
-			<div class="half-width top-right">
-				<h3>Commanditaires</h3>
-				<hr/>
-				<ul class="list">
-					<li repeat.for="commanditaire of commanditaires">
-						<h4>${commanditaire.prenom} ${commanditaire.nom}</h4>
-						<h4>Contribution: $${commanditaire.contribution}</h4>
-						<h4>Numéro de téléphone: ${commanditaire.numtel}</h4>
-						<button class="icon-btn top-right" click.trigger="retirerCommanditaire($index, commanditaire.idcommanditaire)"><i class="material-icons">clear</i></button>
-					</li>
-				</ul>
-			</div>
+		<h1 class="title">${title}</h1>
+		<h3 id="oeuvreCharite">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>
+		<div><i class="material-icons icon-text">date_range</i>Durée: ${tournoi.datedebut.split('T')[0]} - ${tournoi.datefin.split('T')[0]}</div>
+		<div><i class="material-icons icon-text">attach_money</i>${tournoi.fondsaccumules}</div>
+		<div class="half-width">
+			<h3>Matchs</h3>
+			<hr/>
+			<ul class="list">
+				<li repeat.for="match of matchs">
+					<span><i class="material-icons">today</i>${match.date.split('T')[0]}</span>
+					<span><i class="material-icons">access_time</i>${match.heure}</span>
+					<span><i class="material-icons">location_on</i>${match.lieu}</span>
+					<div class="equipes-match">
+						<span><h3>${match.equipes[0].nom}</h3></span>
+						<span><h3>${match.equipes[0].points} - ${match.equipes[1].points}</h3></span>
+						<span><h3>${match.equipes[1].nom}</h3></span>
+					</div>
+					<button class="icon-btn top-right" click.trigger="retirerMatch($index, match.idmatch)"><i class="material-icons">clear</i></button>
+				</li>
+			</ul>
+		</div>
+		<div class="half-width">
+			<h3>Commanditaires</h3>
+			<hr/>
+			<ul class="list">
+				<li repeat.for="commanditaire of commanditaires">
+					<h3>${commanditaire.nom}, ${commanditaire.prenom}</h3>
+					<span>Contribution: $${commanditaire.contribution}</span>
+					<span><i class="material-icons">phone</i>${commanditaire.numtel}</span>
+					<button class="icon-btn top-right" click.trigger="retirerCommanditaire($index, commanditaire.idcommanditaire)"><i class="material-icons">clear</i></button>
+				</li>
+			</ul>
 		</div>
 	</section>
 </template>

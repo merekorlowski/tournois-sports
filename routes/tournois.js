@@ -24,7 +24,8 @@ router.get('/tournois', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM TOURNOIS_SPORTSDB.Tournoi
-      WHERE idsport = '${req.query.idsport}'
+      WHERE idsport = '${req.query.idsport}' AND oeuvrecharite LIKE '%${req.query.query}%'
+      ORDER BY oeuvrecharite ${req.query.sort}
     `);
 
     query.on('row', row => {
