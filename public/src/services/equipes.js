@@ -56,6 +56,20 @@ export class ServiceEquipes {
     });
 	}
 
+	put(equipe) {
+		return this.http.fetch('equipe', {
+      method: 'put',
+      body: json(equipe)
+    });
+	}
+
+	delete(equipe) {
+		return this.http.fetch('equipe', {
+      method: 'post',
+      body: json(equipe)
+    });
+	}
+
 	deleteJoueur(idusager) {
 		return this.http.fetch('equipe/joueur', {
       method: 'delete',

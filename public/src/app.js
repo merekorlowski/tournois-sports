@@ -9,6 +9,7 @@ export class App {
       { route: 'equipes', name: 'equipes', moduleId: 'views/equipes/index', nav: true, title: 'ÉQUIPES' },
       { route: 'usagers', name: 'usagers', moduleId: 'views/usagers/index', nav: true, title: 'USAGERS' },
       { route: 'employes', name: 'employes', moduleId: 'views/employes/index', nav: true, title: 'EMPLOYÉS' },
+			{ route: 'requetes', name: 'requetes', moduleId: 'views/requetes/index', nav: true, title: 'REQUÊTES' },
       { route: 'equipe/:id', name: 'equipe', moduleId: 'views/equipe/index', title: 'ÉQUIPE' },
 			{ route: 'saison/:id', name: 'saison', moduleId: 'views/saison/index', title: 'SAISON' }
     ]);

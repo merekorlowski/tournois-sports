@@ -79,7 +79,7 @@ export class ServiceLigues {
   }
 
   getGestionnaires(idligue) {
-    return this.http.fetch(`ligues/gestionnaires?idligue=${idligue}`).then(response => response.json()).then(data => {
+    return this.http.fetch(`ligue/gestionnaires?idligue=${idligue}`).then(response => response.json()).then(data => {
       return data.map(gestionnaire => {
         return new Gestionnaire(gestionnaire);
       }) || [];
@@ -87,7 +87,7 @@ export class ServiceLigues {
   }
 
   getArbitres(idligue) {
-    return this.http.fetch(`ligues/arbitres?idligue=${idligue}`).then(response => response.json()).then(data => {
+    return this.http.fetch(`ligue/arbitres?idligue=${idligue}`).then(response => response.json()).then(data => {
       return data.map(arbitre => {
         return new Arbitre(arbitre);
       }) || [];

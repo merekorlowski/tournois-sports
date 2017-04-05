@@ -89,8 +89,9 @@ router.post('/usager', (req, res, next) => {
 
     let queryText = `
       INSERT 
-      INTO TOURNOIS_SPORTSDB.Usager(prenom, nom, courriel, numtel)
+      INTO TOURNOIS_SPORTSDB.Usager(idusager, prenom, nom, courriel, numtel)
       VALUES (
+        '${req.body.idusager}',
         '${req.body.prenom}', 
         '${req.body.nom}', 
         '${req.body.courriel}',
@@ -103,6 +104,7 @@ router.post('/usager', (req, res, next) => {
         INSERT 
         INTO TOURNOIS_SPORTSDB.Gerant(diplomesportif)
         VALUES (
+          '${req.body.idusager}',
           '${req.body.diplomesportif}'
         );
       `;
@@ -113,7 +115,7 @@ router.post('/usager', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(req.body);
+      return res.json();
     });
 
   });
@@ -139,7 +141,7 @@ router.delete('/usager', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.send();
+      return res.json();
     });
 
   });
@@ -156,7 +158,7 @@ router.put('/usager', (req, res, next) => {
       return res.status(500).json({success: false, data: err});
     }
 
-    const query = client.query(`
+    let queryText = `
       UPDATE 
       TOURNOIS_SPORTSDB.Usager
       SET
@@ -164,13 +166,25 @@ router.put('/usager', (req, res, next) => {
         nom = '${req.body.nom}', 
         courriel = '${req.body.courriel}',
         numtel = '${req.body.numtel}'
-      WHERE idusager = '${req.body.idusager}'
-    `);
+      WHERE idusager = '${req.body.idusager}';
+    `;
+
+    if (req.body.diplomesportif) {
+      queryText += `
+        UPDATE
+        TOURNOIS_SPORTSDB.Gerant
+        SET 
+          diplomesportif = '${req.body.diplomesportif}'
+        WHERE idusager = '${req.body.idusager}';
+      `;
+    }
+
+    const query = client.query(queryText);
     
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(req.body);
+      return res.json();
     });
 
   });

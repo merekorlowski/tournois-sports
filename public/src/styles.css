@@ -19,7 +19,10 @@ html, body {
 .container {
   position: relative;
   width: 100%;
-	height: 100%;
+}
+
+.height-hundred {
+	height: 100px;
 }
 
 button {
@@ -328,7 +331,9 @@ select {
   border-radius: 100%;
   border: none;
   box-shadow: 1px 1px 5px #222; 
-  margin: 30px;
+	margin-top: 110px;
+	margin-right: 40px;
+	margin-bottom: 50px;
   position: fixed;
 }
 
@@ -336,7 +341,6 @@ select {
   color: #fff;
   font-size: 28px;
 }
-
 
 .list {
   list-style-type: none;
@@ -350,6 +354,11 @@ select {
   background-color: #fff;
   border-radius: 3px;
   box-shadow: 1px 1px 5px #222;
+}
+
+.list li ul li {
+	padding: 10px;
+	margin-bottom: 20px;
 }
 
 .list strong {

@@ -43,8 +43,6 @@ router.get('/employes', (req, res, next) => {
 
 router.post('/employe', (req, res, next) => {
 
-  const results = [];
-
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -91,15 +89,13 @@ router.post('/employe', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
 });
 
 router.put('/employe', (req, res, next) => {
-
-  const results = [];
 
   pg.connect(connectionString, (err, client, done) => {
 
@@ -147,15 +143,13 @@ router.put('/employe', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
 });
 
 router.delete('/employe', (req, res, next) => {
-
-  const results = [];
 
   pg.connect(connectionString, (err, client, done) => {
 
@@ -175,7 +169,7 @@ router.delete('/employe', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });

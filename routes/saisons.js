@@ -74,8 +74,6 @@ router.get('/saison', (req, res, next) => {
 
 router.delete('/saison', (req, res, next) => {
 
-  const results = [];
-
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -88,17 +86,13 @@ router.delete('/saison', (req, res, next) => {
     const query = client.query(`
       DELETE
       FROM TOURNOIS_SPORTSDB.Saison
-      WHERE idsaison = '${req.query.idsaison}'
+      WHERE idsaison = '${req.body.idsaison}'
     `);
-
-    query.on('row', row => {
-      results.push(row);
-    });
 
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
@@ -120,7 +114,11 @@ router.get('/saison/matchs', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM TOURNOIS_SPORTSDB.Match
-      WHERE idsaison = '${req.query.idsaison}'
+      WHERE idmatch IN (
+        SELECT idmatch
+        FROM TOURNOIS_SPORTSDB.MatchSaison
+        WHERE idsaison = '${req.query.idsaison}'
+      )
     `);
 
     query.on('row', row => {
@@ -156,7 +154,13 @@ router.post('/saison/match', (req, res, next) => {
         '${req.body.match.idmatch}',
         '${req.body.match.date}',
         '${req.body.match.heure}',
-        '${req.body.match.lieu}',
+        '${req.body.match.lieu}'
+      );
+
+      INSERT
+      INTO TOURNOIS_SPORTSDB.MatchSaison
+      VALUES (
+        '${req.body.match.idmatch}',
         '${req.body.match.idsaison}'
       );
 

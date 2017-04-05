@@ -78,4 +78,25 @@ export class ServiceTournois {
     });
   }
 
+	post(tournoi) {
+		return this.http.fetch('tournoi', {
+      method: 'post',
+      body: json(tournoi)
+    });
+	}
+
+	delete(tournoi) {
+		return this.http.fetch('tournoi', {
+      method: 'delete',
+      body: json(tournoi)
+    });
+	}
+
+	put(tournoi) {
+		return this.http.fetch('tournoi', {
+      method: 'put',
+      body: json(tournoi)
+    });
+	}
+
 }

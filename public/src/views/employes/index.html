@@ -38,6 +38,7 @@
       <div class="popup">
         <button class="icon-btn" click.trigger="cancelerAjout()"><i class="material-icons">clear</i></button>
         <h3>Ajouter un employé</h3>
+				<input value.bind="nouveauEmploye.idemploye" placeholder="IDEmploye" required/>
         <input value.bind="nouveauEmploye.nom" placeholder="Nom" required/>
         <input value.bind="nouveauEmploye.prenom" placeholder="Prénom" required/>
         <input value.bind="nouveauEmploye.role" placeholder="Role" required/>

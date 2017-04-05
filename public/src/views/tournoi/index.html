@@ -27,7 +27,7 @@
 			<hr/>
 			<ul class="list">
 				<li repeat.for="commanditaire of commanditaires">
-					<h3>${commanditaire.nom}, ${commanditaire.prenom}</h3>
+					<h3>${commanditaire.nom}</h3>
 					<span>Contribution: $${commanditaire.contribution}</span>
 					<span><i class="material-icons">phone</i>${commanditaire.numtel}</span>
 					<button class="icon-btn top-right" click.trigger="retirerCommanditaire($index, commanditaire.idcommanditaire)"><i class="material-icons">clear</i></button>

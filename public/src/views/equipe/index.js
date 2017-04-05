@@ -55,11 +55,31 @@ export class EquipeView {
     });
   }
 
+	cancelerModification() {
+		this.modificationAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	afficherModification() {
+    this.modificationAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+  }
+
 	retirerJoueur(index, idusager) {
 		this.serviceEquipes.deleteJoueur(idusager).then(equipe => {
 			this.joueurs.splice(index, 1);
 		}); 
 	}
+
+	sauvegarder() {
+    this.serviceEquipes.put(this.equipe).then(() => {
+      this.modificationAffiche = false;
+			// add listener to disable scroll
+			window.removeEventListener('scroll', this.scrollTo);
+    });
+  }
 
 	scrollTo() {
 		window.scrollTo( 0, 0 );

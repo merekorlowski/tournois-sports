@@ -43,8 +43,6 @@ router.get('/sports', (req, res, next) => {
 
 router.delete('/sport', (req, res, next) => {
 
-  const results = [];
-
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -60,22 +58,16 @@ router.delete('/sport', (req, res, next) => {
       WHERE idsport = '${req.body.idsport}'
     `);
 
-    query.on('row', row => {
-      results.push(row);
-    });
-
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
 });
 
 router.post('/sport', (req, res, next) => {
-
-  const results = [];
 
   pg.connect(connectionString, (err, client, done) => {
 
@@ -101,15 +93,13 @@ router.post('/sport', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
 });
 
 router.put('/sport', (req, res, next) => {
-
-  const results = [];
 
   pg.connect(connectionString, (err, client, done) => {
 
@@ -134,7 +124,7 @@ router.put('/sport', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });

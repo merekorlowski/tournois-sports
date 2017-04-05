@@ -75,8 +75,6 @@ router.get('/ligue', (req, res, next) => {
 
 router.post('/ligue', (req, res, next) => {
 
-  const results = [];
-
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -99,15 +97,13 @@ router.post('/ligue', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
 });
 
 router.post('/ligue/equipe', (req, res, next) => {
-
-  const results = [];
 
   pg.connect(connectionString, (err, client, done) => {
 
@@ -133,16 +129,14 @@ router.post('/ligue/equipe', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
 });
 
 router.delete('/ligue', (req, res, next) => {
-
-  const results = [];
-
+  
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -158,14 +152,10 @@ router.delete('/ligue', (req, res, next) => {
       WHERE idligue = '${req.query.idligue}'
     `);
 
-    query.on('row', row => {
-      results.push(row);
-    });
-
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
@@ -279,8 +269,6 @@ router.get('/ligue/saisons', (req, res, next) => {
 
 router.delete('/ligue/saison', (req, res, next) => {
 
-  const results = [];
-
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -293,17 +281,13 @@ router.delete('/ligue/saison', (req, res, next) => {
     const query = client.query(`
       DELETE
       FROM TOURNOIS_SPORTSDB.Saison
-      WHERE idsaison = '${req.query.idsaison}'
+      WHERE idsaison = '${req.body.idsaison}'
     `);
-
-    query.on('row', row => {
-      results.push(row);
-    });
 
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });
@@ -343,8 +327,6 @@ router.get('/ligue/equipes', (req, res, next) => {
 
 router.delete('/ligue/equipe', (req, res, next) => {
 
-  const results = [];
-
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -357,7 +339,7 @@ router.delete('/ligue/equipe', (req, res, next) => {
     const query = client.query(`
       DELETE
       FROM TOURNOIS_SPORTSDB.Equipe
-      WHERE idemploye = '${req.query.idemploye}'
+      WHERE idemploye = '${req.body.idemploye}'
     `);
 
     query.on('row', row => {
@@ -367,7 +349,7 @@ router.delete('/ligue/equipe', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });

@@ -18,10 +18,24 @@ export class ServiceSaisons {
     });
   }
 
-  delete(ligue) {
+  delete(saison) {
     return this.http.fetch('saison', {
       method: 'delete',
-      body: json(ligue)
+      body: json(saison)
+    });
+  }
+
+	post(saison) {
+    return this.http.fetch('saison', {
+      method: 'post',
+      body: json(saison)
+    });
+  }
+
+	put(saison) {
+    return this.http.fetch('saison', {
+      method: 'put',
+      body: json(saison)
     });
   }
 

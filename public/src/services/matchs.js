@@ -18,10 +18,10 @@ export class ServiceMatchs {
     });
   }
 
-  deleteMatch(idmatch) {
+  deleteMatch(match) {
     return this.http.fetch('match', {
       method: 'delete',
-      body: json(idmatch)
+      body: json(match)
     });
   }
 

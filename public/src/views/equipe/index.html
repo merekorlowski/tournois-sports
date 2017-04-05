@@ -1,7 +1,11 @@
 <template>
 	<section>
-		<h1>${title}</h1>
+		<div>
+		<h1>${equipe.nom}</h1>
 		<h2>Joueurs</h2>
+		<button class="btn-flotante top-right" click.trigger="afficherModification()">
+      <i class="material-icons">edit</i>
+    </button>
 		<ul class="list">
 			<li>
 				<h3>${gerant.nom}, ${gerant.prenom}</h3>
@@ -38,10 +42,8 @@
     <div class="popup-background" if.bind="modificationAffiche">
       <div class="popup">
         <button class="icon-btn" click.trigger="cancelerModification()"><i class="material-icons">clear</i></button>
-        <h3>Modification de l'employé ${employe.idemploye}</h3>
-        <input value.bind="employeAModifier.nom" placeholder="Nom"/>
-        <input value.bind="employeAModifier.prenom" placeholder="Prénom"/>
-        <input value.bind="employeAModifier.role" placeholder="Role"/>
+        <h3>Modification de l'équipe ${equipe.idequipe}</h3>
+        <input value.bind="equipe.nom" placeholder="Nom"/>
         <button class="btn btn-inscription" click.trigger="sauvegarder()">SAUVERGARDER</button>
       </div>
     </div>

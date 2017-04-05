@@ -73,6 +73,34 @@ router.get('/equipe', (req, res, next) => {
   });
 });
 
+router.put('/equipe', (req, res, next) => {
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      UPDATE 
+      TOURNOIS_SPORTSDB.Equipe
+      SET
+        nom = '${req.body.nom}'
+      WHERE idequipe = '${req.body.idequipe}'
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json();
+    });
+
+  });
+});
+
 router.get('/equipe/joueurs', (req, res, next) => {
 
   const results = [];
@@ -233,7 +261,7 @@ router.delete('/equipe/joueur', (req, res, next) => {
     const query = client.query(`
       DELETE
       FROM TOURNOIS_SPORTSDB.Usager
-      WHERE idusager = '${req.query.idusager}'
+      WHERE idusager = '${req.body.idusager}'
     `);
 
     // After all data is returned, close connection and return results
