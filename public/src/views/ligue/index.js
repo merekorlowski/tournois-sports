@@ -1,12 +1,14 @@
 import {inject} from 'aurelia-framework';
 
 import {ServiceLigues} from '../../services/ligues';
+import {ServiceUsagers} from '../../services/usagers';
 import {Equipe} from '../../models/equipe';
 
-@inject(ServiceLigues)
+@inject(ServiceLigues, ServiceUsagers)
 export class LigueView {
-  constructor(serviceLigues) {
+  constructor(serviceLigues, serviceUsagers) {
     this.serviceLigues = serviceLigues;
+		this.serviceUsagers = serviceUsagers;
   }
 
   activate(params, navigation) {
@@ -50,6 +52,9 @@ export class LigueView {
 		this.ajoutEquipeAffiche = true;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
+		this.serviceUsagers.getGerantsLibres().then(gerants => {
+			this.gerants = gerants;
+		});
 	}
 
 	cancelerAjoutEquipe() {
@@ -68,7 +73,7 @@ export class LigueView {
       this.equipes.push(this.nouveauEquipe);
 			this.nouveauEquipe = new Equipe();
 			this.nouveauEquipe.idligue = this.ligue.idligue;
-		this.nouveauEquipe.statutdeforfait = false;
+			this.nouveauEquipe.statutdeforfait = false;
 			
 			// Remove listener to disable scroll
 			window.removeEventListener('scroll', () => {

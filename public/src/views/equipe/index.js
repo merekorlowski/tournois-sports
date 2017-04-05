@@ -50,6 +50,8 @@ export class EquipeView {
     this.serviceEquipes.post(this.nouveauJoueur.idusager, this.equipe.idequipe).then(() => {
       this.ajoutAffiche = false;
       this.joueurs.push(this.nouveauJoueur);
+			// add listener to disable scroll
+		  window.removeEventListener('scroll', this.scrollTo);
     });
   }
 

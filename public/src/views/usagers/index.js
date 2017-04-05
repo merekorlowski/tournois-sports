@@ -13,6 +13,7 @@ export class Usagers {
     this.query = '';
     this.sort = 'ASC';
     this.nouveauUsager = new Usager();
+		this.nouveauUsager.estGerant = false;
     this.usagerAModifier = new Usager();
     this.afficherModification = false;
     this.getUsagers();
@@ -44,6 +45,13 @@ export class Usagers {
 	cancelerInscription() {
 		this.inscriptionAffiche = false;
 		this.nouveauUsager = new Usager();
+		this.nouveauUsager.estGerant = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerModification() {
+		this.afficherModification = false;
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
 	}
@@ -61,11 +69,15 @@ export class Usagers {
   modifier(usager) {
     this.afficherModification = true;
     this.usagerAModifier = usager;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
   }
 
   sauvegarder() {
     this.serviceUsagers.put(this.usagerAModifier).then(usager => {
       this.afficherModification = false;
+			// add listener to disable scroll
+			window.removeEventListener('scroll', this.scrollTo);
     });
   }
 

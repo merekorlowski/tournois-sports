@@ -36,9 +36,10 @@
       <div class="popup">
         <button class="icon-btn" click.trigger="cancelerAjoutEquipe()"><i class="material-icons">clear</i></button>
         <h3>Inscription</h3>
-        <input value.bind="nouveauEquipe.idequipe" placeholder="IDEquipe"/>
         <input value.bind="nouveauEquipe.nom" placeholder="Nom"/>
-        <input value.bind="nouveauEquipe.idusager" placeholder="IDUsager"/>
+				<select value.bind="nouveauEquipe.idusager">
+					<option repeat.for="gerant of gerants" model.bind="gerant.idusager">${gerant.idusager}</option>
+				</select>
         <button class="btn btn-inscription" click.trigger="ajouterEquipe()">AJOUTER</button>
       </div>
     </div>

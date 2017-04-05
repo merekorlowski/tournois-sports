@@ -17,6 +17,14 @@ export class ServiceUsagers {
     });
   }
 
+	getGerantsLibres() {
+		return this.http.fetch(`usagers/gerants`).then(response => response.json()).then(data => {
+      return data.map(gerant => {
+        return new Usager(gerant);
+      }) || [];
+    });
+	}
+
   delete(usager) {
     return this.http.fetch('usager', {
       method: 'delete',

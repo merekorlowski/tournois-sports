@@ -275,7 +275,7 @@ select {
 }
 
 .popup-background {
-  position: absolute;
+  position: fixed;
   background-color: rgba(0, 0, 0, .7);
   top: 0;
   left: 0;
@@ -396,4 +396,18 @@ li span i {
 	justify-content: space-between;
 	width: 100%;
 	padding: 30px;
+}
+
+input[type=checkbox] {
+	padding: 0;
+	margin-left: 5px;
+	width: auto;
+	vertical-align: middle;
+}
+
+label {
+	display: inline-flex;
+	justify-content: space-between;
+	height: 50px;
+	line-height: 50px;
 }

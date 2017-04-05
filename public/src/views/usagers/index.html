@@ -36,11 +36,12 @@
       <div class="popup">
         <button class="icon-btn" click.trigger="cancelerInscription()"><i class="material-icons">clear</i></button>
         <h3>Inscription</h3>
-        <input value.bind="nouveauUsager.idusager" placeholder="IDUsager"/>
         <input value.bind="nouveauUsager.nom" placeholder="Nom"/>
         <input value.bind="nouveauUsager.prenom" placeholder="Prénom"/>
         <input value.bind="nouveauUsager.courriel" placeholder="example@gmail.com"/>
         <input value.bind="nouveauUsager.numtel" placeholder="(XXX) XXX-XXXX"/>
+				<label>Gérant <input type="checkbox" checked.bind="nouveauUsager.estGerant"/></label>
+        <input if.bind="nouveauUsager.estGerant" value.bind="nouveauUsager.diplomesportif" placeholder="Diplome sportif"/>
         <button class="btn btn-inscription" click.trigger="inscrire()">INSCRIRE</button>
       </div>
     </div>
@@ -48,7 +49,7 @@
     <!-- Modifier un usager -->
     <div class="popup-background" if.bind="afficherModification">
       <div class="popup">
-        <button class="icon-btn" click.trigger="afficherModification=false"><i class="material-icons">clear</i></button>
+        <button class="icon-btn" click.trigger="cancelerModification()"><i class="material-icons">clear</i></button>
         <h3>Modification de l'usager ${usagerAModifier.idusager}</h3>
         <input value.bind="usagerAModifier.nom" placeholder="Nom"/>
         <input value.bind="usagerAModifier.prenom" placeholder="Prénom"/>
