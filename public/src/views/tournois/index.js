@@ -20,6 +20,11 @@ export class Tournois {
   getTournois() {
     this.serviceTournois.get(this.query, this.sort, this.idsport).then(tournois => {
       this.tournois = tournois;
+      for (let tournoi of this.tournois) {
+        this.serviceTournois.getFondsAccumules(tournoi.idtournoi).then(fondsaccumules => {
+          tournoi.fondsaccumules = fondsaccumules;
+        });
+      }
     });
   }
 

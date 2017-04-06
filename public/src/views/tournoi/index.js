@@ -38,6 +38,9 @@ export class TournoiView {
 					});
 				}
 			});
+			this.serviceTournois.getFondsAccumules(idtournoi).then(fondsaccumules => {
+				tournoi.fondsaccumules = fondsaccumules;
+			});
     });
 	}
 
