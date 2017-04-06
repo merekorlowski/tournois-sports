@@ -50,6 +50,12 @@ export class ServiceTournois {
     });
   }
 
+  getFondsAccumules(idtournoi) {
+    return this.http.fetch(`tournoi/fondsaccumules?idtournoi=${idtournoi}`).then(response => response.json()).then(data => {
+      return data[0].sum;
+    });
+  }
+
   retirerMatch(idmatch) {
     return this.http.fetch('tournoi/match', {
       method: 'delete',
