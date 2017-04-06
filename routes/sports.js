@@ -23,7 +23,7 @@ router.get('/sports', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Sport
+      FROM SPORTSDB.Sport
       WHERE nom LIKE '%${req.query.query}%'
       ORDER BY nom ${req.query.sort}
     `);
@@ -54,7 +54,7 @@ router.delete('/sport', (req, res, next) => {
 
     const query = client.query(`
       DELETE
-      FROM TOURNOIS_SPORTSDB.Sport
+      FROM SPORTSDB.Sport
       WHERE idsport = '${req.body.idsport}'
     `);
 
@@ -80,13 +80,11 @@ router.post('/sport', (req, res, next) => {
 
     const query = client.query(`
       INSERT
-      INTO TOURNOIS_SPORTSDB.Sport
+      INTO SPORTSDB.Sport
       VALUES(
         '${req.body.idsport}',
         '${req.body.nom}',
-        '${req.body.description}',
-        '${req.body.nbrminjoueurs}',
-        '${req.body.nbrmaxjoueurs}'
+        '${req.body.description}'
       )
     `);
 
@@ -112,12 +110,10 @@ router.put('/sport', (req, res, next) => {
 
     const query = client.query(`
       UPDATE
-      TOURNOIS_SPORTSDB.Sport
+      SPORTSDB.Sport
       SET
         nom = '${req.body.nom}',
-        description = '${req.body.description}',
-        nbrminjoueurs = '${req.body.nbrminjoueurs}',
-        nbrmaxjoueurs = '${req.body.nbrmaxjoueurs}'
+        description = '${req.body.description}'
       WHERE idsport = '${req.body.idsport}'
     `);
 

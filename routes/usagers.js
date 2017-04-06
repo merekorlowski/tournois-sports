@@ -23,8 +23,8 @@ router.get('/usagers', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Usager 
-      WHERE nom LIKE '%${req.query.query}%' OR prenom LIKE '%${req.query.query}'
+      FROM SPORTSDB.Usager 
+      WHERE nom LIKE '%${req.query.query}%' OR prenom LIKE '%${req.query.query}%'
       ORDER BY nom ${req.query.sort}
     `);
 
@@ -56,10 +56,10 @@ router.get('/usagers/gerants', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Usager NATURAL JOIN TOURNOIS_SPORTSDB.Gerant
+      FROM SPORTSDB.Usager NATURAL JOIN SPORTSDB.Gerant
       WHERE idusager NOT IN (
         SELECT idusager
-        FROM TOURNOIS_SPORTSDB.UsagerEquipe
+        FROM SPORTSDB.UsagerEquipe
       )
     `);
 
@@ -89,7 +89,7 @@ router.post('/usager', (req, res, next) => {
 
     let queryText = `
       INSERT 
-      INTO TOURNOIS_SPORTSDB.Usager(idusager, prenom, nom, courriel, numtel)
+      INTO SPORTSDB.Usager
       VALUES (
         '${req.body.idusager}',
         '${req.body.prenom}', 
@@ -102,7 +102,7 @@ router.post('/usager', (req, res, next) => {
     if (req.body.diplomesportif) {
       queryText += `
         INSERT 
-        INTO TOURNOIS_SPORTSDB.Gerant(diplomesportif)
+        INTO SPORTSDB.Gerant
         VALUES (
           '${req.body.idusager}',
           '${req.body.diplomesportif}'
@@ -134,7 +134,7 @@ router.delete('/usager', (req, res, next) => {
 
     const query = client.query(`
       DELETE 
-      FROM TOURNOIS_SPORTSDB.Usager 
+      FROM SPORTSDB.Usager 
       WHERE idusager = '${req.body.idusager}'
     `);
     
@@ -160,7 +160,7 @@ router.put('/usager', (req, res, next) => {
 
     let queryText = `
       UPDATE 
-      TOURNOIS_SPORTSDB.Usager
+      SPORTSDB.Usager
       SET
         prenom = '${req.body.prenom}', 
         nom = '${req.body.nom}', 
@@ -172,7 +172,7 @@ router.put('/usager', (req, res, next) => {
     if (req.body.diplomesportif) {
       queryText += `
         UPDATE
-        TOURNOIS_SPORTSDB.Gerant
+        SPORTSDB.Gerant
         SET 
           diplomesportif = '${req.body.diplomesportif}'
         WHERE idusager = '${req.body.idusager}';

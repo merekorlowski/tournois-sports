@@ -9,7 +9,10 @@ export class EquipeView {
 	}
 
 	activate(params, navigation) {
-		this.getEquipe(params.id);
+		this.getEquipe({
+			idligue: params.id,
+			nom: params.id2
+		});
 	}
 
 	detached() {
@@ -17,14 +20,14 @@ export class EquipeView {
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
-	getEquipe(idequipe) {
-		this.serviceEquipes.getEquipe(idequipe).then(equipe => {
+	getEquipe(equipe) {
+		this.serviceEquipes.getEquipe(equipe).then(equipe => {
 			this.equipe = equipe;
-			this.title = equipe.nom;
-			this.serviceEquipes.getGerant(idequipe).then(gerant => {
+			this.equipe.nomOriginal = equipe.nom;
+			this.serviceEquipes.getGerant(equipe).then(gerant => {
 				this.gerant = gerant;
 			});
-			this.serviceEquipes.getJoueurs(idequipe).then(joueurs => {
+			this.serviceEquipes.getJoueurs(equipe).then(joueurs => {
 				this.joueurs = joueurs;
 			});
 		}); 
@@ -47,7 +50,7 @@ export class EquipeView {
 	}
 
 	ajouter() {
-    this.serviceEquipes.post(this.nouveauJoueur.idusager, this.equipe.idequipe).then(() => {
+    this.serviceEquipes.post(this.nouveauJoueur.idusager, this.equipe).then(() => {
       this.ajoutAffiche = false;
       this.joueurs.push(this.nouveauJoueur);
 			// add listener to disable scroll

@@ -1,21 +1,25 @@
 <template>
+	<require from="../../resources/value-converters/date"></require>
 	<require from="./styles.css"></require>
 	<section>
 		<h1 class="title">${title}</h1>
 		<h3 id="oeuvreCharite">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>
-		<div><i class="material-icons icon-text">date_range</i>Durée: ${tournoi.datedebut.split('T')[0]} - ${tournoi.datefin.split('T')[0]}</div>
+		<div><i class="material-icons icon-text">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>
 		<div><i class="material-icons icon-text">attach_money</i>${tournoi.fondsaccumules}</div>
+		<button class="btn-flotante top-right" click.trigger="afficherModificationTournoi()">
+      <i class="material-icons">edit</i>
+    </button>
 		<div class="half-width">
 			<h3>Matchs</h3>
 			<hr/>
 			<ul class="list">
 				<li repeat.for="match of matchs">
-					<span><i class="material-icons">today</i>${match.date.split('T')[0]}</span>
+					<span><i class="material-icons">today</i>${match.date | date}</span>
 					<span><i class="material-icons">access_time</i>${match.heure}</span>
 					<span><i class="material-icons">location_on</i>${match.lieu}</span>
 					<div class="equipes-match">
 						<span><h3>${match.equipes[0].nom}</h3></span>
-						<span><h3>${match.equipes[0].points} - ${match.equipes[1].points}</h3></span>
+						<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>
 						<span><h3>${match.equipes[1].nom}</h3></span>
 					</div>
 					<button class="icon-btn top-right" click.trigger="retirerMatch($index, match.idmatch)"><i class="material-icons">clear</i></button>
@@ -34,5 +38,17 @@
 				</li>
 			</ul>
 		</div>
+
+		<div class="popup-background" if.bind="modificationTournoiAffiche">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="cancelerModificationTournoi()"><i class="material-icons">clear</i></button>
+        <h3>Modifier le tournoi ${tournoi.idtournoi}</h3>
+        <input value.bind="tournoi.oeuvrecharite" placeholder="Oeuvre de charité"/>
+        <input type="date" value.bind="tournoi.datedebut | date" placeholder="Date de début"/>
+        <input type="date" value.bind="tournoi.datefin | date" placeholder="Date de fin"/>
+        <button class="btn btn-inscription" click.trigger="modifierTournoi()">SAUVEGARDER</button>
+      </div>
+    </div>
+
 	</section>
 </template>

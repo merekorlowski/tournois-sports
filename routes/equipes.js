@@ -23,7 +23,7 @@ router.get('/equipes', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Equipe
+      FROM SPORTSDB.Equipe
       WHERE nom LIKE '%${req.query.query}%'
       ORDER BY nom ${req.query.sort}
     `);
@@ -56,8 +56,8 @@ router.get('/equipe', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Equipe
-      WHERE idequipe = '${req.query.idequipe}'
+      FROM SPORTSDB.Equipe
+      WHERE idligue = '${req.query.idligue}' AND nom = '${req.query.nom}'
     `);
 
     query.on('row', row => {
@@ -86,10 +86,10 @@ router.put('/equipe', (req, res, next) => {
 
     const query = client.query(`
       UPDATE 
-      TOURNOIS_SPORTSDB.Equipe
+      SPORTSDB.Equipe
       SET
         nom = '${req.body.nom}'
-      WHERE idequipe = '${req.body.idequipe}'
+      WHERE nom = '${req.body.nomOriginal}' AND idligue = '${req.body.idligue}'
     `);
 
     // After all data is returned, close connection and return results
@@ -116,14 +116,14 @@ router.get('/equipe/joueurs', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Usager
+      FROM SPORTSDB.Usager
       WHERE idusager IN (
         SELECT idusager
-        FROM TOURNOIS_SPORTSDB.UsagerEquipe
-        WHERE idequipe = '${req.query.idequipe}'
+        FROM SPORTSDB.UsagerEquipe
+        WHERE idligue = '${req.query.idligue}' AND nom = '${req.query.nom}'
       ) AND idusager NOT IN (
         SELECT idusager
-        FROM TOURNOIS_SPORTSDB.Gerant
+        FROM SPORTSDB.Gerant
       )
     `);
 
@@ -156,11 +156,11 @@ router.get('/equipe/gerant', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Gerant NATURAL JOIN TOURNOIS_SPORTSDB.Usager
+      FROM SPORTSDB.Gerant NATURAL JOIN SPORTSDB.Usager
       WHERE idusager IN (
         SELECT idusager
-        FROM TOURNOIS_SPORTSDB.UsagerEquipe
-        WHERE idequipe = '${req.query.idequipe}'
+        FROM SPORTSDB.UsagerEquipe
+        WHERE idligue = '${req.query.idligue}' AND nom = '${req.query.nom}'
       )
     `);
 
@@ -193,10 +193,10 @@ router.get('/equipe/usagers-libres', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Usager
+      FROM SPORTSDB.Usager
       WHERE idusager NOT IN (
         SELECT idusager
-        FROM TOURNOIS_SPORTSDB.UsagerEquipe
+        FROM SPORTSDB.UsagerEquipe
       )
     `);
 
@@ -229,10 +229,11 @@ router.post('/equipe/joueur', (req, res, next) => {
 
     const query = client.query(`
       INSERT
-      INTO TOURNOIS_SPORTSDB.UsagerEquipe
+      INTO SPORTSDB.UsagerEquipe
       VALUES (
         '${req.body.idusager}',
-        '${req.body.idequipe}'
+        '${req.body.equipe.idligue}',
+        '${req.body.equipe.nom}'
       )
     `);
 
@@ -260,7 +261,7 @@ router.delete('/equipe/joueur', (req, res, next) => {
 
     const query = client.query(`
       DELETE
-      FROM TOURNOIS_SPORTSDB.Usager
+      FROM SPORTSDB.Usager
       WHERE idusager = '${req.body.idusager}'
     `);
 

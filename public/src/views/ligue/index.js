@@ -15,7 +15,6 @@ export class LigueView {
     this.title = `Ligue ${params.id}`;
 		this.nouveauEquipe = new Equipe();
 		this.nouveauEquipe.idligue = params.id;
-		this.nouveauEquipe.statutdeforfait = false;
     this.getLigue(params.id);
   }
 
@@ -42,8 +41,8 @@ export class LigueView {
 		});
   }
 
-	retirerEquipe(index, idequipe) {
-		this.serviceLigues.deleteEquipe(idequipe).then(() => {
+	retirerEquipe(index, equipe) {
+		this.serviceLigues.deleteEquipe(equipe).then(() => {
 			this.equipes.splice(index, 1);
 		});
   }
@@ -61,7 +60,6 @@ export class LigueView {
 		this.ajoutEquipeAffiche = false;
 		this.nouveauEquipe = new Equipe();
 		this.nouveauEquipe.idligue = this.ligue.idligue;
-		this.nouveauEquipe.statutdeforfait = false;
 
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
@@ -73,7 +71,6 @@ export class LigueView {
       this.equipes.push(this.nouveauEquipe);
 			this.nouveauEquipe = new Equipe();
 			this.nouveauEquipe.idligue = this.ligue.idligue;
-			this.nouveauEquipe.statutdeforfait = false;
 			
 			// Remove listener to disable scroll
 			window.removeEventListener('scroll', () => {

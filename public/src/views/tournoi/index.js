@@ -23,8 +23,8 @@ export class TournoiView {
 					this.serviceTournois.getEquipes(match.idmatch).then(equipes => {
 						match.equipes = equipes;
 						for (let equipe of match.equipes) {
-							this.serviceTournois.getPoints(match.idmatch, equipe.idequipe).then(points => {
-								equipe.points = points;
+							this.serviceTournois.getPoints(match.idmatch, equipe.idligue, equipe.nom).then(ptsmarques => {
+								equipe.ptsmarques = ptsmarques;
 							});
 						}
 					});
@@ -50,6 +50,26 @@ export class TournoiView {
 	retirerCommanditaire(index, idcommanditaire) {
 		this.serviceTournois.deleteCommanditaire(idcommanditaire).then(() => {
 			this.commanditaires.splice(index, 1);
+		});
+	}
+
+	afficherModificationTournoi() {
+		this.modificationTournoiAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerModificationTournoi() {
+		this.modificationTournoiAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	modifierTournoi() {
+		this.serviceTournois.put(this.tournoi).then(() => {
+			this.modificationTournoiAffiche = false;
+			// add listener to disable scroll
+			window.removeEventListener('scroll', this.scrollTo);
 		});
 	}
 

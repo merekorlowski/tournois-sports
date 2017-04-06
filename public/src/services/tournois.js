@@ -72,9 +72,9 @@ export class ServiceTournois {
     });
   }
 
-  getPoints(idmatch, idequipe) {
-    return this.http.fetch(`match/equipe/points?idmatch=${idmatch}&idequipe=${idequipe}`).then(response => response.json()).then(data => {
-      return data[0].nbrpoints;
+  getPoints(idmatch, idligue, nom) {
+    return this.http.fetch(`match/equipe/points?idmatch=${idmatch}&idligue=${idligue}&nom=${nom}`).then(response => response.json()).then(data => {
+      return data[0].ptsmarques;
     });
   }
 

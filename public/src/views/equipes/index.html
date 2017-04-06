@@ -19,8 +19,8 @@
       <li repeat.for="equipe of equipes">
         <h3>${equipe.nom}</h3>
 				<p><strong>Ligue</strong> <a href="/#/sports/ligue/${equipe.idligue}">${equipe.idligue}</a></p>
-				<button class="icon-btn top-right" click.trigger="retirerEquipe($index, equipe.idequipe)"><i class="material-icons">clear</i></button>
-				<a class="bottom-right" href="/#/equipe/${equipe.idequipe}"><i class="material-icons">keyboard_arrow_right</i></a>
+				<button class="icon-btn top-right" click.trigger="retirerEquipe($index, equipe)"><i class="material-icons">clear</i></button>
+				<a class="bottom-right" href="/#/equipe/${equipe.idligue}/${equipe.nom}"><i class="material-icons">keyboard_arrow_right</i></a>
       </li>
     </ul>
   </section>

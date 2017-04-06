@@ -23,10 +23,14 @@ router.get('/match/equipes', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Equipe
-      WHERE idequipe IN (
-        SELECT idequipe
-        FROM TOURNOIS_SPORTSDB.EquipeMatch
+      FROM SPORTSDB.Equipe
+      WHERE idligue IN (
+        SELECT idligue
+        FROM SPORTSDB.EquipeMatch
+        WHERE idmatch = '${req.query.idmatch}'
+      ) AND nom IN (
+        SELECT nom
+        FROM SPORTSDB.EquipeMatch
         WHERE idmatch = '${req.query.idmatch}'
       )
     `);
@@ -58,9 +62,9 @@ router.get('/match/equipe/points', (req, res, next) => {
     }
 
     const query = client.query(`
-      SELECT nbrpoints 
-      FROM TOURNOIS_SPORTSDB.EquipeMatch
-      WHERE idmatch = '${req.query.idmatch}' AND idequipe = '${req.query.idequipe}'
+      SELECT ptsmarques 
+      FROM SPORTSDB.EquipeMatch
+      WHERE idmatch = '${req.query.idmatch}' AND idligue = '${req.query.idligue}' AND nom = '${req.query.nom}'
     `);
 
     query.on('row', row => {
@@ -90,7 +94,7 @@ router.delete('/match', (req, res, next) => {
 
     const query = client.query(`
       DELETE
-      FROM TOURNOIS_SPORTSDB.Saison
+      FROM SPORTSDB.Saison
       WHERE idsaison = '${req.body.idsaison}'
     `);
 

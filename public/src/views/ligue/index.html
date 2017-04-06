@@ -22,8 +22,8 @@
 			<ul class="list">
 				<li repeat.for="equipe of equipes">
 					<h3>${equipe.nom}</h3>
-					<button class="icon-btn top-right" click.trigger="retirerEquipe($index, saison.idequipe)"><i class="material-icons">clear</i></button>
-					<a class="bottom-right" href="/#/equipe/${equipe.idequipe}"><i class="material-icons">keyboard_arrow_right</i></a>
+					<button class="icon-btn top-right" click.trigger="retirerEquipe($index, equipe)"><i class="material-icons">clear</i></button>
+					<a class="bottom-right" href="/#/equipe/${equipe.idligue}/${equipe.nom}"><i class="material-icons">keyboard_arrow_right</i></a>
 				</li>
 			</ul>
 			<button class="btn-flotante bottom-right" click.trigger="afficherAjoutEquipe()">
@@ -35,11 +35,14 @@
     <div class="popup-background" if.bind="ajoutEquipeAffiche">
       <div class="popup">
         <button class="icon-btn" click.trigger="cancelerAjoutEquipe()"><i class="material-icons">clear</i></button>
-        <h3>Inscription</h3>
-        <input value.bind="nouveauEquipe.nom" placeholder="Nom"/>
+        <h3>Ajouter un équipe</h3>
+				<input value.bind="nouveauEquipe.nom" placeholder="Nom"/>
 				<select value.bind="nouveauEquipe.idusager">
+					<option value="">Gerant</option>
 					<option repeat.for="gerant of gerants" model.bind="gerant.idusager">${gerant.idusager}</option>
 				</select>
+				<input type="number" value.bind="nouveauEquipe.nbrmaxjoueurs" placeholder="Nombre maximums de joueurs"/>
+				<input type="number" value.bind="nouveauEquipe.nbrminjoueurs" placeholder="Nombre minimums de joueurs"/>
         <button class="btn btn-inscription" click.trigger="ajouterEquipe()">AJOUTER</button>
       </div>
     </div>

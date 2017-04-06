@@ -21,4 +21,10 @@ export class Equipes {
     });  
   }
 
+	retirerEquipe(index, equipe) {
+		this.serviceEquipes.delete(equipe).then(() => {
+      this.equipes.splice(index, 1);
+    }); 
+	}
+
 }

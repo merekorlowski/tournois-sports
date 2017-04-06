@@ -22,7 +22,7 @@ router.get('/requete', (req, res, next) => {
     }
 
     const query = client.query(`
-      SELECT TOURNOIS_SPORTSDB.requete_${req.query.numero}();
+      SELECT SPORTSDB.requete_${req.query.numero}();
     `);
 
     query.on('row', row => {
@@ -51,7 +51,7 @@ router.post('/requete', (req, res, next) => {
     }
 
     const query = client.query(`
-  		SELECT TOURNOIS_SPORTSDB.requete_${req.body.numero}();
+  		SELECT SPORTSDB.requete_${req.body.numero}();
     `);
     
     // After all data is returned, close connection and return results
@@ -75,7 +75,7 @@ router.delete('/requete', (req, res, next) => {
     }
 
     const query = client.query(`
-      SELECT TOURNOIS_SPORTSDB.requete_${req.body.numero}();
+      SELECT SPORTSDB.requete_${req.body.numero}();
     `);
     
     // After all data is returned, close connection and return results
@@ -99,7 +99,7 @@ router.put('/requete', (req, res, next) => {
     }
 
     const query = client.query(`
-      SELECT TOURNOIS_SPORTSDB.requete_${req.body.numero}();
+      SELECT SPORTSDB.requete_${req.body.numero}();
     `);
     
     // After all data is returned, close connection and return results

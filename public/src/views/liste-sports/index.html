@@ -39,8 +39,6 @@
         <input value.bind="nouveauSport.idsport" placeholder="IDSport" required/>
         <input value.bind="nouveauSport.nom" placeholder="Nom" required/>
         <input value.bind="nouveauSport.description" placeholder="Description" required/>
-        <input type="number" value.bind="nouveauSport.nbrminjoueurs" placeholder="Nombre minimum de joueurs" required/>
-        <input type="number" value.bind="nouveauSport.nbrmaxjoueurs" placeholder="Nombre maximum de joueurs" required/>
         <button type="submit" class="btn btn-inscription" click.trigger="ajouter()">AJOUTER</button>
       </form>
     </div>
@@ -52,8 +50,6 @@
         <input value.bind="sportAModifier.idsport" placeholder="IDSport" required/>
         <input value.bind="sportAModifier.nom" placeholder="Nom" required/>
         <input value.bind="sportAModifier.description" placeholder="Description" required/>
-        <input type="number" value.bind="sportAModifier.nbrminjoueurs" placeholder="Nombre minimum de joueurs" required/>
-        <input type="number" value.bind="sportAModifier.nbrmaxjoueurs" placeholder="Nombre maximum de joueurs" required/>
         <button type="submit" class="btn btn-inscription" click.trigger="modifier()">SAUVEGARDER</button>
       </form>
     </div>

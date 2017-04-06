@@ -57,10 +57,17 @@ export class ServiceSaisons {
 		return this.http.fetch('saison/match', {
 			method: 'post',
 			body: json({
-				match: JSON.stringify(match),
-				equipeA: JSON.stringify(equipeA),
-				equipeB: JSON.stringify(equipeB)
+				match: match,
+				equipeA: equipeA,
+				equipeB: equipeB
 			})
+		});
+	}
+
+	deleteMatch(match) {
+		return this.http.fetch('saison/match', {
+			method: 'delete',
+			body: json(match)
 		});
 	}
 

@@ -25,9 +25,9 @@ export class ServiceMatchs {
     });
   }
 
-	getPoints(idmatch, idequipe) {
-		return this.http.fetch(`match/equipe/points?idmatch=${idmatch}&idequipe=${idequipe}`).then(response => response.json()).then(data => {
-			return data[0].nbrpoints;
+	getPoints(match, equipe) {
+		return this.http.fetch(`match/equipe/points?idmatch=${match.idmatch}&idligue=${equipe.idligue}&nom=${equipe.nom}`).then(response => response.json()).then(data => {
+			return data[0].ptsmarques;
     });
 	}
 

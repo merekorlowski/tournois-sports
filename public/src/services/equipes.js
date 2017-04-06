@@ -18,20 +18,20 @@ export class ServiceEquipes {
     });
   }
 
-	getEquipe(idequipe) {
-		return this.http.fetch(`equipe?idequipe=${idequipe}`).then(response => response.json()).then(data => {
+	getEquipe(equipe) {
+		return this.http.fetch(`equipe?idligue=${equipe.idligue}&nom=${equipe.nom}`).then(response => response.json()).then(data => {
       return new Equipe(data[0]);
     });
 	}
 
-	getGerant(idequipe) {
-		return this.http.fetch(`equipe/gerant?idequipe=${idequipe}`).then(response => response.json()).then(data => {
+	getGerant(equipe) {
+		return this.http.fetch(`equipe/gerant?idligue=${equipe.idligue}&nom=${equipe.nom}`).then(response => response.json()).then(data => {
       return new Usager(data[0]);
     });
 	}
 
-	getJoueurs(idequipe) {
-		return this.http.fetch(`equipe/joueurs?idequipe=${idequipe}`).then(response => response.json()).then(data => {
+	getJoueurs(equipe) {
+		return this.http.fetch(`equipe/joueurs?idligue=${equipe.idligue}&nom=${equipe.nom}`).then(response => response.json()).then(data => {
       return data.map(usager => {
         return new Usager(usager);
       }) || [];
@@ -46,12 +46,12 @@ export class ServiceEquipes {
     });
 	}
 
-	post(idusager, idequipe) {
+	post(idusager, equipe) {
 		return this.http.fetch('equipe/joueur', {
       method: 'post',
       body: json({
 				idusager: idusager,
-				idequipe: idequipe
+				equipe: equipe
 			})
     });
 	}

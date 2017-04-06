@@ -57,10 +57,10 @@ export class ServiceLigues {
     });
 	}
 
- 	deleteEquipe(idequipe) {
+ 	deleteEquipe(equipe) {
     return this.http.fetch('ligue/equipe', {
       method: 'delete',
-      body: json(idequipe)
+      body: json(equipe)
     });
   }
 

@@ -42,7 +42,7 @@
     <div class="popup-background" if.bind="modificationAffiche">
       <div class="popup">
         <button class="icon-btn" click.trigger="cancelerModification()"><i class="material-icons">clear</i></button>
-        <h3>Modification de l'équipe ${equipe.idequipe}</h3>
+        <h3>Modification de l'équipe ${equipe.nom} du ligue ${equipe.idlige}</h3>
         <input value.bind="equipe.nom" placeholder="Nom"/>
         <button class="btn btn-inscription" click.trigger="sauvegarder()">SAUVERGARDER</button>
       </div>

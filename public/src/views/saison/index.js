@@ -18,8 +18,6 @@ export class SaisonView {
 		this.getSaison(params.id);
 		this.nouveauMatch = new Match();
 		this.nouveauMatch.idsaison = params.id;
-		this.equipeA = new Equipe();
-		this.equipeB = new Equipe();
 	}
 
 	detached() {
@@ -40,8 +38,8 @@ export class SaisonView {
 					this.serviceMatchs.getEquipes(match.idmatch).then(equipes => {
 						match.equipes = equipes;
 						for (let equipe of match.equipes) {
-							this.serviceMatchs.getPoints(match.idmatch, equipe.idequipe).then(points => {
-								equipe.nbrpoints = points;
+							this.serviceMatchs.getPoints(match, equipe).then(points => {
+								equipe.ptsmarques = points;
 							});
 						}
 					});
@@ -53,22 +51,24 @@ export class SaisonView {
 	getEquipes(idligue) {
 		this.serviceLigues.getEquipes(idligue).then(equipes => {
 			this.equipes = equipes;
+			this.equipeA = this.equipes[0];
+			this.equipeB = this.equipes[1];
 		});
 	}
 
-	retirerMatch(index, idmatch) {
-		this.serviceSaisons.deleteMatch(idmatch).then(() => {
+	retirerMatch(index, match) {
+		this.serviceSaisons.deleteMatch(match).then(() => {
 			this.matchs.splice(index, 1);
 		}); 
 	}
 
 	ajouter() {
-		console.log(JSON.stringify(this.equipeA));
-		this.serviceSaisons.postMatch(this. nouveauMatch, this.equipeA, this.equipeB).then(() => {
+		this.serviceSaisons.postMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(() => {
+			this.matchs.push(this.nouveauMatch);
 			this.ajoutAffiche = false;
 			this.nouveauMatch = new Match();
-			this.equipeA = new Equipe();
-			this.equipeB = new Equipe();
+			this.equipeA = this.equipes[0];
+			this.equipeB = this.equipes[1];
 			// add listener to disable scroll
 			window.removeEventListener('scroll', this.scrollTo);
 		});
@@ -83,12 +83,32 @@ export class SaisonView {
 	cancelerAjout() {
 		this.ajoutAffiche = false;
 		this.nouveauMatch = new Match();
-		this.equipeA = new Equipe();
-		this.equipeB = new Equipe();
-		this.nbrpointsA = 0;
-		this.nbrpointsB = 0;
+		this.equipeA = this.equipes[0];
+		this.equipeB = this.equipes[1];
+		this.ptsmarquesA = 0;
+		this.ptsmarquesB = 0;
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	afficherModificationSaison() {
+		this.modificationSaisonAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerModificationSaison() {
+		this.modificationSaisonAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	modifierSaison() {
+		this.serviceSaisons.put(this.saison).then(() => {
+			this.modificationSaisonAffiche = false;
+			// add listener to disable scroll
+			window.removeEventListener('scroll', this.scrollTo);
+		});
 	}
 
 	scrollTo() {

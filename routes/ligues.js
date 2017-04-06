@@ -23,7 +23,7 @@ router.get('/ligues', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Ligue
+      FROM SPORTSDB.Ligue
       WHERE idsport = '${req.query.idsport}' AND (idligue LIKE '%${req.query.query}%' OR niveaudifficulte LIKE '%${req.query.query}%')
       ORDER BY idligue ${req.query.sort}
     `);
@@ -56,7 +56,7 @@ router.get('/ligue', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Ligue
+      FROM SPORTSDB.Ligue
       WHERE idligue = '${req.query.idligue}'
     `);
 
@@ -86,7 +86,7 @@ router.post('/ligue', (req, res, next) => {
 
     const query = client.query(`
       INSERT  
-      INTO TOURNOIS_SPORTSDB.Ligue(idligue, idsport, niveaudifficulte)
+      INTO SPORTSDB.Ligue(idligue, idsport, niveaudifficulte)
       VALUES (
         '${req.body.idligue}',
         '${req.body.idsport}',
@@ -116,14 +116,22 @@ router.post('/ligue/equipe', (req, res, next) => {
 
     const query = client.query(`
       INSERT
-      INTO TOURNOIS_SPORTSDB.Equipe(idequipe, nom, statutdeforfait, idusager, idligue)
+      INTO SPORTSDB.Equipe
       VALUES (
-        '${req.body.idequipe}',
         '${req.body.nom}',
-        '${req.body.statutdeforfait}',
+        '${req.body.idligue}',
         '${req.body.idusager}',
-        '${req.body.idligue}'
-      )
+        '${req.body.nbrminjoueurs}',
+        '${req.body.nbrmaxjoueurs}'
+      );
+
+      INSERT
+      INTO SPORTSDB.UsagerEquipe
+      VALUES (
+        '${req.body.idusager}',
+        '${req.body.idligue}',
+        '${req.body.nom}'
+      );
     `);
 
     // After all data is returned, close connection and return results
@@ -148,7 +156,7 @@ router.delete('/ligue', (req, res, next) => {
 
     const query = client.query(`
       DELETE
-      FROM TOURNOIS_SPORTSDB.Ligue
+      FROM SPORTSDB.Ligue
       WHERE idligue = '${req.query.idligue}'
     `);
 
@@ -176,10 +184,10 @@ router.get('/ligues/gestionnaires', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Gestionnaire NATURAL JOIN TOURNOIS_SPORTSDB.Employe
+      FROM SPORTSDB.Gestionnaire NATURAL JOIN SPORTSDB.Employe
       WHERE idemploye = (
         SELECT idemploye
-        FROM TOURNOIS_SPORTSDB.GestionnaireLigue
+        FROM SPORTSDB.GestionnaireLigue
         WHERE idligue = '${req.query.idligue}'
       )
     `);
@@ -213,10 +221,10 @@ router.get('/ligues/arbitres', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Arbitre NATURAL JOIN TOURNOIS_SPORTSDB.Employe
+      FROM SPORTSDB.Arbitre NATURAL JOIN SPORTSDB.Employe
       WHERE idemploye = (
         SELECT idemploye
-        FROM TOURNOIS_SPORTSDB.ArbitreLigue
+        FROM SPORTSDB.ArbitreLigue
         WHERE idligue = '${req.query.idligue}'
       )
     `);
@@ -250,7 +258,7 @@ router.get('/ligue/saisons', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Saison
+      FROM SPORTSDB.Saison
       WHERE idligue = '${req.query.idligue}'
     `);
 
@@ -280,7 +288,7 @@ router.delete('/ligue/saison', (req, res, next) => {
 
     const query = client.query(`
       DELETE
-      FROM TOURNOIS_SPORTSDB.Saison
+      FROM SPORTSDB.Saison
       WHERE idsaison = '${req.body.idsaison}'
     `);
 
@@ -308,7 +316,7 @@ router.get('/ligue/equipes', (req, res, next) => {
 
     const query = client.query(`
       SELECT *
-      FROM TOURNOIS_SPORTSDB.Equipe
+      FROM SPORTSDB.Equipe
       WHERE idligue = '${req.query.idligue}'
     `);
 
@@ -338,8 +346,8 @@ router.delete('/ligue/equipe', (req, res, next) => {
 
     const query = client.query(`
       DELETE
-      FROM TOURNOIS_SPORTSDB.Equipe
-      WHERE idemploye = '${req.body.idemploye}'
+      FROM SPORTSDB.Equipe
+      WHERE idligue = '${req.body.idligue}' AND nom = '${req.body.nom}'
     `);
 
     query.on('row', row => {

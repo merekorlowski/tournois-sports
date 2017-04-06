@@ -23,7 +23,7 @@ router.get('/employes', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Employe NATURAL LEFT OUTER JOIN TOURNOIS_SPORTSDB.Gestionnaire NATURAL LEFT OUTER JOIN TOURNOIS_SPORTSDB.Arbitre
+      FROM SPORTSDB.Employe NATURAL LEFT OUTER JOIN SPORTSDB.Gestionnaire NATURAL LEFT OUTER JOIN SPORTSDB.Arbitre
       WHERE nom LIKE '%${req.query.query}%' OR prenom LIKE '%${req.query.query}' OR role LIKE '%${req.query.query}'
       ORDER BY nom ${req.query.sort}
     `);
@@ -54,7 +54,7 @@ router.post('/employe', (req, res, next) => {
 
     let queryText = `
       INSERT 
-      INTO TOURNOIS_SPORTSDB.Employe
+      INTO SPORTSDB.Employe
       VALUES (
         '${req.body.idemploye}',
         '${req.body.prenom}',
@@ -66,16 +66,15 @@ router.post('/employe', (req, res, next) => {
     if (req.body.role === 'Arbitre') {
       queryText += `
         INSERT 
-        INTO TOURNOIS_SPORTSDB.Arbitre
+        INTO SPORTSDB.Arbitre
         VALUES (
-          '${req.body.idemploye}',
-          '${req.body.nbrannees}'
+          '${req.body.idemploye}'
         );
       `;
     } else if (req.body.role === 'Gestionnaire') {
       queryText += `
         INSERT 
-        INTO TOURNOIS_SPORTSDB.Gestionnaire
+        INTO SPORTSDB.Gestionnaire
         VALUES (
           '${req.body.idemploye}',
           '${req.body.numtel}',
@@ -108,7 +107,7 @@ router.put('/employe', (req, res, next) => {
 
     let queryText = `
       UPDATE 
-      TOURNOIS_SPORTSDB.Employe
+      SPORTSDB.Employe
       SET
         prenom = '${req.body.prenom}',
         nom = '${req.body.nom}',
@@ -120,16 +119,16 @@ router.put('/employe', (req, res, next) => {
     if (req.body.role === 'Arbitre') {
       queryText += `
         UPDATE 
-        TOURNOIS_SPORTSDB.Arbitre
+        SPORTSDB.ArbitreSport
         SET
           nbrannees = '${req.body.nbrannees}'
-        WHERE idemploye = '${req.body.idemploye}'
+        WHERE idemploye = '${req.body.idemploye}' AND '${req.body.idsport}' = '${req.body.idsport}'
         ;
       `;
     } else if (req.body.role === 'Gestionnaire') {
       queryText += `
         UPDATE 
-        TOURNOIS_SPORTSDB.Gestionnaire
+        SPORTSDB.Gestionnaire
         SET
           numtel = '${req.body.numtel}',
           courriel = '${req.body.courriel}'
@@ -162,7 +161,7 @@ router.delete('/employe', (req, res, next) => {
 
     const query = client.query(`
       DELETE 
-      FROM TOURNOIS_SPORTSDB.Employe
+      FROM SPORTSDB.Employe
       WHERE idemploye = '${req.body.idemploye}'
     `);
 

@@ -23,7 +23,7 @@ router.get('/tournois', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Tournoi
+      FROM SPORTSDB.Tournoi
       WHERE idsport = '${req.query.idsport}' AND oeuvrecharite LIKE '%${req.query.query}%'
       ORDER BY oeuvrecharite ${req.query.sort}
     `);
@@ -56,7 +56,7 @@ router.get('/tournoi', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Tournoi
+      FROM SPORTSDB.Tournoi
       WHERE idtournoi = '${req.query.idtournoi}'
     `);
 
@@ -88,10 +88,10 @@ router.get('/tournoi/commanditaires', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Commanditaire
+      FROM SPORTSDB.Commanditaire
       WHERE idcommanditaire IN (
         SELECT idcommanditaire
-        FROM TOURNOIS_SPORTSDB.CommanditaireTournoi
+        FROM SPORTSDB.CommanditaireTournoi
         WHERE idtournoi = '${req.query.idtournoi}'
       )
     `);
@@ -124,7 +124,7 @@ router.get('/tournoi/commanditairetournoi', (req, res, next) => {
 
     const query = client.query(`
       SELECT contribution 
-      FROM TOURNOIS_SPORTSDB.CommanditaireTournoi
+      FROM SPORTSDB.CommanditaireTournoi
       WHERE idcommanditaire = '${req.query.idcommanditaire}'
       AND idtournoi = '${req.query.idtournoi}'`
     );
@@ -157,10 +157,10 @@ router.get('/tournoi/matchs', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM TOURNOIS_SPORTSDB.Match
+      FROM SPORTSDB.Match
       WHERE idmatch IN (
         SELECT idmatch
-        FROM TOURNOIS_SPORTSDB.MatchTournoi
+        FROM SPORTSDB.MatchTournoi
         WHERE idtournoi = '${req.query.idtournoi}'
       )
     `);
@@ -193,13 +193,13 @@ router.post('/tournoi', (req, res, next) => {
 
     const query = client.query(`
       INSERT 
-      INTO TOURNOIS_SPORTSDB.Tournoi
+      INTO SPORTSDB.Tournoi
       VALUES (
         '${req.body.idtournoi}',
         '${req.body.oeuvrecharite}',
         '${req.body.fondsaccumules}',
-        '${req.body.datedebut}',
-        '${req.body.datefin}',
+        (to_date('${req.body.datedebut}', 'YYYY-MM-DD')),
+        (to_date('${req.body.datefin}', 'YYYY-MM-DD')),
         '${req.body.idsport}'
       )
     `);
@@ -224,13 +224,15 @@ router.put('/tournoi', (req, res, next) => {
       return res.status(500).json({success: false, data: err});
     }
 
+    console.log(JSON.stringify(req.body));
+
     const query = client.query(`
       UPDATE 
-      TOURNOIS_SPORTSDB.Tournoi
+      SPORTSDB.Tournoi
       SET
         oeuvrecharite = '${req.body.oeuvrecharite}',
-        datedebut = '${req.body.datedebut}',
-        datefin = '${req.body.datefin}'
+        datedebut = (to_date('${req.body.datedebut}', 'YYYY-MM-DD')),
+        datefin = (to_date('${req.body.datefin}', 'YYYY-MM-DD'))
       WHERE idtournoi = '${req.body.idtournoi}';
     `);
 
@@ -256,7 +258,7 @@ router.delete('/tournoi', (req, res, next) => {
 
     const query = client.query(`
       DELETE 
-      TOURNOIS_SPORTSDB.Tournoi
+      SPORTSDB.Tournoi
       WHERE idtournoi = '${req.body.idtournoi}';
     `);
 
