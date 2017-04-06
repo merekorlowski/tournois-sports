@@ -19,21 +19,21 @@ export class ServiceSports {
     });
   }
 
-  post(sport) {
+  ajouter(sport) {
     return this.http.fetch('sport', {
       method: 'post',
       body: json(sport)
     });
   }
 
-  put(sport) {
+  modifier(sport) {
     return this.http.fetch('sport', {
       method: 'put',
       body: json(sport)
     });
   }
 
-	deleteSport(sport) {
+	retirerSport(sport) {
 		return this.http.fetch('sport', {
       method: 'delete',
       body: json(sport)

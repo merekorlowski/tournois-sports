@@ -4,7 +4,7 @@
 		<ul class="list">
 			<li repeat.for="requete of requetes">
 				<p>${requete}</p>
-				<button if.bind="($index + 1) !== requeteExecute" class="icon-btn bottom-right" click.trigger="executerRequete($index + 1)">
+				<button if.bind="($index + 1) !== requeteExecute" class="icon-btn bottom-right" click.trigger="executer($index + 1)">
 					<i class="material-icons">keyboard_arrow_down</i>
 				</button>
 				<button if.bind="($index + 1) === requeteExecute" class="icon-btn bottom-right" click.trigger="requeteExecute = -1">
@@ -39,19 +39,3 @@
 		</ul>
 	</section>
 </template>
-			if (numero === 10) {
-				return this.http.fetch('requete', {
-					method: 'post',
-					body: json({numero: numero})
-				});
-			} else if (numero === 11) {
-				return this.http.fetch('requete', {
-					method: 'delete',
-					body: json({numero: numero})
-				});
-			} else {
-				return this.http.fetch('requete', {
-					method: 'put',
-					body: json({numero: numero})
-				});
-			}

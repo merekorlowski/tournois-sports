@@ -17,21 +17,21 @@ export class ServiceEmployes {
     });
   }
 
-	delete(idemploye) {
+	retirer(idemploye) {
     return this.http.fetch('employe', {
       method: 'delete',
       body: json(idemploye)
     });
   }
 
-  post(employe) {
+  ajouter(employe) {
     return this.http.fetch('employe', {
       method: 'post',
       body: json(employe)
     });
   }
 
-	put(employe) {
+	modifier(employe) {
     return this.http.fetch('employe', {
       method: 'put',
       body: json(employe)

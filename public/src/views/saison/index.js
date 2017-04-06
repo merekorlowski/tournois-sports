@@ -62,8 +62,29 @@ export class SaisonView {
 		}); 
 	}
 
-	ajouter() {
-		this.serviceSaisons.postMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(() => {
+	/**
+	 * Ajouter un match
+	 */
+
+	afficherAjoutNatch() {
+		this.ajoutAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerAjoutMatch() {
+		this.ajoutAffiche = false;
+		this.nouveauMatch = new Match();
+		this.equipeA = this.equipes[0];
+		this.equipeB = this.equipes[1];
+		this.ptsmarquesA = 0;
+		this.ptsmarquesB = 0;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	ajouterMatch() {
+		this.serviceSaisons.ajouterMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(() => {
 			this.matchs.push(this.nouveauMatch);
 			this.ajoutAffiche = false;
 			this.nouveauMatch = new Match();
@@ -74,22 +95,9 @@ export class SaisonView {
 		});
 	}
 
-	afficherAjout() {
-		this.ajoutAffiche = true;
-		// add listener to disable scroll
-		window.addEventListener('scroll', this.scrollTo);
-	}
-
-	cancelerAjout() {
-		this.ajoutAffiche = false;
-		this.nouveauMatch = new Match();
-		this.equipeA = this.equipes[0];
-		this.equipeB = this.equipes[1];
-		this.ptsmarquesA = 0;
-		this.ptsmarquesB = 0;
-		// add listener to disable scroll
-		window.removeEventListener('scroll', this.scrollTo);
-	}
+	/**
+	 * Modifier le saison
+	 */
 
 	afficherModificationSaison() {
 		this.modificationSaisonAffiche = true;
@@ -104,8 +112,33 @@ export class SaisonView {
 	}
 
 	modifierSaison() {
-		this.serviceSaisons.put(this.saison).then(() => {
+		this.serviceSaisons.modifierSaison(this.saison).then(() => {
 			this.modificationSaisonAffiche = false;
+			// add listener to disable scroll
+			window.removeEventListener('scroll', this.scrollTo);
+		});
+	}
+
+	/**
+	 * Modifier un match
+	 */
+
+	afficherModificationMatch(match) {
+		this.matchAModifier = match;
+		this.modificationMatchAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerModificationMatch() {
+		this.modificationMatchAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+	modifierMatch() {
+		this.serviceMatchs.modifierMatch(this.matchAModifier).then(() => {
+			this.modificationMatchAffiche = false;
 			// add listener to disable scroll
 			window.removeEventListener('scroll', this.scrollTo);
 		});

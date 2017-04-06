@@ -107,4 +107,46 @@ router.delete('/match', (req, res, next) => {
   });
 });
 
+router.put('/match', (req, res, next) => {
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      UPDATE
+      SPORTSDB.Match
+      SET
+        date = (to_date('${req.body.match.date}', 'YYYY-MM-DD')),
+        heure = '${req.body.match.heure}',
+        lieu = '${req.body.match.lieu}'
+      WHERE idmatch = '${req.body.match.idmatch}';
+
+      UPDATE
+      SPORTSDB.EquipeMatch
+      SET
+        ptsmarques = '${req.body.equipeA.ptsmarques}'
+      WHERE idmatch = '${req.body.match.idmatch}' AND idligue = '${req.body.equipeA.idligue}' AND nom = '${req.body.equipeA.nom}';
+
+      UPDATE
+      SPORTSDB.EquipeMatch
+      SET
+        ptsmarques = '${req.body.equipeB.ptsmarques}'
+      WHERE idmatch = '${req.body.match.idmatch}' AND idligue = '${req.body.equipeB.idligue}' AND nom = '${req.body.equipeB.nom}';
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json();
+    });
+
+  });
+});
+
 module.exports = router;

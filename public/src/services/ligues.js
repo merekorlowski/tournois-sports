@@ -21,20 +21,20 @@ export class ServiceLigues {
     });
   }
 
-	post(ligue) {
-		return this.http.fetch('ligue', {
-      method: 'post',
-      body: json(ligue)
-    });
-	}
-
 	getLigue(idligue) {
 		return this.http.fetch(`ligue?idligue=${idligue}`).then(response => response.json()).then(data => {
       return new Ligue(data[0]);
     });
 	}
 
-  delete(ligue) {
+	ajouter(ligue) {
+		return this.http.fetch('ligue', {
+      method: 'post',
+      body: json(ligue)
+    });
+	}
+
+  retirer(ligue) {
     return this.http.fetch('ligue', {
       method: 'delete',
       body: json(ligue)
@@ -57,21 +57,21 @@ export class ServiceLigues {
     });
 	}
 
- 	deleteEquipe(equipe) {
+ 	retirerEquipe(equipe) {
     return this.http.fetch('ligue/equipe', {
       method: 'delete',
       body: json(equipe)
     });
   }
 
-	postEquipe(equipe) {
+	ajouterEquipe(equipe) {
 		return this.http.fetch('ligue/equipe', {
       method: 'post',
       body: json(equipe)
     });
 	}
 	
-	deleteSaison(idsaison) {
+	retirerSaison(idsaison) {
     return this.http.fetch('ligue/saison', {
       method: 'delete',
       body: json(idsaison)

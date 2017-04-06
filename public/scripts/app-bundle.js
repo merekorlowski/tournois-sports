@@ -489,21 +489,21 @@ define('services/employes',['exports', 'aurelia-fetch-client', '../models/employ
       });
     };
 
-    ServiceEmployes.prototype.delete = function _delete(idemploye) {
+    ServiceEmployes.prototype.retirer = function retirer(idemploye) {
       return this.http.fetch('employe', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(idemploye)
       });
     };
 
-    ServiceEmployes.prototype.post = function post(employe) {
+    ServiceEmployes.prototype.ajouter = function ajouter(employe) {
       return this.http.fetch('employe', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(employe)
       });
     };
 
-    ServiceEmployes.prototype.put = function put(employe) {
+    ServiceEmployes.prototype.modifier = function modifier(employe) {
       return this.http.fetch('employe', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(employe)
@@ -582,7 +582,7 @@ define('services/equipes',['exports', 'aurelia-fetch-client', '../models/equipe'
       });
     };
 
-    ServiceEquipes.prototype.post = function post(idusager, equipe) {
+    ServiceEquipes.prototype.ajouter = function ajouter(idusager, equipe) {
       return this.http.fetch('equipe/joueur', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)({
@@ -592,21 +592,21 @@ define('services/equipes',['exports', 'aurelia-fetch-client', '../models/equipe'
       });
     };
 
-    ServiceEquipes.prototype.put = function put(equipe) {
+    ServiceEquipes.prototype.modifier = function modifier(equipe) {
       return this.http.fetch('equipe', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(equipe)
       });
     };
 
-    ServiceEquipes.prototype.delete = function _delete(equipe) {
+    ServiceEquipes.prototype.retirer = function retirer(equipe) {
       return this.http.fetch('equipe', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(equipe)
       });
     };
 
-    ServiceEquipes.prototype.deleteJoueur = function deleteJoueur(idusager) {
+    ServiceEquipes.prototype.retirerJoueur = function retirerJoueur(idusager) {
       return this.http.fetch('equipe/joueur', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(idusager)
@@ -649,13 +649,6 @@ define('services/ligues',['exports', 'aurelia-fetch-client', '../models/ligue', 
       });
     };
 
-    ServiceLigues.prototype.post = function post(ligue) {
-      return this.http.fetch('ligue', {
-        method: 'post',
-        body: (0, _aureliaFetchClient.json)(ligue)
-      });
-    };
-
     ServiceLigues.prototype.getLigue = function getLigue(idligue) {
       return this.http.fetch('ligue?idligue=' + idligue).then(function (response) {
         return response.json();
@@ -664,7 +657,14 @@ define('services/ligues',['exports', 'aurelia-fetch-client', '../models/ligue', 
       });
     };
 
-    ServiceLigues.prototype.delete = function _delete(ligue) {
+    ServiceLigues.prototype.ajouter = function ajouter(ligue) {
+      return this.http.fetch('ligue', {
+        method: 'post',
+        body: (0, _aureliaFetchClient.json)(ligue)
+      });
+    };
+
+    ServiceLigues.prototype.retirer = function retirer(ligue) {
       return this.http.fetch('ligue', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(ligue)
@@ -691,21 +691,21 @@ define('services/ligues',['exports', 'aurelia-fetch-client', '../models/ligue', 
       });
     };
 
-    ServiceLigues.prototype.deleteEquipe = function deleteEquipe(equipe) {
+    ServiceLigues.prototype.retirerEquipe = function retirerEquipe(equipe) {
       return this.http.fetch('ligue/equipe', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(equipe)
       });
     };
 
-    ServiceLigues.prototype.postEquipe = function postEquipe(equipe) {
+    ServiceLigues.prototype.ajouterEquipe = function ajouterEquipe(equipe) {
       return this.http.fetch('ligue/equipe', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(equipe)
       });
     };
 
-    ServiceLigues.prototype.deleteSaison = function deleteSaison(idsaison) {
+    ServiceLigues.prototype.retirerSaison = function retirerSaison(idsaison) {
       return this.http.fetch('ligue/saison', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(idsaison)
@@ -768,10 +768,21 @@ define('services/matchs',['exports', 'aurelia-fetch-client', '../models/match', 
       });
     };
 
-    ServiceMatchs.prototype.deleteMatch = function deleteMatch(match) {
+    ServiceMatchs.prototype.retirerMatch = function retirerMatch(match) {
       return this.http.fetch('match', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(match)
+      });
+    };
+
+    ServiceMatchs.prototype.modifierMatch = function modifierMatch(match, equipeA, equipeB) {
+      return this.http.fetch('match', {
+        method: 'put',
+        body: (0, _aureliaFetchClient.json)({
+          match: match,
+          equipeA: equipeA,
+          equipeB: equipeB
+        })
       });
     };
 
@@ -882,21 +893,21 @@ define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison'
       });
     };
 
-    ServiceSaisons.prototype.delete = function _delete(saison) {
+    ServiceSaisons.prototype.retirer = function retirer(saison) {
       return this.http.fetch('saison', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(saison)
       });
     };
 
-    ServiceSaisons.prototype.post = function post(saison) {
+    ServiceSaisons.prototype.ajouter = function ajouter(saison) {
       return this.http.fetch('saison', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(saison)
       });
     };
 
-    ServiceSaisons.prototype.put = function put(saison) {
+    ServiceSaisons.prototype.modifier = function modifier(saison) {
       return this.http.fetch('saison', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(saison)
@@ -921,7 +932,7 @@ define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison'
       });
     };
 
-    ServiceSaisons.prototype.postMatch = function postMatch(match, equipeA, equipeB) {
+    ServiceSaisons.prototype.ajouterMatch = function ajouterMatch(match, equipeA, equipeB) {
       return this.http.fetch('saison/match', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)({
@@ -932,7 +943,7 @@ define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison'
       });
     };
 
-    ServiceSaisons.prototype.deleteMatch = function deleteMatch(match) {
+    ServiceSaisons.prototype.retirerMatch = function retirerMatch(match) {
       return this.http.fetch('saison/match', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(match)
@@ -975,21 +986,21 @@ define('services/sports',['exports', 'aurelia-fetch-client', '../models/sport', 
       });
     };
 
-    ServiceSports.prototype.post = function post(sport) {
+    ServiceSports.prototype.ajouter = function ajouter(sport) {
       return this.http.fetch('sport', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(sport)
       });
     };
 
-    ServiceSports.prototype.put = function put(sport) {
+    ServiceSports.prototype.modifier = function modifier(sport) {
       return this.http.fetch('sport', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(sport)
       });
     };
 
-    ServiceSports.prototype.deleteSport = function deleteSport(sport) {
+    ServiceSports.prototype.retirerSport = function retirerSport(sport) {
       return this.http.fetch('sport', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(sport)
@@ -1069,14 +1080,14 @@ define('services/tournois',['exports', 'aurelia-fetch-client', '../models/tourno
       });
     };
 
-    ServiceTournois.prototype.deleteMatch = function deleteMatch(idmatch) {
+    ServiceTournois.prototype.retirerMatch = function retirerMatch(idmatch) {
       return this.http.fetch('tournoi/match', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(idmatch)
       });
     };
 
-    ServiceTournois.prototype.deleteCommanditaire = function deleteCommanditaire(idcommanditaire) {
+    ServiceTournois.prototype.retirerCommanditaire = function retirerCommanditaire(idcommanditaire) {
       return this.http.fetch('tournoi/commanditaire', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(idcommanditaire)
@@ -1101,21 +1112,21 @@ define('services/tournois',['exports', 'aurelia-fetch-client', '../models/tourno
       });
     };
 
-    ServiceTournois.prototype.post = function post(tournoi) {
+    ServiceTournois.prototype.ajouter = function ajouter(tournoi) {
       return this.http.fetch('tournoi', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(tournoi)
       });
     };
 
-    ServiceTournois.prototype.delete = function _delete(tournoi) {
+    ServiceTournois.prototype.retirer = function retirer(tournoi) {
       return this.http.fetch('tournoi', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(tournoi)
       });
     };
 
-    ServiceTournois.prototype.put = function put(tournoi) {
+    ServiceTournois.prototype.modifier = function modifier(tournoi) {
       return this.http.fetch('tournoi', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(tournoi)
@@ -1168,21 +1179,21 @@ define('services/usagers',['exports', 'aurelia-fetch-client', '../models/usager'
       });
     };
 
-    ServiceUsagers.prototype.delete = function _delete(usager) {
+    ServiceUsagers.prototype.retirer = function retirer(usager) {
       return this.http.fetch('usager', {
         method: 'delete',
         body: (0, _aureliaFetchClient.json)(usager)
       });
     };
 
-    ServiceUsagers.prototype.post = function post(usager) {
+    ServiceUsagers.prototype.ajouter = function ajouter(usager) {
       return this.http.fetch('usager', {
         method: 'post',
         body: (0, _aureliaFetchClient.json)(usager)
       });
     };
 
-    ServiceUsagers.prototype.put = function put(usager) {
+    ServiceUsagers.prototype.modifier = function modifier(usager) {
       return this.http.fetch('usager', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(usager)
@@ -1294,7 +1305,7 @@ define('views/employes/index',['exports', 'aurelia-framework', '../../models/emp
 		Employes.prototype.retirer = function retirer(index, idemploye) {
 			var _this2 = this;
 
-			this.serviceEmployes.delete(idemploye).then(function () {
+			this.serviceEmployes.retirer(idemploye).then(function () {
 				_this2.employes.splice(index, 1);
 			});
 		};
@@ -1315,13 +1326,11 @@ define('views/employes/index',['exports', 'aurelia-framework', '../../models/emp
 		Employes.prototype.ajouter = function ajouter() {
 			var _this3 = this;
 
-			this.serviceEmployes.post(this.nouveauEmploye).then(function (employe) {
+			this.serviceEmployes.ajouter(this.nouveauEmploye).then(function (employe) {
 				_this3.ajoutAffiche = false;
 				_this3.employes.push(_this3.nouveauEmploye);
 
-				window.removeEventListener('scroll', function () {
-					window.scrollTo(0, 0);
-				});
+				window.removeEventListener('scroll', _this3.scrollTo);
 			});
 		};
 
@@ -1334,7 +1343,6 @@ define('views/employes/index',['exports', 'aurelia-framework', '../../models/emp
 
 		Employes.prototype.cancelerModification = function cancelerModification() {
 			this.modificationAffiche = false;
-			this.employeAModifier = new _employe.Employe();
 
 			window.removeEventListener('scroll', this.scrollTo);
 		};
@@ -1342,7 +1350,7 @@ define('views/employes/index',['exports', 'aurelia-framework', '../../models/emp
 		Employes.prototype.modifier = function modifier() {
 			var _this4 = this;
 
-			this.serviceEmployes.put(this.employeAModifier).then(function () {
+			this.serviceEmployes.modifier(this.employeAModifier).then(function () {
 				_this4.modificationAffiche = false;
 			});
 		};
@@ -1394,24 +1402,48 @@ define('views/equipe/index',['exports', 'aurelia-framework', '../../services/equ
 			this.serviceEquipes.getEquipe(equipe).then(function (equipe) {
 				_this.equipe = equipe;
 				_this.equipe.nomOriginal = equipe.nom;
-				_this.serviceEquipes.getGerant(equipe).then(function (gerant) {
-					_this.gerant = gerant;
-				});
-				_this.serviceEquipes.getJoueurs(equipe).then(function (joueurs) {
-					_this.joueurs = joueurs;
-				});
+				_this.getGerant(equipe);
+				_this.getJoueurs(equipe);
+			});
+		};
+
+		EquipeView.prototype.getGerant = function getGerant(equipe) {
+			var _this2 = this;
+
+			this.serviceEquipes.getGerant(equipe).then(function (gerant) {
+				_this2.gerant = gerant;
+			});
+		};
+
+		EquipeView.prototype.getJoueurs = function getJoueurs(equipe) {
+			var _this3 = this;
+
+			this.serviceEquipes.getJoueurs(equipe).then(function (joueurs) {
+				_this3.joueurs = joueurs;
+			});
+		};
+
+		EquipeView.prototype.getUsagersLibres = function getUsagersLibres() {
+			var _this4 = this;
+
+			this.serviceEquipes.getUsagersLibres(this.equipe.idligue).then(function (usagersLibres) {
+				_this4.usagersLibres = usagersLibres;
+			});
+		};
+
+		EquipeView.prototype.retirerJoueur = function retirerJoueur(index, idusager) {
+			var _this5 = this;
+
+			this.serviceEquipes.retirerJoueur(idusager).then(function (equipe) {
+				_this5.joueurs.splice(index, 1);
 			});
 		};
 
 		EquipeView.prototype.afficherAjout = function afficherAjout() {
-			var _this2 = this;
-
 			this.ajoutAffiche = true;
 
 			window.addEventListener('scroll', this.scrollTo);
-			this.serviceEquipes.getUsagersLibres(this.equipe.idligue).then(function (usagersLibres) {
-				_this2.usagersLibres = usagersLibres;
-			});
+			this.getUsagersLibres();
 		};
 
 		EquipeView.prototype.cancelerAjout = function cancelerAjout() {
@@ -1422,20 +1454,14 @@ define('views/equipe/index',['exports', 'aurelia-framework', '../../services/equ
 		};
 
 		EquipeView.prototype.ajouter = function ajouter() {
-			var _this3 = this;
+			var _this6 = this;
 
-			this.serviceEquipes.post(this.nouveauJoueur.idusager, this.equipe).then(function () {
-				_this3.ajoutAffiche = false;
-				_this3.joueurs.push(_this3.nouveauJoueur);
+			this.serviceEquipes.ajouter(this.nouveauJoueur.idusager, this.equipe).then(function () {
+				_this6.ajoutAffiche = false;
+				_this6.joueurs.push(_this6.nouveauJoueur);
 
-				window.removeEventListener('scroll', _this3.scrollTo);
+				window.removeEventListener('scroll', _this6.scrollTo);
 			});
-		};
-
-		EquipeView.prototype.cancelerModification = function cancelerModification() {
-			this.modificationAffiche = false;
-
-			window.removeEventListener('scroll', this.scrollTo);
 		};
 
 		EquipeView.prototype.afficherModification = function afficherModification() {
@@ -1444,21 +1470,19 @@ define('views/equipe/index',['exports', 'aurelia-framework', '../../services/equ
 			window.addEventListener('scroll', this.scrollTo);
 		};
 
-		EquipeView.prototype.retirerJoueur = function retirerJoueur(index, idusager) {
-			var _this4 = this;
+		EquipeView.prototype.cancelerModification = function cancelerModification() {
+			this.modificationAffiche = false;
 
-			this.serviceEquipes.deleteJoueur(idusager).then(function (equipe) {
-				_this4.joueurs.splice(index, 1);
-			});
+			window.removeEventListener('scroll', this.scrollTo);
 		};
 
 		EquipeView.prototype.sauvegarder = function sauvegarder() {
-			var _this5 = this;
+			var _this7 = this;
 
-			this.serviceEquipes.put(this.equipe).then(function () {
-				_this5.modificationAffiche = false;
+			this.serviceEquipes.sauvegarder(this.equipe).then(function () {
+				_this7.modificationAffiche = false;
 
-				window.removeEventListener('scroll', _this5.scrollTo);
+				window.removeEventListener('scroll', _this7.scrollTo);
 			});
 		};
 
@@ -1506,10 +1530,10 @@ define('views/equipes/index',['exports', 'aurelia-framework', '../../models/equi
       });
     };
 
-    Equipes.prototype.retirerEquipe = function retirerEquipe(index, equipe) {
+    Equipes.prototype.retirer = function retirer(index, equipe) {
       var _this2 = this;
 
-      this.serviceEquipes.delete(equipe).then(function () {
+      this.serviceEquipes.retirer(equipe).then(function () {
         _this2.equipes.splice(index, 1);
       });
     };
@@ -1557,39 +1581,51 @@ define('views/ligue/index',['exports', 'aurelia-framework', '../../services/ligu
 
 			this.serviceLigues.getLigue(idligue).then(function (ligue) {
 				_this.ligue = ligue;
-				_this.serviceLigues.getSaisons(idligue).then(function (saisons) {
-					_this.saisons = saisons;
-				});
-				_this.serviceLigues.getEquipes(idligue).then(function (equipes) {
-					_this.equipes = equipes;
-				});
+				_this.getSaisons(idligue);
+				_this.getEquipes(idligue);
+			});
+		};
+
+		LigueView.prototype.getSaisons = function getSaisons(idligue) {
+			var _this2 = this;
+
+			this.serviceLigues.getSaisons(idligue).then(function (saisons) {
+				_this2.saisons = saisons;
+			});
+		};
+
+		LigueView.prototype.getEquipes = function getEquipes(idligue) {
+			var _this3 = this;
+
+			this.serviceLigues.getEquipes(idligue).then(function (equipes) {
+				_this3.equipes = equipes;
 			});
 		};
 
 		LigueView.prototype.retirerSaison = function retirerSaison(index, idsaison) {
-			var _this2 = this;
+			var _this4 = this;
 
-			this.serviceLigues.deleteSaison(idsaison).then(function () {
-				_this2.saisons.splice(index, 1);
+			this.serviceLigues.retirerSaison(idsaison).then(function () {
+				_this4.saisons.splice(index, 1);
 			});
 		};
 
 		LigueView.prototype.retirerEquipe = function retirerEquipe(index, equipe) {
-			var _this3 = this;
+			var _this5 = this;
 
-			this.serviceLigues.deleteEquipe(equipe).then(function () {
-				_this3.equipes.splice(index, 1);
+			this.serviceLigues.retirerEquipe(equipe).then(function () {
+				_this5.equipes.splice(index, 1);
 			});
 		};
 
 		LigueView.prototype.afficherAjoutEquipe = function afficherAjoutEquipe() {
-			var _this4 = this;
+			var _this6 = this;
 
 			this.ajoutEquipeAffiche = true;
 
 			window.addEventListener('scroll', this.scrollTo);
 			this.serviceUsagers.getGerantsLibres().then(function (gerants) {
-				_this4.gerants = gerants;
+				_this6.gerants = gerants;
 			});
 		};
 
@@ -1602,13 +1638,13 @@ define('views/ligue/index',['exports', 'aurelia-framework', '../../services/ligu
 		};
 
 		LigueView.prototype.ajouterEquipe = function ajouterEquipe() {
-			var _this5 = this;
+			var _this7 = this;
 
-			this.serviceLigues.postEquipe(this.nouveauEquipe).then(function (equipe) {
-				_this5.ajoutEquipeAffiche = false;
-				_this5.equipes.push(_this5.nouveauEquipe);
-				_this5.nouveauEquipe = new _equipe.Equipe();
-				_this5.nouveauEquipe.idligue = _this5.ligue.idligue;
+			this.serviceLigues.ajouterEquipe(this.nouveauEquipe).then(function (equipe) {
+				_this7.ajoutEquipeAffiche = false;
+				_this7.equipes.push(_this7.nouveauEquipe);
+				_this7.nouveauEquipe = new _equipe.Equipe();
+				_this7.nouveauEquipe.idligue = _this7.ligue.idligue;
 
 				window.removeEventListener('scroll', function () {
 					window.scrollTo(0, 0);
@@ -1685,7 +1721,7 @@ define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue
     Ligues.prototype.ajouter = function ajouter() {
       var _this2 = this;
 
-      this.serviceLigues.post(this.nouveauLigue).then(function () {
+      this.serviceLigues.ajouter(this.nouveauLigue).then(function () {
         _this2.ajoutAffiche = false;
         _this2.ligues.push(_this2.nouveauLigue);
       });
@@ -1694,7 +1730,7 @@ define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue
     Ligues.prototype.retirer = function retirer(index, ligue) {
       var _this3 = this;
 
-      this.serviceLigues.delete(ligue).then(function () {
+      this.serviceLigues.retirer(ligue).then(function () {
         _this3.ligues.splice(index, 1);
       });
     };
@@ -1752,7 +1788,7 @@ define('views/liste-sports/index',['exports', 'aurelia-framework', '../../models
 		ListeSports.prototype.retirerSport = function retirerSport(index, idsport) {
 			var _this2 = this;
 
-			this.serviceSports.deleteSport(idsport).then(function () {
+			this.serviceSports.retirerSport(idsport).then(function () {
 				_this2.sports.splice(index, 1);
 			});
 		};
@@ -1773,7 +1809,7 @@ define('views/liste-sports/index',['exports', 'aurelia-framework', '../../models
 		ListeSports.prototype.ajouter = function ajouter() {
 			var _this3 = this;
 
-			this.serviceSports.post(this.nouveauSport).then(function (sport) {
+			this.serviceSports.ajouter(this.nouveauSport).then(function (sport) {
 				_this3.ajoutAffiche = false;
 				_this3.sports.push(_this3.nouveauSport);
 			});
@@ -1782,6 +1818,8 @@ define('views/liste-sports/index',['exports', 'aurelia-framework', '../../models
 		ListeSports.prototype.afficherModification = function afficherModification(sport) {
 			this.modificationAffiche = true;
 			this.sportAModifier = sport;
+
+			window.addEventListener('scroll', this.scrollTo);
 		};
 
 		ListeSports.prototype.cancelerModification = function cancelerModification() {
@@ -1790,11 +1828,13 @@ define('views/liste-sports/index',['exports', 'aurelia-framework', '../../models
 			window.removeEventListener('scroll', this.scrollTo);
 		};
 
-		ListeSports.prototype.modifier = function modifier() {
+		ListeSports.prototype.sauvegarder = function sauvegarder() {
 			var _this4 = this;
 
-			this.serviceSports.put(this.sportAModifier).then(function () {
+			this.serviceSports.sauvegarder(this.sportAModifier).then(function () {
 				_this4.modificationAffiche = false;
+
+				window.removeEventListener('scroll', _this4.scrollTo);
 			});
 		};
 
@@ -1833,10 +1873,10 @@ define('views/requetes/index',['exports', 'aurelia-framework', '../../services/r
 			this.requetes = ['1. Quelles sont les \xE9quipes qui comportent plus de 17 joueurs, toutes ligues confondues?\n\t\t\tLister les \xE9quipes en ordre alphab\xE9tique selon le nom de l\u2019\xE9quipe.', '2. Combien de joueurs ont le nom de famille \xAB Smith \xBB?', '3. Quels tournois sont commandit\xE9s par \xAB Ballons Inc. \xBB? Lister les IDTournoi en ordre\n\t\t\tcroissant.', '4. Combien de matchs sont supervis\xE9s par un arbitre dont le pr\xE9nom commence par la lettre\n\t\t\t\xABA\xBB?', '5. Quels sont les joueurs inscrits \xE0 l\u2019\xE9quipe \xABLions\xBB de la ligue L007? Lister les joueurs en\n\t\t\tordre alphab\xE9tique selon leur nom de famille.', '6. Quels sont les joueurs participant au tournoi T110? Lister les joueurs en ordre alphab\xE9tique\n\t\t\tselon leur nom de famille.', '7. Combien de matchs, toutes ligues confondues, ont eu lieu le 14 mars 2016 mais pas au\n\t\t\tcomplexe sportif Sportmax?', '8. Combien de joueurs sont inscrits \xE0 la fois \xE0 une \xE9quipe dans une ligue de basketball et une\n\t\t\t\xE9quipe dans une ligue de soccer?', '9. \xC0 quelle date est-ce que le gestionnaire de l\u2019\xE9quipe \xABTitans\xBB de la ligue L040 a effectu\xE9 le\n\t\t\tpaiement pour la saison d\xE9butant le 12 janvier 2016?', '10. Inscrire le joueur \xABJohn Smith\xBB \xE0 l\u2019\xE9quipe \xABLions\xBB de la ligue L007.', '11. Supprimer l\u2019usager \xAB\xC9milie Jones\xBB de l\u2019organisation.', '12. Modifier le nom de l\u2019\xE9quipe \xABFonceurs\xBB de la ligue L022.'];
 		};
 
-		Requetes.prototype.executerRequete = function executerRequete(numero) {
+		Requetes.prototype.executer = function executer(numero) {
 			var _this = this;
 
-			this.serviceRequetes.execute(numero).then(function (resultats) {
+			this.serviceRequetes.executer(numero).then(function (resultats) {
 				_this.requeteExecute = numero;
 				_this.resultats = resultats;
 			});
@@ -1963,27 +2003,13 @@ define('views/saison/index',['exports', 'aurelia-framework', '../../services/sai
 			});
 		};
 
-		SaisonView.prototype.ajouter = function ajouter() {
-			var _this4 = this;
-
-			this.serviceSaisons.postMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(function () {
-				_this4.matchs.push(_this4.nouveauMatch);
-				_this4.ajoutAffiche = false;
-				_this4.nouveauMatch = new _match.Match();
-				_this4.equipeA = _this4.equipes[0];
-				_this4.equipeB = _this4.equipes[1];
-
-				window.removeEventListener('scroll', _this4.scrollTo);
-			});
-		};
-
-		SaisonView.prototype.afficherAjout = function afficherAjout() {
+		SaisonView.prototype.afficherAjoutNatch = function afficherAjoutNatch() {
 			this.ajoutAffiche = true;
 
 			window.addEventListener('scroll', this.scrollTo);
 		};
 
-		SaisonView.prototype.cancelerAjout = function cancelerAjout() {
+		SaisonView.prototype.cancelerAjoutMatch = function cancelerAjoutMatch() {
 			this.ajoutAffiche = false;
 			this.nouveauMatch = new _match.Match();
 			this.equipeA = this.equipes[0];
@@ -1992,6 +2018,20 @@ define('views/saison/index',['exports', 'aurelia-framework', '../../services/sai
 			this.ptsmarquesB = 0;
 
 			window.removeEventListener('scroll', this.scrollTo);
+		};
+
+		SaisonView.prototype.ajouterMatch = function ajouterMatch() {
+			var _this4 = this;
+
+			this.serviceSaisons.ajouterMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(function () {
+				_this4.matchs.push(_this4.nouveauMatch);
+				_this4.ajoutAffiche = false;
+				_this4.nouveauMatch = new _match.Match();
+				_this4.equipeA = _this4.equipes[0];
+				_this4.equipeB = _this4.equipes[1];
+
+				window.removeEventListener('scroll', _this4.scrollTo);
+			});
 		};
 
 		SaisonView.prototype.afficherModificationSaison = function afficherModificationSaison() {
@@ -2009,10 +2049,33 @@ define('views/saison/index',['exports', 'aurelia-framework', '../../services/sai
 		SaisonView.prototype.modifierSaison = function modifierSaison() {
 			var _this5 = this;
 
-			this.serviceSaisons.put(this.saison).then(function () {
+			this.serviceSaisons.modifierSaison(this.saison).then(function () {
 				_this5.modificationSaisonAffiche = false;
 
 				window.removeEventListener('scroll', _this5.scrollTo);
+			});
+		};
+
+		SaisonView.prototype.afficherModificationMatch = function afficherModificationMatch(match) {
+			this.matchAModifier = match;
+			this.modificationMatchAffiche = true;
+
+			window.addEventListener('scroll', this.scrollTo);
+		};
+
+		SaisonView.prototype.cancelerModificationMatch = function cancelerModificationMatch() {
+			this.modificationMatchAffiche = false;
+
+			window.removeEventListener('scroll', this.scrollTo);
+		};
+
+		SaisonView.prototype.modifierMatch = function modifierMatch() {
+			var _this6 = this;
+
+			this.serviceMatchs.modifierMatch(this.matchAModifier).then(function () {
+				_this6.modificationMatchAffiche = false;
+
+				window.removeEventListener('scroll', _this6.scrollTo);
 			});
 		};
 
@@ -2076,6 +2139,10 @@ define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/to
 		TournoiView.prototype.activate = function activate(params, navigation) {
 			this.title = 'Tournoi ' + params.id;
 			this.getTournoi(params.id);
+		};
+
+		TournoiView.prototype.detached = function detached() {
+			window.removeEventListener('scroll', this.scrollTo);
 		};
 
 		TournoiView.prototype.getTournoi = function getTournoi(idtournoi) {
@@ -2183,6 +2250,37 @@ define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/to
 			});
 		};
 
+		TournoiView.prototype.afficherAjoutMatch = function afficherAjoutMatch() {
+			this.ajoutMatchAffiche = true;
+
+			window.addEventListener('scroll', this.scrollTo);
+		};
+
+		TournoiView.prototype.cancelerAjoutMatch = function cancelerAjoutMatch() {
+			this.ajoutMatchAffiche = false;
+			this.nouveauMatch = new Match();
+			this.equipeA = this.equipes[0];
+			this.equipeB = this.equipes[1];
+			this.ptsmarquesA = 0;
+			this.ptsmarquesB = 0;
+
+			window.removeEventListener('scroll', this.scrollTo);
+		};
+
+		TournoiView.prototype.ajouterMatch = function ajouterMatch() {
+			var _this4 = this;
+
+			this.serviceTournois.postMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(function () {
+				_this4.matchs.push(_this4.nouveauMatch);
+				_this4.ajoutMatchAffiche = false;
+				_this4.nouveauMatch = new Match();
+				_this4.equipeA = _this4.equipes[0];
+				_this4.equipeB = _this4.equipes[1];
+
+				window.removeEventListener('scroll', _this4.scrollTo);
+			});
+		};
+
 		TournoiView.prototype.afficherModificationTournoi = function afficherModificationTournoi() {
 			this.modificationTournoiAffiche = true;
 
@@ -2196,12 +2294,35 @@ define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/to
 		};
 
 		TournoiView.prototype.modifierTournoi = function modifierTournoi() {
-			var _this4 = this;
+			var _this5 = this;
 
-			this.serviceTournois.put(this.tournoi).then(function () {
-				_this4.modificationTournoiAffiche = false;
+			this.serviceTournois.modifier(this.tournoi).then(function () {
+				_this5.modificationTournoiAffiche = false;
 
-				window.removeEventListener('scroll', _this4.scrollTo);
+				window.removeEventListener('scroll', _this5.scrollTo);
+			});
+		};
+
+		TournoiView.prototype.afficherModificationMatch = function afficherModificationMatch(match) {
+			this.matchAModifier = match;
+			this.modificationMatchAffiche = true;
+
+			window.addEventListener('scroll', this.scrollTo);
+		};
+
+		TournoiView.prototype.cancelerModificationMatch = function cancelerModificationMatch() {
+			this.modificationMatchAffiche = false;
+
+			window.removeEventListener('scroll', this.scrollTo);
+		};
+
+		TournoiView.prototype.modifierMatch = function modifierMatch() {
+			var _this6 = this;
+
+			this.serviceMatchs.modifierMatch(this.matchAModifier).then(function () {
+				_this6.modificationMatchAffiche = false;
+
+				window.removeEventListener('scroll', _this6.scrollTo);
 			});
 		};
 
@@ -2250,7 +2371,7 @@ define('views/tournois/index',['exports', 'aurelia-framework', '../../models/tou
     Tournois.prototype.retirer = function retirer(index, tournoi) {
       var _this2 = this;
 
-      this.serviceTournois.delete(tournoi).then(function () {
+      this.serviceTournois.retirer(tournoi).then(function () {
         _this2.tournois.splice(index, 1);
       });
     };
@@ -2259,112 +2380,111 @@ define('views/tournois/index',['exports', 'aurelia-framework', '../../models/tou
   }()) || _class);
 });
 define('views/usagers/index',['exports', 'aurelia-framework', '../../models/usager', '../../services/usagers'], function (exports, _aureliaFramework, _usager, _usagers) {
-  'use strict';
+		'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.Usagers = undefined;
+		Object.defineProperty(exports, "__esModule", {
+				value: true
+		});
+		exports.Usagers = undefined;
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
+		function _classCallCheck(instance, Constructor) {
+				if (!(instance instanceof Constructor)) {
+						throw new TypeError("Cannot call a class as a function");
+				}
+		}
 
-  var _dec, _class;
+		var _dec, _class;
 
-  var Usagers = exports.Usagers = (_dec = (0, _aureliaFramework.inject)(_usagers.ServiceUsagers), _dec(_class = function () {
-    function Usagers(serviceUsagers) {
-      _classCallCheck(this, Usagers);
+		var Usagers = exports.Usagers = (_dec = (0, _aureliaFramework.inject)(_usagers.ServiceUsagers), _dec(_class = function () {
+				function Usagers(serviceUsagers) {
+						_classCallCheck(this, Usagers);
 
-      this.serviceUsagers = serviceUsagers;
-    }
+						this.serviceUsagers = serviceUsagers;
+				}
 
-    Usagers.prototype.activate = function activate(params, navigation) {
-      this.query = '';
-      this.sort = 'ASC';
-      this.nouveauUsager = new _usager.Usager();
-      this.nouveauUsager.estGerant = false;
-      this.usagerAModifier = new _usager.Usager();
-      this.afficherModification = false;
-      this.getUsagers();
-    };
+				Usagers.prototype.activate = function activate(params, navigation) {
+						this.query = '';
+						this.sort = 'ASC';
+						this.nouveauUsager = new _usager.Usager();
+						this.nouveauUsager.estGerant = false;
+						this.usagerAModifier = new _usager.Usager();
+						this.getUsagers();
+				};
 
-    Usagers.prototype.detached = function detached() {
-      window.removeEventListener('scroll', this.scrollTo);
-    };
+				Usagers.prototype.detached = function detached() {
+						window.removeEventListener('scroll', this.scrollTo);
+				};
 
-    Usagers.prototype.getUsagers = function getUsagers() {
-      var _this = this;
+				Usagers.prototype.getUsagers = function getUsagers() {
+						var _this = this;
 
-      this.serviceUsagers.get(this.query, this.sort).then(function (usagers) {
-        _this.usagers = usagers;
-      });
-    };
+						this.serviceUsagers.get(this.query, this.sort).then(function (usagers) {
+								_this.usagers = usagers;
+						});
+				};
 
-    Usagers.prototype.retirer = function retirer(index, usager) {
-      var _this2 = this;
+				Usagers.prototype.retirer = function retirer(index, usager) {
+						var _this2 = this;
 
-      this.serviceUsagers.delete(usager).then(function () {
-        _this2.usagers.splice(index, 1);
-      });
-    };
+						this.serviceUsagers.retirer(usager).then(function () {
+								_this2.usagers.splice(index, 1);
+						});
+				};
 
-    Usagers.prototype.afficherInscription = function afficherInscription() {
-      this.inscriptionAffiche = true;
+				Usagers.prototype.afficherAjout = function afficherAjout() {
+						this.ajoutAffiche = true;
 
-      window.addEventListener('scroll', this.scrollTo);
-    };
+						window.addEventListener('scroll', this.scrollTo);
+				};
 
-    Usagers.prototype.cancelerInscription = function cancelerInscription() {
-      this.inscriptionAffiche = false;
-      this.nouveauUsager = new _usager.Usager();
-      this.nouveauUsager.estGerant = false;
+				Usagers.prototype.cancelerAjout = function cancelerAjout() {
+						this.ajoutAffiche = false;
+						this.nouveauUsager = new _usager.Usager();
+						this.nouveauUsager.estGerant = false;
 
-      window.removeEventListener('scroll', this.scrollTo);
-    };
+						window.removeEventListener('scroll', this.scrollTo);
+				};
 
-    Usagers.prototype.cancelerModification = function cancelerModification() {
-      this.afficherModification = false;
+				Usagers.prototype.ajouter = function ajouter() {
+						var _this3 = this;
 
-      window.removeEventListener('scroll', this.scrollTo);
-    };
+						this.serviceUsagers.ajouter(this.nouveauUsager).then(function (usager) {
+								_this3.ajoutAffiche = false;
+								_this3.usagers.push(_this3.nouveauUsager);
 
-    Usagers.prototype.inscrire = function inscrire() {
-      var _this3 = this;
+								window.removeEventListener('scroll', _this3.scrollTo);
+						});
+				};
 
-      this.serviceUsagers.post(this.nouveauUsager).then(function (usager) {
-        _this3.inscriptionAffiche = false;
-        _this3.usagers.push(_this3.nouveauUsager);
+				Usagers.prototype.afficherModification = function afficherModification(usager) {
+						this.modificationAffiche = true;
+						this.usagerAModifier = usager;
 
-        window.removeEventListener('scroll', _this3.scrollTo);
-      });
-    };
+						window.addEventListener('scroll', this.scrollTo);
+				};
 
-    Usagers.prototype.modifier = function modifier(usager) {
-      this.afficherModification = true;
-      this.usagerAModifier = usager;
+				Usagers.prototype.cancelerModification = function cancelerModification() {
+						this.modificationAffiche = false;
 
-      window.addEventListener('scroll', this.scrollTo);
-    };
+						window.removeEventListener('scroll', this.scrollTo);
+				};
 
-    Usagers.prototype.sauvegarder = function sauvegarder() {
-      var _this4 = this;
+				Usagers.prototype.modifier = function modifier() {
+						var _this4 = this;
 
-      this.serviceUsagers.put(this.usagerAModifier).then(function (usager) {
-        _this4.afficherModification = false;
+						this.serviceUsagers.modifier(this.usagerAModifier).then(function (usager) {
+								_this4.modificationAffiche = false;
 
-        window.removeEventListener('scroll', _this4.scrollTo);
-      });
-    };
+								window.removeEventListener('scroll', _this4.scrollTo);
+						});
+				};
 
-    Usagers.prototype.scrollTo = function scrollTo() {
-      window.scrollTo(0, 0);
-    };
+				Usagers.prototype.scrollTo = function scrollTo() {
+						window.scrollTo(0, 0);
+				};
 
-    return Usagers;
-  }()) || _class);
+				return Usagers;
+		}()) || _class);
 });
 define('resources/value-converters/date',['exports'], function (exports) {
   'use strict';
@@ -2393,30 +2513,30 @@ define('resources/value-converters/date',['exports'], function (exports) {
     return DateValueConverter;
   }();
 });
-define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #444;\n  font-size: 16px;\n\tfont-family: 'Arial';\n  background-color: #fff;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n\tmargin-bottom: 10px;\n}\n\n.container {\n  position: relative;\n  width: 100%;\n}\n\n.height-hundred {\n\theight: 100px;\n}\n\nbutton {\n  margin: 0;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #008080;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #006666;\n}\n\n.nav-bar li a {\n\tfont-size: 14px;\n  display: block;\n  height: 50px;\n\tline-height: 50px;\n\tpadding: 0 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #004d4d;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n  margin-top: 50px;\n}\n\nfooter {\n  background-color: #004d4d;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border-radius: 5px;\n  background-color: #008080;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  box-shadow: 1px 1px 5px #222;\n  text-align: center;\n  font-size: 14px;\n  border: none;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n  text-shadow: 1px 1px 5px #222;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  background-color: #008080;\n  border-left: none;\n}\n\n.search-bar button .material-icons {\n  color: #fff;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\nselect {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n  background-color: #fff;\n}\n\n.delete-btn {\n  background: none;\n  border: none;\n  height: 20px;\n}\n\n.top-right, .bottom-right, .top-left, .bottom-left {\n  position: absolute;\n}\n\n.top-right {\n  right: 10px;\n  top: 10px;\n}\n\n.bottom-right {\n  right: 10px;\n  bottom: 10px;\n}\n\n.top-left {\n  left: 10px;\n  top: 10px;\n}\n\n.bottom-left {\n  left: 10px;\n  bottom: 10px;\n}\n\n.space-evenly {\n  display: inline-flex;\n  justify-content: space-between;\n}\n\n.btn-inscription {\n  float: right;\n}\n\n.popup-background {\n  position: fixed;\n  background-color: rgba(0, 0, 0, .7);\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  bottom: 0;\n  z-index: 1;\n  overflow: hidden;\n}\n\n.popup-background .popup {\n  position: fixed;\n  top: 100px;\n  left: 50%;\n  margin-left: -300px;\n  width: 600px;\n  box-shadow: 1px 1px 10px #222;\n  border-radius: 5px;\n  z-index: 2;\n  padding: 20px;\n  background-color: #fff;\n  opacity: 1;\n\toverflow: hidden;\n}\n\n.popup input, .popup select {\n  margin-bottom: 5px;\n\tdisplay: block;\n\twidth: 400px;\n\theight: 40px;\n  padding: 5px 15px;\n}\n\n.popup .icon-btn {\n  float: right;\n}\n\n.icon-btn {\n  background: none;\n  border: none;\n}\n\n.btn-inscription-container {\n  height: 75px;\n}\n\n.btn-flotante {\n  background-color: #008080;\n  padding: 15px;\n  border-radius: 100%;\n  border: none;\n  box-shadow: 1px 1px 5px #222; \n\tmargin-top: 110px;\n\tmargin-right: 40px;\n\tmargin-bottom: 50px;\n  position: fixed;\n}\n\n.btn-flotante i.material-icons {\n  color: #fff;\n  font-size: 28px;\n}\n\n.list {\n  list-style-type: none;\n}\n\n.list li {\n  position: relative;\n  display: block;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 3px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.list li ul li {\n\tpadding: 10px;\n\tmargin-bottom: 20px;\n}\n\n.list strong {\n\tmargin-right: 5px;\n}\n\nli span {\n\tmargin-bottom: 10px;\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\nli span i {\n  margin-right: 10px;\n}\n\n.icon-text {\n  display: inline-flex;\n  vertical-align: middle;\n\tmargin-right: 10px;\n\tmargin-bottom: 10px;\n}\n\n.icon-text i {\n\tmargin-right: 10px;\n}\n\n.list h3 {\n\tmargin-top: 0;\n}\n\n.half-width {\n\tposition: relative;\n\twidth: 500px;\n\theight: 100%;\n\tdisplay: table-cell;\n\tpadding-right: 15px;\n}\n\n.equipes-match {\n\theight: 50px;\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\twidth: 100%;\n\tpadding: 30px;\n}\n\ninput[type=checkbox] {\n\tpadding: 0;\n\tmargin-left: 5px;\n\twidth: auto;\n\tvertical-align: middle;\n}\n\nlabel {\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\theight: 50px;\n\tline-height: 50px;\n}\n"; });
+define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #444;\n  font-size: 16px;\n\tfont-family: 'Arial';\n  background-color: #fff;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n\tmargin-bottom: 10px;\n}\n\n.container {\n  position: relative;\n  width: 100%;\n}\n\n.height-hundred {\n\theight: 100px;\n}\n\nbutton {\n  margin: 0;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #008080;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #006666;\n}\n\n.nav-bar li a {\n\tfont-size: 14px;\n  display: block;\n  height: 50px;\n\tline-height: 50px;\n\tpadding: 0 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #004d4d;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n  margin-top: 50px;\n}\n\nfooter {\n  background-color: #004d4d;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border-radius: 5px;\n  background-color: #008080;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  box-shadow: 1px 1px 5px #222;\n  text-align: center;\n  font-size: 14px;\n  border: none;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n  text-shadow: 1px 1px 5px #222;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  background-color: #008080;\n  border-left: none;\n}\n\n.search-bar button .material-icons {\n  color: #fff;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\nselect {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n  background-color: #fff;\n}\n\n.delete-btn {\n  background: none;\n  border: none;\n  height: 20px;\n}\n\n.top-right, .bottom-right, .top-left, .bottom-left {\n  position: absolute;\n}\n\n.top-right {\n  right: 10px;\n  top: 10px;\n}\n\n.bottom-right {\n  right: 10px;\n  bottom: 10px;\n}\n\n.top-left {\n  left: 10px;\n  top: 10px;\n}\n\n.bottom-left {\n  left: 10px;\n  bottom: 10px;\n}\n\n.space-evenly {\n  display: inline-flex;\n  justify-content: space-between;\n}\n\n.btn-inscription {\n  float: right;\n}\n\n.popup-background {\n  position: fixed;\n  background-color: rgba(0, 0, 0, .7);\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  bottom: 0;\n  z-index: 1;\n  overflow: hidden;\n}\n\n.popup-background .popup {\n  position: fixed;\n  top: 100px;\n  left: 50%;\n  margin-left: -300px;\n  width: 600px;\n  box-shadow: 1px 1px 10px #222;\n  border-radius: 5px;\n  z-index: 2;\n  padding: 20px;\n  background-color: #fff;\n  opacity: 1;\n\toverflow: hidden;\n}\n\n.popup input, .popup select {\n  margin-bottom: 5px;\n\tdisplay: block;\n\twidth: 400px;\n\theight: 40px;\n  padding: 5px 15px;\n}\n\n.popup .icon-btn {\n  float: right;\n}\n\n.icon-btn {\n  background: none;\n  border: none;\n}\n\n.btn-inscription-container {\n  height: 75px;\n}\n\n.btn-flotante {\n  background-color: #008080;\n  padding: 15px;\n  border-radius: 100%;\n  border: none;\n  box-shadow: 1px 1px 5px #222; \n\tmargin-top: 110px;\n\tmargin-right: 40px;\n\tmargin-left: 40px;\n\tmargin-bottom: 50px;\n}\n\n.fixed {\n  position: fixed;\n}\n\n.btn-flotante i.material-icons {\n  color: #fff;\n  font-size: 28px;\n}\n\n.list {\n  list-style-type: none;\n}\n\n.list li {\n  position: relative;\n  display: block;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 3px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.list li ul li {\n\tpadding: 10px;\n\tmargin-bottom: 20px;\n}\n\n.list strong {\n\tmargin-right: 5px;\n}\n\nli span {\n\tmargin-bottom: 10px;\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\nli span i {\n  margin-right: 10px;\n}\n\n.icon-text {\n  display: inline-flex;\n  vertical-align: middle;\n\tmargin-right: 10px;\n\tmargin-bottom: 10px;\n}\n\n.icon-text i {\n\tmargin-right: 10px;\n}\n\n.list h3 {\n\tmargin-top: 0;\n}\n\n.half-width {\n\tposition: relative;\n\twidth: 500px;\n\theight: 100%;\n\tdisplay: table-cell;\n\tpadding-right: 15px;\n}\n\n.equipes-match {\n\theight: 50px;\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\twidth: 100%;\n\tpadding: 30px;\n}\n\ninput[type=checkbox] {\n\tpadding: 0;\n\tmargin-left: 5px;\n\twidth: auto;\n\tvertical-align: middle;\n}\n\nlabel {\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\theight: 50px;\n\tline-height: 50px;\n}\n\n.options {\n\tbox-shadow: 1px 1px 5px #222;\n\tlist-style-type: none;\n\tposition: absolute;\n\tright: 0;\n}\n\n.options li {\n\tborder-bottom: 1px solid #aaa;\n\twidth: 200px;\n}\n\n.options li:hover button {\n\tbackground-color: #006666;\n\tcolor: #fff;\n}\n\n.options li button {\n\tpadding: 10px;\n\tborder: none;\n\tbackground: none;\n\twidth: 100%;\n\theight: 100%;\n\ttext-align: left;\n\tfont-size: 16px;\n}\n\nselect, option, input {\n\tfont-size: 16px;\n}\n"; });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <header>\n    <nav>\n      <h1 id=\"logo\">T<span>ournois</span>S<span>ports</span></h1>\n      <ul class=\"nav-bar\">\n        <li repeat.for=\"route of router.navigation\" class=\"${route.isActive ? 'active' : ''}\">\n          <a href.bind=\"route.href\">${route.title}</a>\n        </li>\n      </ul>\n    </nav>\n  </header>\n  <section id=\"main\">\n    <router-view></router-view>\n  </section>\n  <footer></footer>\n</template>\n"; });
 define('text!views/accueil/styles.css', ['module'], function(module) { module.exports = "#sectionAccueil {\n\twidth: 100%;\n}\n\n#sectionAccueil h1 {\n\tmargin: 0 auto;\n\twidth: 1000px;\n\ttext-align: center;\n\tmargin-top: 150px;\n\tfont-size: 50px;\n}\n\n#sectionAccueil p {\n\ttext-align: center;\n\tmargin: 0 auto;\n\twidth: 100%;\n\tmargin-top: 15px;\n}\n\n#sectionAccueil a {\n\ttext-decoration: none;\n\tdisplay: block;\n\ttext-align: center;\n\tpadding: 15px;\n\tcolor: #fff;\n\ttext-shadow: 1px 1px 5px #222;\n\tbackground-color: #008080;\n\twidth: 250px;\n\tmargin: 75px auto;\n\tborder-radius: 3px;\n\tbox-shadow: 1px 1px 5px #222;\n}\n"; });
 define('text!views/accueil/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section id=\"sectionAccueil\">\n\t\t<h1>Bienvenue à Tournois Sports!</h1>\n\t\t<p>Tournois sports, l'application qui éveille le directeur sportif en vous.</p>\n\t\t<a href=\"/#/usagers\">INSCRIVEZ-VOUS</a>\n  </section>\n</template>\n"; });
-define('text!views/employes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Employés</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEmployes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEmployes()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"employe of employes\">\n        <h3>${employe.nom}, ${employe.prenom}</h3>\n        <p>${employe.role}</p>\n\t\t\t\t<span if.bind=\"employe.role==='Arbitre'\"><strong>Nombre d'années:</strong>${employe.nbrannees}</span>\n\t\t\t\t<span if.bind=\"employe.role==='Gestionnaire' && employe.numtel !== 'undefined'\"><i class=\"material-icons\">phone</i>${employe.numtel}</span>\n\t\t\t\t<span if.bind=\"employe.role==='Gestionnaire' && employe.courriel !== 'undefined'\"><i class=\"material-icons\">email</i>${employe.courriel}</span>\n\t\t\t\t<div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(employe)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, employe)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un employe -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un employé</h3>\n\t\t\t\t<input value.bind=\"nouveauEmploye.idemploye\" placeholder=\"IDEmploye\" required/>\n        <input value.bind=\"nouveauEmploye.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"nouveauEmploye.prenom\" placeholder=\"Prénom\" required/>\n        <input value.bind=\"nouveauEmploye.role\" placeholder=\"Role\" required/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Arbitre'\" type=\"number\" value.bind=\"nouveauEmploye.nbrannees\" placeholder=\"Nombre d'années\" required/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Gestionnaire' && employe.numtel !== 'undefined'\" value.bind=\"nouveauEmploye.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Gestionnaire' && employe.courriel !== 'undefined'\" value.bind=\"nouveauEmploye.courriel\" placeholder=\"example@gmail.com\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<!-- Modifier un employe -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier l'employé ${employeAModifier.idemploye}</h3>\n        <input value.bind=\"employeAModifier.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"employeAModifier.prenom\" placeholder=\"Prénom\" required/>\n        <input value.bind=\"employeAModifier.role\" placeholder=\"Role\" required/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Arbitre'\" type=\"number\" value.bind=\"employeAModifier.nbrannees\" placeholder=\"Nombre d'années\" required/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Gestionnaire'\" value.bind=\"employeAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Gestionnaire'\" value.bind=\"employeAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"modifier()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
+define('text!views/employes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Employés</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEmployes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEmployes()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"employe of employes\">\n        <h3>${employe.nom}, ${employe.prenom}</h3>\n        <p>${employe.role}</p>\n\t\t\t\t<span if.bind=\"employe.role==='Arbitre'\"><strong>Nombre d'années:</strong>${employe.nbrannees}</span>\n\t\t\t\t<span if.bind=\"employe.role==='Gestionnaire' && employe.numtel !== 'undefined'\"><i class=\"material-icons\">phone</i>${employe.numtel}</span>\n\t\t\t\t<span if.bind=\"employe.role==='Gestionnaire' && employe.courriel !== 'undefined'\"><i class=\"material-icons\">email</i>${employe.courriel}</span>\n\t\t\t\t<div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(employe)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, employe)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un employe -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un employé</h3>\n\t\t\t\t<input value.bind=\"nouveauEmploye.idemploye\" placeholder=\"IDEmploye\" required/>\n        <input value.bind=\"nouveauEmploye.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"nouveauEmploye.prenom\" placeholder=\"Prénom\" required/>\n        <input value.bind=\"nouveauEmploye.role\" placeholder=\"Role\" required/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Arbitre'\" type=\"number\" value.bind=\"nouveauEmploye.nbrannees\" placeholder=\"Nombre d'années\" required/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Gestionnaire' && employe.numtel !== 'undefined'\" value.bind=\"nouveauEmploye.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Gestionnaire' && employe.courriel !== 'undefined'\" value.bind=\"nouveauEmploye.courriel\" placeholder=\"example@gmail.com\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<!-- Modifier un employe -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier l'employé ${employeAModifier.idemploye}</h3>\n        <input value.bind=\"employeAModifier.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"employeAModifier.prenom\" placeholder=\"Prénom\" required/>\n        <input value.bind=\"employeAModifier.role\" placeholder=\"Role\" required/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Arbitre'\" type=\"number\" value.bind=\"employeAModifier.nbrannees\" placeholder=\"Nombre d'années\" required/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Gestionnaire'\" value.bind=\"employeAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Gestionnaire'\" value.bind=\"employeAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"modifier()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/employes/styles.css', ['module'], function(module) { module.exports = ".employes {\n  list-style-type: none;\n}\n\n.employes li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.employes li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.employes li span i {\n  margin-right: 10px;\n}\n\n.employes a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
-define('text!views/equipe/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<div>\n\t\t<h1>${equipe.nom}</h1>\n\t\t<h2>Joueurs</h2>\n\t\t<button class=\"btn-flotante top-right\" click.trigger=\"afficherModification()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<ul class=\"list\">\n\t\t\t<li>\n\t\t\t\t<h3>${gerant.nom}, ${gerant.prenom}</h3>\n\t\t\t\t<p>Gérant</p>\n\t\t\t\t<span><i class=\"material-icons\">school</i>${gerant.diplomesportif}</span>\n\t\t\t\t<span if.bind=\"gerant.courriel\"><i class=\"material-icons\">email</i>${gerant.courriel}</span>\n        <span if.bind=\"gerant.numtel\"><i class=\"material-icons\">phone</i>${gerant.numtel}</span>\n\t\t\t</li>\n\t\t\t<li repeat.for=\"joueur of joueurs\">\n\t\t\t\t<h3>${joueur.nom}, ${joueur.prenom}</h3>\n\t\t\t\t<span if.bind=\"joueur.courriel\"><i class=\"material-icons\">email</i>${joueur.courriel}</span>\n        <span if.bind=\"joueur.numtel\"><i class=\"material-icons\">phone</i>${joueur.numtel}</span>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerJoueur($index, joueur.idusager)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t</li>\n\t\t</ul>\n\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un joueur -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un joueur</h3>\n        <select value.bind=\"nouveauJoueur\">\n\t\t\t\t\t<option repeat.for=\"usager of usagersLibres\" model.bind=\"usager\">${usager.idusager}</option>\n        </select>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t <!-- Modifier un equipe -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'équipe ${equipe.nom} du ligue ${equipe.idlige}</h3>\n        <input value.bind=\"equipe.nom\" placeholder=\"Nom\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
+define('text!views/equipe/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<div>\n\t\t<h1>${equipe.nom}</h1>\n\t\t<h2>Joueurs</h2>\n\t\t<button class=\"btn-flotante fixed top-right\" click.trigger=\"afficherModification()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<ul class=\"list\">\n\t\t\t<li>\n\t\t\t\t<h3>${gerant.nom}, ${gerant.prenom}</h3>\n\t\t\t\t<p>Gérant</p>\n\t\t\t\t<span><i class=\"material-icons\">school</i>${gerant.diplomesportif}</span>\n\t\t\t\t<span if.bind=\"gerant.courriel\"><i class=\"material-icons\">email</i>${gerant.courriel}</span>\n        <span if.bind=\"gerant.numtel\"><i class=\"material-icons\">phone</i>${gerant.numtel}</span>\n\t\t\t</li>\n\t\t\t<li repeat.for=\"joueur of joueurs\">\n\t\t\t\t<h3>${joueur.nom}, ${joueur.prenom}</h3>\n\t\t\t\t<span if.bind=\"joueur.courriel\"><i class=\"material-icons\">email</i>${joueur.courriel}</span>\n        <span if.bind=\"joueur.numtel\"><i class=\"material-icons\">phone</i>${joueur.numtel}</span>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerJoueur($index, joueur.idusager)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t</li>\n\t\t</ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un joueur -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un joueur</h3>\n        <select value.bind=\"nouveauJoueur\">\n\t\t\t\t\t<option repeat.for=\"usager of usagersLibres\" model.bind=\"usager\">${usager.idusager}</option>\n        </select>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t <!-- Modifier un equipe -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'équipe ${equipe.nom} du ligue ${equipe.idlige}</h3>\n        <input value.bind=\"equipe.nom\" placeholder=\"Nom\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
 define('text!views/equipes/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/equipes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Équipes</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEquipes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEquipes()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"equipe of equipes\">\n        <h3>${equipe.nom}</h3>\n\t\t\t\t<p><strong>Ligue</strong> <a href=\"/#/sports/ligue/${equipe.idligue}\">${equipe.idligue}</a></p>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerEquipe($index, equipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idligue}/${equipe.nom}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
+define('text!views/equipes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Équipes</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEquipes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEquipes()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"equipe of equipes\">\n        <h3>${equipe.nom}</h3>\n\t\t\t\t<p><strong>Ligue</strong> <a href=\"/#/sports/ligue/${equipe.idligue}\">${equipe.idligue}</a></p>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirer($index, equipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idligue}/${equipe.nom}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
 define('text!views/ligue/styles.css', ['module'], function(module) { module.exports = "#ligueTitle {\n\tmargin: 0;\n}\n\n#difficulteLigue {\n\tmargin: 10px 0;\n}\n"; });
-define('text!views/ligue/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./styles.css\"></require>\n\t<section>\n\t\t<h1 id=\"ligueTitle\">${title}</h1>\n\t\t<h4 id=\"difficulteLigue\">${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Saisons</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"saison of saisons\">\n\t\t\t\t\t<h3>${saison.idsaison}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerSaison($index, saison.idsaison)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>Date limite de paiement: ${saison.datelimitepaiement.split('T')[0]}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">date_range</i>Durée: ${saison.datecommencement.split('T')[0]} - ${saison.datefin.split('T')[0]}</span>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/saison/${saison.idsaison}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Équipes</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"equipe of equipes\">\n\t\t\t\t\t<h3>${equipe.nom}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerEquipe($index, equipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idligue}/${equipe.nom}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherAjoutEquipe()\">\n\t\t\t\t<i class=\"material-icons\">add</i>\n\t\t\t</button>\n\t\t</div>\n\n\t\t <!-- Ajouter un equipe -->\n    <div class=\"popup-background\" if.bind=\"ajoutEquipeAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutEquipe()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un équipe</h3>\n\t\t\t\t<input value.bind=\"nouveauEquipe.nom\" placeholder=\"Nom\"/>\n\t\t\t\t<select value.bind=\"nouveauEquipe.idusager\">\n\t\t\t\t\t<option value=\"\">Gerant</option>\n\t\t\t\t\t<option repeat.for=\"gerant of gerants\" model.bind=\"gerant.idusager\">${gerant.idusager}</option>\n\t\t\t\t</select>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrmaxjoueurs\" placeholder=\"Nombre maximums de joueurs\"/>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrminjoueurs\" placeholder=\"Nombre minimums de joueurs\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterEquipe()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
+define('text!views/ligue/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./styles.css\"></require>\n\t<section>\n\t\t<h1 id=\"ligueTitle\">${title}</h1>\n\t\t<h4 id=\"difficulteLigue\">${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Saisons</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"saison of saisons\">\n\t\t\t\t\t<h3>${saison.idsaison}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerSaison($index, saison.idsaison)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>Date limite de paiement: ${saison.datelimitepaiement.split('T')[0]}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">date_range</i>Durée: ${saison.datecommencement.split('T')[0]} - ${saison.datefin.split('T')[0]}</span>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/saison/${saison.idsaison}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Équipes</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"equipe of equipes\">\n\t\t\t\t\t<h3>${equipe.nom}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerEquipe($index, equipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idligue}/${equipe.nom}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjoutEquipe()\">\n\t\t\t\t<i class=\"material-icons\">add</i>\n\t\t\t</button>\n\t\t</div>\n\n\t\t <!-- Ajouter un equipe -->\n    <div class=\"popup-background\" if.bind=\"ajoutEquipeAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutEquipe()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un équipe</h3>\n\t\t\t\t<input value.bind=\"nouveauEquipe.nom\" placeholder=\"Nom\"/>\n\t\t\t\t<select value.bind=\"nouveauEquipe.idusager\">\n\t\t\t\t\t<option value=\"\">Gerant</option>\n\t\t\t\t\t<option repeat.for=\"gerant of gerants\" model.bind=\"gerant.idusager\">${gerant.idusager}</option>\n\t\t\t\t</select>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrmaxjoueurs\" placeholder=\"Nombre maximums de joueurs\"/>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrminjoueurs\" placeholder=\"Nombre minimums de joueurs\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterEquipe()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
 define('text!views/ligues/styles.css', ['module'], function(module) { module.exports = ".ligues {\n  list-style-type: none;\n}\n\n.ligues li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.ligues li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.ligues li span i {\n  margin-right: 10px;\n}\n\n.ligues a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
-define('text!views/ligues/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getLigues()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getLigues()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"ligue of ligues\">\n        <h3>${ligue.idligue}</h3>\n        <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n        <button class=\"icon-btn top-right\" click.trigger=\"retirer($index, ligue.idligue)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/sports/ligue/${ligue.idligue}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter une ligue</h3>\n        <input value.bind=\"nouveauLigue.idligue\" placeholder=\"IDLigue\"/>\n\t\t\t\t<select value.bind=\"nouveauLigue.niveaudifficulte\">\t\t\n\t\t\t\t\t<option value=\"C\">Compétitive</option>\n\t\t\t\t\t<option value=\"R\">Récréative</option>\n\t\t\t\t</select>\t\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
+define('text!views/ligues/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getLigues()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getLigues()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"ligue of ligues\">\n        <h3>${ligue.idligue}</h3>\n        <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n        <button class=\"icon-btn top-right\" click.trigger=\"retirer($index, ligue.idligue)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/sports/ligue/${ligue.idligue}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter une ligue</h3>\n        <input value.bind=\"nouveauLigue.idligue\" placeholder=\"IDLigue\"/>\n\t\t\t\t<select value.bind=\"nouveauLigue.niveaudifficulte\">\t\t\n\t\t\t\t\t<option value=\"C\">Compétitive</option>\n\t\t\t\t\t<option value=\"R\">Récréative</option>\n\t\t\t\t</select>\t\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/liste-sports/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/liste-sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Sports</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getSports()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getSports()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"sport of sports\">\n        <h3>${sport.nom}</h3>\n\t\t\t\t<p>${sport.description}</p>\n\t\t\t\t<div class=\"top-right\">\n      \t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(sport)\"><i class=\"material-icons\">edit</i></button>\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"retirerSport($index, sport)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</div>\n\t\t\t\t<span><a href=\"/#/sports/ligues/${sport.idsport}\">Ligues</a></span>\n        <span><a href=\"/#/sports/tournois/${sport.idsport}\">Tournois</a></span>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <form class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un sport</h3>\n        <input value.bind=\"nouveauSport.idsport\" placeholder=\"IDSport\" required/>\n        <input value.bind=\"nouveauSport.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"nouveauSport.description\" placeholder=\"Description\" required/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </form>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <form class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le sport ${sportAModifier.idsport}</h3>\n        <input value.bind=\"sportAModifier.idsport\" placeholder=\"IDSport\" required/>\n        <input value.bind=\"sportAModifier.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"sportAModifier.description\" placeholder=\"Description\" required/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"modifier()\">SAUVEGARDER</button>\n      </form>\n    </div>\n\n  </section>\n</template>\n"; });
+define('text!views/liste-sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Sports</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getSports()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getSports()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"sport of sports\">\n        <h3>${sport.nom}</h3>\n\t\t\t\t<p>${sport.description}</p>\n\t\t\t\t<div class=\"top-right\">\n      \t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(sport)\"><i class=\"material-icons\">edit</i></button>\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"retirerSport($index, sport)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</div>\n\t\t\t\t<span><a href=\"/#/sports/ligues/${sport.idsport}\">Ligues</a></span>\n        <span><a href=\"/#/sports/tournois/${sport.idsport}\">Tournois</a></span>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <form class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un sport</h3>\n        <input value.bind=\"nouveauSport.idsport\" placeholder=\"IDSport\" required/>\n        <input value.bind=\"nouveauSport.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"nouveauSport.description\" placeholder=\"Description\" required/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </form>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <form class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le sport ${sportAModifier.idsport}</h3>\n        <input value.bind=\"sportAModifier.idsport\" placeholder=\"IDSport\" required/>\n        <input value.bind=\"sportAModifier.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"sportAModifier.description\" placeholder=\"Description\" required/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVEGARDER</button>\n      </form>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/requetes/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/requetes/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<h1>Requêtes</h1>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"requete of requetes\">\n\t\t\t\t<p>${requete}</p>\n\t\t\t\t<button if.bind=\"($index + 1) !== requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"executerRequete($index + 1)\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_down</i>\n\t\t\t\t</button>\n\t\t\t\t<button if.bind=\"($index + 1) === requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"requeteExecute = -1\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_up</i>\n\t\t\t\t</button>\n\t\t\t\t<div if.bind=\"($index + 1) === requeteExecute\" class=\"resultats\">\n\t\t\t\t\t<h3>Résultats</h3>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 1\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.nom}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 2 || ($index + 1) === 4 || ($index + 1) === 7 || ($index + 1) === 8 ||\n\t\t\t\t\t\t($index + 1) === 9 || ($index + 1) === 10 || ($index + 1) === 11 || ($index + 1) === 12\" \n\t\t\t\t\t\tclass=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.requete_2}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 3\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.idtournoi}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 5 || ($index + 1) === 6\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.nom}, ${resultat.prenom}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t</section>\n</template>\n\t\t\tif (numero === 10) {\n\t\t\t\treturn this.http.fetch('requete', {\n\t\t\t\t\tmethod: 'post',\n\t\t\t\t\tbody: json({numero: numero})\n\t\t\t\t});\n\t\t\t} else if (numero === 11) {\n\t\t\t\treturn this.http.fetch('requete', {\n\t\t\t\t\tmethod: 'delete',\n\t\t\t\t\tbody: json({numero: numero})\n\t\t\t\t});\n\t\t\t} else {\n\t\t\t\treturn this.http.fetch('requete', {\n\t\t\t\t\tmethod: 'put',\n\t\t\t\t\tbody: json({numero: numero})\n\t\t\t\t});\n\t\t\t}\n"; });
+define('text!views/requetes/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<h1>Requêtes</h1>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"requete of requetes\">\n\t\t\t\t<p>${requete}</p>\n\t\t\t\t<button if.bind=\"($index + 1) !== requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"executer($index + 1)\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_down</i>\n\t\t\t\t</button>\n\t\t\t\t<button if.bind=\"($index + 1) === requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"requeteExecute = -1\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_up</i>\n\t\t\t\t</button>\n\t\t\t\t<div if.bind=\"($index + 1) === requeteExecute\" class=\"resultats\">\n\t\t\t\t\t<h3>Résultats</h3>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 1\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.nom}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 2 || ($index + 1) === 4 || ($index + 1) === 7 || ($index + 1) === 8 ||\n\t\t\t\t\t\t($index + 1) === 9 || ($index + 1) === 10 || ($index + 1) === 11 || ($index + 1) === 12\" \n\t\t\t\t\t\tclass=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.requete_2}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 3\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.idtournoi}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 5 || ($index + 1) === 6\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.nom}, ${resultat.prenom}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t</section>\n</template>\n"; });
 define('text!views/sports/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/saison/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<section>\n\t\t<h1>${title}</h1>\n\t\t<div><i class=\"material-icons icon-text\">today</i>Date limite de paiement: ${saison.datelimitepaiement | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${saison.datecommencement | date} - ${saison.datefin | date}</div>\n\t\t<button class=\"btn-flotante top-right\" click.trigger=\"afficherModificationSaison()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<h2>Matchs</h2>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t</div>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerMatch($index, match)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t</li>\n\t\t</ul>\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un match</h3>\n        <input value.bind=\"nouveauMatch.idmatch\" placeholder=\"IDMatch\"/>\n        <input type=\"date\" value.bind=\"nouveauMatch.date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"nouveauMatch.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"nouveauMatch.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<select value.bind=\"equipeA\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n\t\t\t\t<input if.bind=\"equipeA.nom !== ''\" type=\"number\" value.bind=\"equipeA.ptsmarques\" placeholder=\"Nombre de points A\"/>\n\t\t\t\t<select value.bind=\"equipeB\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n        <input if.bind=\"equipeB.nom !== ''\" type=\"number\" value.bind=\"equipeB.ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationSaisonAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationSaison()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le saison ${saison.idsaison}</h3>\n        <input type=\"date\" value.bind=\"saison.datelimitepaiement | date\" placeholder=\"Date limite de paiement\"/>\n        <input type=\"date\" value.bind=\"saison.datecommencement | date\" placeholder=\"Date de commencement\"/>\n        <input type=\"date\" value.bind=\"saison.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierSaison()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
+define('text!views/saison/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<section>\n\t\t<h1>${title}</h1>\n\t\t<div><i class=\"material-icons icon-text\">today</i>Date limite de paiement: ${saison.datelimitepaiement | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${saison.datecommencement | date} - ${saison.datefin | date}</div>\n\t\t<button class=\"btn-flotante fixed top-right\" click.trigger=\"afficherModificationSaison()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<h2>Matchs</h2>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModificationMatch(match)\"><i class=\"material-icons\">edit</i></button>\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"retirerMatch($index, match)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un match</h3>\n        <input value.bind=\"nouveauMatch.idmatch\" placeholder=\"IDMatch\"/>\n        <input type=\"date\" value.bind=\"nouveauMatch.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"nouveauMatch.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"nouveauMatch.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<select value.bind=\"equipeA\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n\t\t\t\t<input if.bind=\"equipeA.nom !== ''\" type=\"number\" value.bind=\"equipeA.ptsmarques\" placeholder=\"Nombre de points A\"/>\n\t\t\t\t<select value.bind=\"equipeB\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n        <input if.bind=\"equipeB.nom !== ''\" type=\"number\" value.bind=\"equipeB.ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterMatch()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationSaisonAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationSaison()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le saison ${saison.idsaison}</h3>\n        <input type=\"date\" value.bind=\"saison.datelimitepaiement | date\" placeholder=\"Date limite de paiement\"/>\n        <input type=\"date\" value.bind=\"saison.datecommencement | date\" placeholder=\"Date de commencement\"/>\n        <input type=\"date\" value.bind=\"saison.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierSaison()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationMatchAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationMatch()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le match ${matchAModifier.idmatch}</h3>\n        <input type=\"date\" value.bind=\"matchAModifier.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"matchAModifier.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"matchAModifier.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<input type=\"number\" value.bind=\"matchAModifier.equipes[0].ptsmarques\" placeholder=\"Nombre de points A\"/>\n        <input type=\"number\" value.bind=\"matchAModifier.equipes[1].ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierMatch()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
 define('text!views/tournoi/styles.css', ['module'], function(module) { module.exports = "#oeuvreCharite {\n\tmargin-top: 0;\n}\n"; });
 define('text!views/sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <router-view></router-view>\n  </section>\n</template>\n"; });
 define('text!views/tournois/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/tournoi/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<require from=\"./styles.css\"></require>\n\t<section>\n\t\t<h1 class=\"title\">${title}</h1>\n\t\t<h3 id=\"oeuvreCharite\">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">attach_money</i>${tournoi.fondsaccumules}</div>\n\t\t<button class=\"btn-flotante top-right\" click.trigger=\"afficherModificationTournoi()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Matchs</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t\t</div>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerMatch($index, match.idmatch)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Commanditaires</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"commanditaire of commanditaires\">\n\t\t\t\t\t<h3>${commanditaire.nom}</h3>\n\t\t\t\t\t<span>Contribution: $${commanditaire.contribution}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">phone</i>${commanditaire.numtel}</span>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerCommanditaire($index, commanditaire.idcommanditaire)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationTournoiAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationTournoi()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le tournoi ${tournoi.idtournoi}</h3>\n        <input value.bind=\"tournoi.oeuvrecharite\" placeholder=\"Oeuvre de charité\"/>\n        <input type=\"date\" value.bind=\"tournoi.datedebut | date\" placeholder=\"Date de début\"/>\n        <input type=\"date\" value.bind=\"tournoi.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierTournoi()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
+define('text!views/tournoi/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<require from=\"./styles.css\"></require>\n\t<section class=\"container\">\n\t\t<h1 class=\"title\">${title}</h1>\n\t\t<h3 id=\"oeuvreCharite\">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">attach_money</i>${tournoi.fondsaccumules}</div>\n\t\t<div class=\"top-right\">\n\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherOptions=!afficherOptions\">\n\t\t\t\t<i class=\"material-icons\">menu</i>\n\t\t\t</button>\n\t\t\t<ul class=\"options\" if.bind=\"afficherOptions\">\n\t\t\t\t<li><button click.trigger=\"afficherModificationTournoi()\">Modifier le tournoi</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutMatch()\">Ajouter un match</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutCommanditaire()\">Ajouter un commanditaire</button></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Matchs</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t\t</div>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerMatch($index, match.idmatch)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Commanditaires</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"commanditaire of commanditaires\">\n\t\t\t\t\t<h3>${commanditaire.nom}</h3>\n\t\t\t\t\t<span>Contribution: $${commanditaire.contribution}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">phone</i>${commanditaire.numtel}</span>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerCommanditaire($index, commanditaire.idcommanditaire)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationTournoiAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationTournoi()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le tournoi ${tournoi.idtournoi}</h3>\n        <input value.bind=\"tournoi.oeuvrecharite\" placeholder=\"Oeuvre de charité\"/>\n        <input type=\"date\" value.bind=\"tournoi.datedebut | date\" placeholder=\"Date de début\"/>\n        <input type=\"date\" value.bind=\"tournoi.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierTournoi()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutMatchAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutMatch()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un match</h3>\n        <input value.bind=\"nouveauMatch.idmatch\" placeholder=\"IDMatch\"/>\n        <input type=\"date\" value.bind=\"nouveauMatch.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"nouveauMatch.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"nouveauMatch.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<select value.bind=\"equipeA\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n\t\t\t\t<input if.bind=\"equipeA.nom !== ''\" type=\"number\" value.bind=\"equipeA.ptsmarques\" placeholder=\"Nombre de points A\"/>\n\t\t\t\t<select value.bind=\"equipeB\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n        <input if.bind=\"equipeB.nom !== ''\" type=\"number\" value.bind=\"equipeB.ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterMatch()\">AJOUTER</button>\n      </div>\n    </div>\n\t\n\t</section>\n</template>\n"; });
 define('text!views/usagers/styles.css', ['module'], function(module) { module.exports = ""; });
 define('text!views/tournois/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getTournois()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getTournois()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"tournoi of tournois\">\n        <h3>${tournoi.oeuvrecharite}</h3>\n        <span><i class=\"material-icons\">date_range</i>${tournoi.datedebut.split('T')[0]} - ${tournoi.datefin.split('T')[0]}</span>\n        <span><i class=\"material-icons\">attach_money</i> ${tournoi.fondsaccumules}</span>\n        <div class=\"top-right\">\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, tournoi)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n        <a class=\"bottom-right\" href=\"/#/sports/tournoi/${tournoi.idtournoi}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
-define('text!views/usagers/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Usagers</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getUsagers()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getUsagers()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"usager of usagers\">\n        <h3>${usager.nom}, ${usager.prenom}</h3>\n        <span if.bind=\"usager.courriel\"><i class=\"material-icons\">email</i>${usager.courriel}</span>\n        <span if.bind=\"usager.numtel\"><i class=\"material-icons\">phone</i>${usager.numtel}</span>\n        <div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"modifier(usager)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, usager)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante bottom-right\" click.trigger=\"afficherInscription()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un usager -->\n    <div class=\"popup-background\" if.bind=\"inscriptionAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerInscription()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Inscription</h3>\n        <input value.bind=\"nouveauUsager.idusager\" placeholder=\"IDUsager\"/>\n        <input value.bind=\"nouveauUsager.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"nouveauUsager.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"nouveauUsager.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"nouveauUsager.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<label>Gérant <input type=\"checkbox\" checked.bind=\"nouveauUsager.estGerant\"/></label>\n        <input if.bind=\"nouveauUsager.estGerant\" value.bind=\"nouveauUsager.diplomesportif\" placeholder=\"Diplome sportif\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"inscrire()\">INSCRIRE</button>\n      </div>\n    </div>\n\n    <!-- Modifier un usager -->\n    <div class=\"popup-background\" if.bind=\"afficherModification\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'usager ${usagerAModifier.idusager}</h3>\n        <input value.bind=\"usagerAModifier.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"usagerAModifier.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"usagerAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"usagerAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n  </section>\n</template>\n"; });
+define('text!views/usagers/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Usagers</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getUsagers()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getUsagers()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"usager of usagers\">\n        <h3>${usager.nom}, ${usager.prenom}</h3>\n        <span if.bind=\"usager.courriel\"><i class=\"material-icons\">email</i>${usager.courriel}</span>\n        <span if.bind=\"usager.numtel\"><i class=\"material-icons\">phone</i>${usager.numtel}</span>\n        <div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(usager)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, usager)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un usager -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajout</h3>\n        <input value.bind=\"nouveauUsager.idusager\" placeholder=\"IDUsager\"/>\n        <input value.bind=\"nouveauUsager.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"nouveauUsager.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"nouveauUsager.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"nouveauUsager.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<label>Gérant <input type=\"checkbox\" checked.bind=\"nouveauUsager.estGerant\"/></label>\n        <input if.bind=\"nouveauUsager.estGerant\" value.bind=\"nouveauUsager.diplomesportif\" placeholder=\"Diplome sportif\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n    <!-- Modifier un usager -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'usager ${usagerAModifier.idusager}</h3>\n        <input value.bind=\"usagerAModifier.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"usagerAModifier.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"usagerAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"usagerAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifier()\">SAUVERGARDER</button>\n      </div>\n    </div>\n  </section>\n</template>\n"; });
 //# sourceMappingURL=app-bundle.js.map

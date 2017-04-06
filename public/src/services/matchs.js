@@ -18,10 +18,21 @@ export class ServiceMatchs {
     });
   }
 
-  deleteMatch(match) {
+  retirerMatch(match) {
     return this.http.fetch('match', {
       method: 'delete',
       body: json(match)
+    });
+  }
+
+	modifierMatch(match, equipeA, equipeB) {
+    return this.http.fetch('match', {
+      method: 'put',
+      body: json({
+				match: match,
+				equipeA: equipeA,
+				equipeB: equipeB
+			})
     });
   }
 

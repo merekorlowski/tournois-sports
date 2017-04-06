@@ -15,7 +15,6 @@ export class Usagers {
     this.nouveauUsager = new Usager();
 		this.nouveauUsager.estGerant = false;
     this.usagerAModifier = new Usager();
-    this.afficherModification = false;
     this.getUsagers();
   }
 
@@ -31,34 +30,32 @@ export class Usagers {
   }
 
   retirer(index, usager) {
-    this.serviceUsagers.delete(usager).then(() => {
+    this.serviceUsagers.retirer(usager).then(() => {
       this.usagers.splice(index, 1);
     });
   }
 
-	afficherInscription() {
-		this.inscriptionAffiche = true;
+	/**
+	 * Ajouter un usager
+	 */
+
+	afficherAjout() {
+		this.ajoutAffiche = true;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
 	}
 
-	cancelerInscription() {
-		this.inscriptionAffiche = false;
+	cancelerAjout() {
+		this.ajoutAffiche = false;
 		this.nouveauUsager = new Usager();
 		this.nouveauUsager.estGerant = false;
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
-	cancelerModification() {
-		this.afficherModification = false;
-		// add listener to disable scroll
-		window.removeEventListener('scroll', this.scrollTo);
-	}
-
-  inscrire() {
-    this.serviceUsagers.post(this.nouveauUsager).then(usager => {
-      this.inscriptionAffiche = false;
+	ajouter() {
+    this.serviceUsagers.ajouter(this.nouveauUsager).then(usager => {
+      this.ajoutAffiche = false;
       this.usagers.push(this.nouveauUsager);
 			
 			// Remove listener to disable scroll
@@ -66,16 +63,26 @@ export class Usagers {
     });
   }
 
-  modifier(usager) {
-    this.afficherModification = true;
+	/**
+	 * Modifier un usager
+	 */
+
+	afficherModification(usager) {
+    this.modificationAffiche = true;
     this.usagerAModifier = usager;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
   }
 
-  sauvegarder() {
-    this.serviceUsagers.put(this.usagerAModifier).then(usager => {
-      this.afficherModification = false;
+	cancelerModification() {
+		this.modificationAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+  modifier() {
+    this.serviceUsagers.modifier(this.usagerAModifier).then(usager => {
+      this.modificationAffiche = false;
 			// add listener to disable scroll
 			window.removeEventListener('scroll', this.scrollTo);
     });

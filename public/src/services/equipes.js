@@ -46,7 +46,7 @@ export class ServiceEquipes {
     });
 	}
 
-	post(idusager, equipe) {
+	ajouter(idusager, equipe) {
 		return this.http.fetch('equipe/joueur', {
       method: 'post',
       body: json({
@@ -55,22 +55,22 @@ export class ServiceEquipes {
 			})
     });
 	}
-
-	put(equipe) {
+	
+	modifier(equipe) {
 		return this.http.fetch('equipe', {
       method: 'put',
       body: json(equipe)
     });
 	}
 
-	delete(equipe) {
+	retirer(equipe) {
 		return this.http.fetch('equipe', {
       method: 'post',
       body: json(equipe)
     });
 	}
 
-	deleteJoueur(idusager) {
+	retirerJoueur(idusager) {
 		return this.http.fetch('equipe/joueur', {
       method: 'delete',
       body: json(idusager)

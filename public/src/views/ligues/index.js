@@ -45,14 +45,14 @@ export class Ligues {
 	}
 
 	ajouter() {
-    this.serviceLigues.post(this.nouveauLigue).then(() => {
+    this.serviceLigues.ajouter(this.nouveauLigue).then(() => {
       this.ajoutAffiche = false;
       this.ligues.push(this.nouveauLigue);
     });
   }
 
   retirer(index, ligue) {
-    this.serviceLigues.delete(ligue).then(() => {
+    this.serviceLigues.retirer(ligue).then(() => {
       this.ligues.splice(index, 1);
     });
   }

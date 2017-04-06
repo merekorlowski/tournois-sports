@@ -29,10 +29,14 @@ export class Employes {
   }
 
 	retirer(index, idemploye) {
-    this.serviceEmployes.delete(idemploye).then(() => {
+    this.serviceEmployes.retirer(idemploye).then(() => {
       this.employes.splice(index, 1);
     });
   }
+
+	/**
+	 * Ajouter un employé
+	 */
 
 	afficherAjout() {
 		this.ajoutAffiche = true;
@@ -48,16 +52,17 @@ export class Employes {
 	}
 
   ajouter() {
-    this.serviceEmployes.post(this.nouveauEmploye).then(employe => {
+    this.serviceEmployes.ajouter(this.nouveauEmploye).then(employe => {
       this.ajoutAffiche = false;
       this.employes.push(this.nouveauEmploye);
-			
 			// Remove listener to disable scroll
-			window.removeEventListener('scroll', () => {
-				window.scrollTo( 0, 0 );
-			});
+			window.removeEventListener('scroll', this.scrollTo);
     });
   }
+
+	/**
+	 * Modifier un employé
+	 */
 
 	afficherModification(employe) {
 		this.modificationAffiche = true;
@@ -68,13 +73,12 @@ export class Employes {
 
 	cancelerModification() {
 		this.modificationAffiche = false;
-		this.employeAModifier = new Employe();
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
 	modifier() {
-		this.serviceEmployes.put(this.employeAModifier).then(() => {
+		this.serviceEmployes.modifier(this.employeAModifier).then(() => {
 			this.modificationAffiche = false;
 		});
 	}

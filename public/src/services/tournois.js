@@ -50,14 +50,14 @@ export class ServiceTournois {
     });
   }
 
-  deleteMatch(idmatch) {
+  retirerMatch(idmatch) {
     return this.http.fetch('tournoi/match', {
       method: 'delete',
       body: json(idmatch)
     });
   }
   
-  deleteCommanditaire(idcommanditaire) {
+  retirerCommanditaire(idcommanditaire) {
     return this.http.fetch('tournoi/commanditaire', {
       method: 'delete',
       body: json(idcommanditaire)
@@ -78,21 +78,21 @@ export class ServiceTournois {
     });
   }
 
-	post(tournoi) {
+	ajouter(tournoi) {
 		return this.http.fetch('tournoi', {
       method: 'post',
       body: json(tournoi)
     });
 	}
 
-	delete(tournoi) {
+	retirer(tournoi) {
 		return this.http.fetch('tournoi', {
       method: 'delete',
       body: json(tournoi)
     });
 	}
 
-	put(tournoi) {
+	modifier(tournoi) {
 		return this.http.fetch('tournoi', {
       method: 'put',
       body: json(tournoi)

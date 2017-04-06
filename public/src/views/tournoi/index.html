@@ -1,14 +1,22 @@
 <template>
 	<require from="../../resources/value-converters/date"></require>
 	<require from="./styles.css"></require>
-	<section>
+	<section class="container">
 		<h1 class="title">${title}</h1>
 		<h3 id="oeuvreCharite">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>
 		<div><i class="material-icons icon-text">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>
 		<div><i class="material-icons icon-text">attach_money</i>${tournoi.fondsaccumules}</div>
-		<button class="btn-flotante top-right" click.trigger="afficherModificationTournoi()">
-      <i class="material-icons">edit</i>
-    </button>
+		<div class="top-right">
+			<button class="icon-btn" click.trigger="afficherOptions=!afficherOptions">
+				<i class="material-icons">menu</i>
+			</button>
+			<ul class="options" if.bind="afficherOptions">
+				<li><button click.trigger="afficherModificationTournoi()">Modifier le tournoi</button></li>
+				<li><button click.trigger="afficherAjoutMatch()">Ajouter un match</button></li>
+				<li><button click.trigger="afficherAjoutCommanditaire()">Ajouter un commanditaire</button></li>
+			</ul>
+		</div>
+		
 		<div class="half-width">
 			<h3>Matchs</h3>
 			<hr/>
@@ -50,5 +58,25 @@
       </div>
     </div>
 
+		<div class="popup-background" if.bind="ajoutMatchAffiche">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="cancelerAjoutMatch()"><i class="material-icons">clear</i></button>
+        <h3>Ajouter un match</h3>
+        <input value.bind="nouveauMatch.idmatch" placeholder="IDMatch"/>
+        <input type="date" value.bind="nouveauMatch.date | date" placeholder="Date"/>
+        <input type="time" value.bind="nouveauMatch.heure" placeholder="Heure"/>
+        <input value.bind="nouveauMatch.lieu" placeholder="Lieu"/>
+				<select value.bind="equipeA">
+					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue" model.bind="equipe">${equipe.nom}</option>
+				</select>
+				<input if.bind="equipeA.nom !== ''" type="number" value.bind="equipeA.ptsmarques" placeholder="Nombre de points A"/>
+				<select value.bind="equipeB">
+					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue" model.bind="equipe">${equipe.nom}</option>
+				</select>
+        <input if.bind="equipeB.nom !== ''" type="number" value.bind="equipeB.ptsmarques" placeholder="Nombre de points B"/>
+        <button class="btn btn-inscription" click.trigger="ajouterMatch()">AJOUTER</button>
+      </div>
+    </div>
+	
 	</section>
 </template>

@@ -18,21 +18,21 @@ export class ServiceSaisons {
     });
   }
 
-  delete(saison) {
+  retirer(saison) {
     return this.http.fetch('saison', {
       method: 'delete',
       body: json(saison)
     });
   }
 
-	post(saison) {
+	ajouter(saison) {
     return this.http.fetch('saison', {
       method: 'post',
       body: json(saison)
     });
   }
 
-	put(saison) {
+	modifier(saison) {
     return this.http.fetch('saison', {
       method: 'put',
       body: json(saison)
@@ -53,7 +53,7 @@ export class ServiceSaisons {
     });
 	}
 
-	postMatch(match, equipeA, equipeB) {
+	ajouterMatch(match, equipeA, equipeB) {
 		return this.http.fetch('saison/match', {
 			method: 'post',
 			body: json({
@@ -64,7 +64,7 @@ export class ServiceSaisons {
 		});
 	}
 
-	deleteMatch(match) {
+	retirerMatch(match) {
 		return this.http.fetch('saison/match', {
 			method: 'delete',
 			body: json(match)

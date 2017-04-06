@@ -20,26 +20,56 @@ export class EquipeView {
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
+	/**
+	 * Get les données
+	 */
+
 	getEquipe(equipe) {
 		this.serviceEquipes.getEquipe(equipe).then(equipe => {
 			this.equipe = equipe;
 			this.equipe.nomOriginal = equipe.nom;
-			this.serviceEquipes.getGerant(equipe).then(gerant => {
-				this.gerant = gerant;
-			});
-			this.serviceEquipes.getJoueurs(equipe).then(joueurs => {
-				this.joueurs = joueurs;
-			});
+			this.getGerant(equipe);
+			this.getJoueurs(equipe);
 		}); 
 	}
+
+	getGerant(equipe) {
+		this.serviceEquipes.getGerant(equipe).then(gerant => {
+			this.gerant = gerant;
+		});
+	}
+
+	getJoueurs(equipe) {
+		this.serviceEquipes.getJoueurs(equipe).then(joueurs => {
+			this.joueurs = joueurs;
+		});
+	}
+
+	getUsagersLibres() {
+		this.serviceEquipes.getUsagersLibres(this.equipe.idligue).then(usagersLibres => {
+			this.usagersLibres = usagersLibres;
+		});
+	}
+
+	/**
+	 * Retirer un joueur
+	 */
+
+	retirerJoueur(index, idusager) {
+		this.serviceEquipes.retirerJoueur(idusager).then(equipe => {
+			this.joueurs.splice(index, 1);
+		}); 
+	}
+
+	/**
+	 * Ajouter un équipe
+	 */
 
 	afficherAjout() {
 		this.ajoutAffiche = true;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
-		this.serviceEquipes.getUsagersLibres(this.equipe.idligue).then(usagersLibres => {
-			this.usagersLibres = usagersLibres;
-		});
+		this.getUsagersLibres();
 	}
 
 	cancelerAjout() {
@@ -50,12 +80,22 @@ export class EquipeView {
 	}
 
 	ajouter() {
-    this.serviceEquipes.post(this.nouveauJoueur.idusager, this.equipe).then(() => {
+    this.serviceEquipes.ajouter(this.nouveauJoueur.idusager, this.equipe).then(() => {
       this.ajoutAffiche = false;
       this.joueurs.push(this.nouveauJoueur);
 			// add listener to disable scroll
 		  window.removeEventListener('scroll', this.scrollTo);
     });
+  }
+
+	/**
+	 * Modifier un equipe
+	 */
+
+	afficherModification() {
+    this.modificationAffiche = true;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
   }
 
 	cancelerModification() {
@@ -64,21 +104,10 @@ export class EquipeView {
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
-	afficherModification() {
-    this.modificationAffiche = true;
-		// add listener to disable scroll
-		window.addEventListener('scroll', this.scrollTo);
-  }
-
-	retirerJoueur(index, idusager) {
-		this.serviceEquipes.deleteJoueur(idusager).then(equipe => {
-			this.joueurs.splice(index, 1);
-		}); 
-	}
-
 	sauvegarder() {
-    this.serviceEquipes.put(this.equipe).then(() => {
+    this.serviceEquipes.sauvegarder(this.equipe).then(() => {
       this.modificationAffiche = false;
+			
 			// add listener to disable scroll
 			window.removeEventListener('scroll', this.scrollTo);
     });

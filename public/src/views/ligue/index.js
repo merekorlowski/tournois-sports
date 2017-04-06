@@ -26,26 +26,38 @@ export class LigueView {
   getLigue(idligue) {
     this.serviceLigues.getLigue(idligue).then(ligue => {
       this.ligue = ligue;
-			this.serviceLigues.getSaisons(idligue).then(saisons => {
-				this.saisons = saisons;
-			});
-			this.serviceLigues.getEquipes(idligue).then(equipes => {
-				this.equipes = equipes;
-			});
+			this.getSaisons(idligue);
+			this.getEquipes(idligue);
     });
 	}
 
+	getSaisons(idligue) {
+		this.serviceLigues.getSaisons(idligue).then(saisons => {
+			this.saisons = saisons;
+		});
+	}
+
+	getEquipes(idligue) {
+		this.serviceLigues.getEquipes(idligue).then(equipes => {
+			this.equipes = equipes;
+		});
+	}
+
 	retirerSaison(index, idsaison) {
-		this.serviceLigues.deleteSaison(idsaison).then(() => {
+		this.serviceLigues.retirerSaison(idsaison).then(() => {
 			this.saisons.splice(index, 1);
 		});
   }
 
 	retirerEquipe(index, equipe) {
-		this.serviceLigues.deleteEquipe(equipe).then(() => {
+		this.serviceLigues.retirerEquipe(equipe).then(() => {
 			this.equipes.splice(index, 1);
 		});
   }
+
+	/**
+	 * Ajouter un équipe
+	 */
 
 	afficherAjoutEquipe() {
 		this.ajoutEquipeAffiche = true;
@@ -66,7 +78,7 @@ export class LigueView {
 	}
 
   ajouterEquipe() {
-    this.serviceLigues.postEquipe(this.nouveauEquipe).then(equipe => {
+    this.serviceLigues.ajouterEquipe(this.nouveauEquipe).then(equipe => {
       this.ajoutEquipeAffiche = false;
       this.equipes.push(this.nouveauEquipe);
 			this.nouveauEquipe = new Equipe();

@@ -25,21 +25,21 @@ export class ServiceUsagers {
     });
 	}
 
-  delete(usager) {
+  retirer(usager) {
     return this.http.fetch('usager', {
       method: 'delete',
       body: json(usager)
     });
   }
 
-  post(usager) {
+  ajouter(usager) {
     return this.http.fetch('usager', {
       method: 'post',
       body: json(usager)
     });
   }
 
-  put(usager) {
+  modifier(usager) {
     return this.http.fetch('usager', {
       method: 'put',
       body: json(usager)
