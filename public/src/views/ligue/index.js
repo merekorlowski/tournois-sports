@@ -3,6 +3,7 @@ import {inject} from 'aurelia-framework';
 import {ServiceLigues} from '../../services/ligues';
 import {ServiceUsagers} from '../../services/usagers';
 import {Equipe} from '../../models/equipe';
+import {Saison} from '../../models/saison';
 
 @inject(ServiceLigues, ServiceUsagers)
 export class LigueView {
@@ -56,11 +57,67 @@ export class LigueView {
   }
 
 	/**
+	 * Modifier le ligue
+	 */
+
+	afficherModificationLigue() {
+		this.modificationLigueAffiche = true;
+		this.optionsAffiche = false;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerModificationLigue() {
+		this.modificationLigueAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+  modifierLigue() {
+    this.serviceLigues.modifierLigue(this.ligue).then(() => {
+      this.modificationLigueAffiche = false;			
+			// Remove listener to disable scroll
+			window.removeEventListener('scroll', this.scrollTo);
+    });
+  }
+
+	/**
+	 * Ajouter une saison
+	 */
+
+	afficherAjoutSaison() {
+		this.ajoutSaisonAffiche = true;
+		this.optionsAffiche = false;
+		this.nouveauSaison = new Saison();
+		this.nouveauSaison.idligue = this.ligue.idligue;
+		// add listener to disable scroll
+		window.addEventListener('scroll', this.scrollTo);
+	}
+
+	cancelerAjoutSaison() {
+		this.ajoutSaisonAffiche = false;
+		// add listener to disable scroll
+		window.removeEventListener('scroll', this.scrollTo);
+	}
+
+  ajouterSaison() {
+    this.serviceLigues.ajouterSaison(this.nouveauSaison).then(() => {
+      this.ajoutSaisonAffiche = false;
+			this.saisons.push(this.nouveauSaison);		
+			// Remove listener to disable scroll
+			window.removeEventListener('scroll', this.scrollTo);
+    });
+  }
+
+	/**
 	 * Ajouter un équipe
 	 */
 
 	afficherAjoutEquipe() {
 		this.ajoutEquipeAffiche = true;
+		this.optionsAffiche = false;
+		this.nouveauEquipe = new Equipe();
+		this.nouveauEquipe.idligue = this.ligue.idligue;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
 		this.serviceUsagers.getGerantsLibres().then(gerants => {
@@ -70,24 +127,16 @@ export class LigueView {
 
 	cancelerAjoutEquipe() {
 		this.ajoutEquipeAffiche = false;
-		this.nouveauEquipe = new Equipe();
-		this.nouveauEquipe.idligue = this.ligue.idligue;
-
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
   ajouterEquipe() {
-    this.serviceLigues.ajouterEquipe(this.nouveauEquipe).then(equipe => {
+    this.serviceLigues.ajouterEquipe(this.nouveauEquipe).then(() => {
       this.ajoutEquipeAffiche = false;
-      this.equipes.push(this.nouveauEquipe);
-			this.nouveauEquipe = new Equipe();
-			this.nouveauEquipe.idligue = this.ligue.idligue;
-			
+      this.equipes.push(this.nouveauEquipe);			
 			// Remove listener to disable scroll
-			window.removeEventListener('scroll', () => {
-				window.scrollTo( 0, 0 );
-			});
+			window.removeEventListener('scroll', this.scrollTo);
     });
   }
 

@@ -14,8 +14,6 @@ export class Ligues {
     this.sort = 'ASC';
     this.title = `Ligues de ${params.id}`;
 		this.ajoutAffiche = false;
-		this.nouveauLigue = new Ligue();
-		this.nouveauLigue.idsport = params.id;
 		this.idsport = params.id;
     this.getLigues(params.id);
   }
@@ -32,6 +30,9 @@ export class Ligues {
   }
 
 	afficherAjout() {
+		this.nouveauLigue = new Ligue();
+		this.nouveauLigue.niveaudifficulte = 'C';
+		this.nouveauLigue.idsport = this.idsport; 
 		this.ajoutAffiche = true;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
@@ -39,7 +40,6 @@ export class Ligues {
 
 	cancelerAjout() {
 		this.ajoutAffiche = false;
-		this.nouveauLigue = new Ligue();
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
 	}

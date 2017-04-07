@@ -606,10 +606,10 @@ define('services/equipes',['exports', 'aurelia-fetch-client', '../models/equipe'
       });
     };
 
-    ServiceEquipes.prototype.retirerJoueur = function retirerJoueur(idusager) {
+    ServiceEquipes.prototype.retirerJoueur = function retirerJoueur(joueur) {
       return this.http.fetch('equipe/joueur', {
         method: 'delete',
-        body: (0, _aureliaFetchClient.json)(idusager)
+        body: (0, _aureliaFetchClient.json)(joueur)
       });
     };
 
@@ -691,6 +691,13 @@ define('services/ligues',['exports', 'aurelia-fetch-client', '../models/ligue', 
       });
     };
 
+    ServiceLigues.prototype.modifierLigue = function modifierLigue(ligue) {
+      return this.http.fetch('ligue', {
+        method: 'put',
+        body: (0, _aureliaFetchClient.json)(ligue)
+      });
+    };
+
     ServiceLigues.prototype.retirerEquipe = function retirerEquipe(equipe) {
       return this.http.fetch('ligue/equipe', {
         method: 'delete',
@@ -705,10 +712,17 @@ define('services/ligues',['exports', 'aurelia-fetch-client', '../models/ligue', 
       });
     };
 
-    ServiceLigues.prototype.retirerSaison = function retirerSaison(idsaison) {
+    ServiceLigues.prototype.retirerSaison = function retirerSaison(saison) {
       return this.http.fetch('ligue/saison', {
         method: 'delete',
-        body: (0, _aureliaFetchClient.json)(idsaison)
+        body: (0, _aureliaFetchClient.json)(saison)
+      });
+    };
+
+    ServiceLigues.prototype.ajouterSaison = function ajouterSaison(saison) {
+      return this.http.fetch('ligue/saison', {
+        method: 'post',
+        body: (0, _aureliaFetchClient.json)(saison)
       });
     };
 
@@ -775,14 +789,10 @@ define('services/matchs',['exports', 'aurelia-fetch-client', '../models/match', 
       });
     };
 
-    ServiceMatchs.prototype.modifierMatch = function modifierMatch(match, equipeA, equipeB) {
+    ServiceMatchs.prototype.modifierMatch = function modifierMatch(match) {
       return this.http.fetch('match', {
         method: 'put',
-        body: (0, _aureliaFetchClient.json)({
-          match: match,
-          equipeA: equipeA,
-          equipeB: equipeB
-        })
+        body: (0, _aureliaFetchClient.json)(match)
       });
     };
 
@@ -820,21 +830,13 @@ define('services/requetes',['exports', 'aurelia-fetch-client', '../models/employ
 			});
 		}
 
-		ServiceRequetes.prototype.execute = function execute(numero) {
+		ServiceRequetes.prototype.executer = function executer(numero) {
 			if (numero < 10) {
 				return this.http.fetch('requete?numero=' + numero).then(function (response) {
 					return response.json();
 				}).then(function (data) {
 					return data.map(function (element) {
-						if (numero === 1) {
-							return new _equipe.Equipe(element);
-						} else if (numero === 2 || numero === 4 || numero === 7 || numero === 8 || numero === 9) {
-							return element;
-						} else if (numero === 3) {
-							return new _tournoi.Tournoi(element);
-						} else if (numero === 5 || numero === 6) {
-							return new _usager.Usager(element);
-						}
+						return element['requete_' + numero];
 					}) || [];
 				});
 			} else {
@@ -842,16 +844,28 @@ define('services/requetes',['exports', 'aurelia-fetch-client', '../models/employ
 					return this.http.fetch('requete', {
 						method: 'post',
 						body: (0, _aureliaFetchClient.json)({ numero: numero })
+					}).then(function (response) {
+						return response.json();
+					}).then(function (data) {
+						return [data.message];
 					});
 				} else if (numero === 11) {
 					return this.http.fetch('requete', {
 						method: 'delete',
 						body: (0, _aureliaFetchClient.json)({ numero: numero })
+					}).then(function (response) {
+						return response.json();
+					}).then(function (data) {
+						return [data.message];
 					});
 				} else {
 					return this.http.fetch('requete', {
 						method: 'put',
 						body: (0, _aureliaFetchClient.json)({ numero: numero })
+					}).then(function (response) {
+						return response.json();
+					}).then(function (data) {
+						return [data.message];
 					});
 				}
 			}
@@ -907,7 +921,7 @@ define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison'
       });
     };
 
-    ServiceSaisons.prototype.modifier = function modifier(saison) {
+    ServiceSaisons.prototype.modifierSaison = function modifierSaison(saison) {
       return this.http.fetch('saison', {
         method: 'put',
         body: (0, _aureliaFetchClient.json)(saison)
@@ -932,14 +946,10 @@ define('services/saisons',['exports', 'aurelia-fetch-client', '../models/saison'
       });
     };
 
-    ServiceSaisons.prototype.ajouterMatch = function ajouterMatch(match, equipeA, equipeB) {
+    ServiceSaisons.prototype.ajouterMatch = function ajouterMatch(match) {
       return this.http.fetch('saison/match', {
         method: 'post',
-        body: (0, _aureliaFetchClient.json)({
-          match: match,
-          equipeA: equipeA,
-          equipeB: equipeB
-        })
+        body: (0, _aureliaFetchClient.json)(match)
       });
     };
 
@@ -1088,22 +1098,53 @@ define('services/tournois',['exports', 'aurelia-fetch-client', '../models/tourno
       });
     };
 
-    ServiceTournois.prototype.retirerMatch = function retirerMatch(idmatch) {
+    ServiceTournois.prototype.ajouterMatch = function ajouterMatch(match) {
       return this.http.fetch('tournoi/match', {
-        method: 'delete',
-        body: (0, _aureliaFetchClient.json)(idmatch)
+        method: 'post',
+        body: (0, _aureliaFetchClient.json)(match)
       });
     };
 
-    ServiceTournois.prototype.retirerCommanditaire = function retirerCommanditaire(idcommanditaire) {
+    ServiceTournois.prototype.retirerMatch = function retirerMatch(match) {
+      return this.http.fetch('tournoi/match', {
+        method: 'delete',
+        body: (0, _aureliaFetchClient.json)(match)
+      });
+    };
+
+    ServiceTournois.prototype.ajouterCommanditaire = function ajouterCommanditaire(commanditaire) {
+      return this.http.fetch('tournoi/commanditaire', {
+        method: 'post',
+        body: (0, _aureliaFetchClient.json)(commanditaire)
+      });
+    };
+
+    ServiceTournois.prototype.modifierCommanditaire = function modifierCommanditaire(commanditaire) {
+      return this.http.fetch('tournoi/commanditaire', {
+        method: 'put',
+        body: (0, _aureliaFetchClient.json)(commanditaire)
+      });
+    };
+
+    ServiceTournois.prototype.retirerCommanditaire = function retirerCommanditaire(commanditaire) {
       return this.http.fetch('tournoi/commanditaire', {
         method: 'delete',
-        body: (0, _aureliaFetchClient.json)(idcommanditaire)
+        body: (0, _aureliaFetchClient.json)(commanditaire)
       });
     };
 
     ServiceTournois.prototype.getEquipes = function getEquipes(idmatch) {
       return this.http.fetch('match/equipes?idmatch=' + idmatch).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return data.map(function (equipe) {
+          return new _equipe.Equipe(equipe);
+        }) || [];
+      });
+    };
+
+    ServiceTournois.prototype.getEquipesTournoi = function getEquipesTournoi(idtournoi) {
+      return this.http.fetch('tournoi/equipes?idtournoi=' + idtournoi).then(function (response) {
         return response.json();
       }).then(function (data) {
         return data.map(function (equipe) {
@@ -1449,6 +1490,7 @@ define('views/equipe/index',['exports', 'aurelia-framework', '../../services/equ
 
 		EquipeView.prototype.afficherAjout = function afficherAjout() {
 			this.ajoutAffiche = true;
+			this.optionsAffiche = false;
 
 			window.addEventListener('scroll', this.scrollTo);
 			this.getUsagersLibres();
@@ -1474,6 +1516,7 @@ define('views/equipe/index',['exports', 'aurelia-framework', '../../services/equ
 
 		EquipeView.prototype.afficherModification = function afficherModification() {
 			this.modificationAffiche = true;
+			this.optionsAffiche = false;
 
 			window.addEventListener('scroll', this.scrollTo);
 		};
@@ -1549,7 +1592,7 @@ define('views/equipes/index',['exports', 'aurelia-framework', '../../models/equi
     return Equipes;
   }()) || _class);
 });
-define('views/ligue/index',['exports', 'aurelia-framework', '../../services/ligues', '../../services/usagers', '../../models/equipe'], function (exports, _aureliaFramework, _ligues, _usagers, _equipe) {
+define('views/ligue/index',['exports', 'aurelia-framework', '../../services/ligues', '../../services/usagers', '../../models/equipe', '../../models/saison'], function (exports, _aureliaFramework, _ligues, _usagers, _equipe, _saison) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -1626,37 +1669,83 @@ define('views/ligue/index',['exports', 'aurelia-framework', '../../services/ligu
 			});
 		};
 
-		LigueView.prototype.afficherAjoutEquipe = function afficherAjoutEquipe() {
+		LigueView.prototype.afficherModificationLigue = function afficherModificationLigue() {
+			this.modificationLigueAffiche = true;
+			this.optionsAffiche = false;
+
+			window.addEventListener('scroll', this.scrollTo);
+		};
+
+		LigueView.prototype.cancelerModificationLigue = function cancelerModificationLigue() {
+			this.modificationLigueAffiche = false;
+
+			window.removeEventListener('scroll', this.scrollTo);
+		};
+
+		LigueView.prototype.modifierLigue = function modifierLigue() {
 			var _this6 = this;
 
+			this.serviceLigues.modifierLigue(this.ligue).then(function () {
+				_this6.modificationLigueAffiche = false;
+
+				window.removeEventListener('scroll', _this6.scrollTo);
+			});
+		};
+
+		LigueView.prototype.afficherAjoutSaison = function afficherAjoutSaison() {
+			this.ajoutSaisonAffiche = true;
+			this.optionsAffiche = false;
+			this.nouveauSaison = new _saison.Saison();
+			this.nouveauSaison.idligue = this.ligue.idligue;
+
+			window.addEventListener('scroll', this.scrollTo);
+		};
+
+		LigueView.prototype.cancelerAjoutSaison = function cancelerAjoutSaison() {
+			this.ajoutSaisonAffiche = false;
+
+			window.removeEventListener('scroll', this.scrollTo);
+		};
+
+		LigueView.prototype.ajouterSaison = function ajouterSaison() {
+			var _this7 = this;
+
+			this.serviceLigues.ajouterSaison(this.nouveauSaison).then(function () {
+				_this7.ajoutSaisonAffiche = false;
+				_this7.saisons.push(_this7.nouveauSaison);
+
+				window.removeEventListener('scroll', _this7.scrollTo);
+			});
+		};
+
+		LigueView.prototype.afficherAjoutEquipe = function afficherAjoutEquipe() {
+			var _this8 = this;
+
 			this.ajoutEquipeAffiche = true;
+			this.optionsAffiche = false;
+			this.nouveauEquipe = new _equipe.Equipe();
+			this.nouveauEquipe.idligue = this.ligue.idligue;
 
 			window.addEventListener('scroll', this.scrollTo);
 			this.serviceUsagers.getGerantsLibres().then(function (gerants) {
-				_this6.gerants = gerants;
+				_this8.gerants = gerants;
 			});
 		};
 
 		LigueView.prototype.cancelerAjoutEquipe = function cancelerAjoutEquipe() {
 			this.ajoutEquipeAffiche = false;
-			this.nouveauEquipe = new _equipe.Equipe();
-			this.nouveauEquipe.idligue = this.ligue.idligue;
 
 			window.removeEventListener('scroll', this.scrollTo);
 		};
 
 		LigueView.prototype.ajouterEquipe = function ajouterEquipe() {
-			var _this7 = this;
+			var _this9 = this;
 
-			this.serviceLigues.ajouterEquipe(this.nouveauEquipe).then(function (equipe) {
-				_this7.ajoutEquipeAffiche = false;
-				_this7.equipes.push(_this7.nouveauEquipe);
-				_this7.nouveauEquipe = new _equipe.Equipe();
-				_this7.nouveauEquipe.idligue = _this7.ligue.idligue;
+			this.serviceLigues.ajouterEquipe(this.nouveauEquipe).then(function () {
+				_this9.ajoutEquipeAffiche = false;
+				_this9.equipes.push(_this9.nouveauEquipe);
 
-				window.removeEventListener('scroll', function () {
-					window.scrollTo(0, 0);
-				});
+				window.removeEventListener('scroll', _this9.scrollTo);
 			});
 		};
 
@@ -1695,8 +1784,6 @@ define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue
       this.sort = 'ASC';
       this.title = 'Ligues de ' + params.id;
       this.ajoutAffiche = false;
-      this.nouveauLigue = new _ligue.Ligue();
-      this.nouveauLigue.idsport = params.id;
       this.idsport = params.id;
       this.getLigues(params.id);
     };
@@ -1714,6 +1801,9 @@ define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue
     };
 
     Ligues.prototype.afficherAjout = function afficherAjout() {
+      this.nouveauLigue = new _ligue.Ligue();
+      this.nouveauLigue.niveaudifficulte = 'C';
+      this.nouveauLigue.idsport = this.idsport;
       this.ajoutAffiche = true;
 
       window.addEventListener('scroll', this.scrollTo);
@@ -1721,7 +1811,6 @@ define('views/ligues/index',['exports', 'aurelia-framework', '../../models/ligue
 
     Ligues.prototype.cancelerAjout = function cancelerAjout() {
       this.ajoutAffiche = false;
-      this.nouveauLigue = new _ligue.Ligue();
 
       window.removeEventListener('scroll', this.scrollTo);
     };
@@ -1887,6 +1976,7 @@ define('views/requetes/index',['exports', 'aurelia-framework', '../../services/r
 			this.serviceRequetes.executer(numero).then(function (resultats) {
 				_this.requeteExecute = numero;
 				_this.resultats = resultats;
+				console.log(JSON.stringify(resultats));
 			});
 		};
 
@@ -2006,24 +2096,20 @@ define('views/saison/index',['exports', 'aurelia-framework', '../../services/sai
 		SaisonView.prototype.retirerMatch = function retirerMatch(index, match) {
 			var _this3 = this;
 
-			this.serviceSaisons.deleteMatch(match).then(function () {
+			this.serviceSaisons.retirerMatch(match).then(function () {
 				_this3.matchs.splice(index, 1);
 			});
 		};
 
-		SaisonView.prototype.afficherAjoutNatch = function afficherAjoutNatch() {
-			this.ajoutAffiche = true;
+		SaisonView.prototype.afficherAjoutMatch = function afficherAjoutMatch() {
+			this.ajoutMatchAffiche = true;
+			this.optionsAffiche = false;
 
 			window.addEventListener('scroll', this.scrollTo);
 		};
 
 		SaisonView.prototype.cancelerAjoutMatch = function cancelerAjoutMatch() {
-			this.ajoutAffiche = false;
-			this.nouveauMatch = new _match.Match();
-			this.equipeA = this.equipes[0];
-			this.equipeB = this.equipes[1];
-			this.ptsmarquesA = 0;
-			this.ptsmarquesB = 0;
+			this.ajoutMatchAffiche = false;
 
 			window.removeEventListener('scroll', this.scrollTo);
 		};
@@ -2033,10 +2119,7 @@ define('views/saison/index',['exports', 'aurelia-framework', '../../services/sai
 
 			this.serviceSaisons.ajouterMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(function () {
 				_this4.matchs.push(_this4.nouveauMatch);
-				_this4.ajoutAffiche = false;
-				_this4.nouveauMatch = new _match.Match();
-				_this4.equipeA = _this4.equipes[0];
-				_this4.equipeB = _this4.equipes[1];
+				_this4.ajoutMatchAffiche = false;
 
 				window.removeEventListener('scroll', _this4.scrollTo);
 			});
@@ -2044,6 +2127,7 @@ define('views/saison/index',['exports', 'aurelia-framework', '../../services/sai
 
 		SaisonView.prototype.afficherModificationSaison = function afficherModificationSaison() {
 			this.modificationSaisonAffiche = true;
+			this.optionsAffiche = false;
 
 			window.addEventListener('scroll', this.scrollTo);
 		};
@@ -2121,7 +2205,7 @@ define('views/sports/index',['exports'], function (exports) {
     return Sports;
   }();
 });
-define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/tournois', '../../services/matchs'], function (exports, _aureliaFramework, _tournois, _matchs) {
+define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/tournois', '../../services/matchs', '../../models/match', '../../models/commanditaire'], function (exports, _aureliaFramework, _tournois, _matchs, _match, _commanditaire) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -2248,51 +2332,54 @@ define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/to
 		TournoiView.prototype.retirerMatch = function retirerMatch(index, idmatch) {
 			var _this2 = this;
 
-			this.serviceTournois.deleteMatch(idmatch).then(function () {
+			this.serviceTournois.retirerMatch(idmatch).then(function () {
 				_this2.matchs.splice(index, 1);
 			});
 		};
 
-		TournoiView.prototype.retirerCommanditaire = function retirerCommanditaire(index, idcommanditaire) {
+		TournoiView.prototype.retirerCommanditaire = function retirerCommanditaire(index, commanditaire) {
 			var _this3 = this;
 
-			this.serviceTournois.deleteCommanditaire(idcommanditaire).then(function () {
+			this.serviceTournois.retirerCommanditaire(commanditaire).then(function () {
 				_this3.commanditaires.splice(index, 1);
 			});
 		};
 
 		TournoiView.prototype.afficherAjoutMatch = function afficherAjoutMatch() {
+			var _this4 = this;
+
+			this.nouveauMatch = new _match.Match();
+			this.nouveauMatch.idtournoi = this.tournoi.idtournoi;
+			this.optionsAffiche = false;
 			this.ajoutMatchAffiche = true;
+			this.serviceTournois.getEquipesTournoi(this.tournoi.idtournoi).then(function (equipes) {
+				_this4.equipes = equipes;
+				_this4.equipeA = equipes[0];
+				_this4.equipeB = equipes[1];
+			});
 
 			window.addEventListener('scroll', this.scrollTo);
 		};
 
 		TournoiView.prototype.cancelerAjoutMatch = function cancelerAjoutMatch() {
 			this.ajoutMatchAffiche = false;
-			this.nouveauMatch = new Match();
-			this.equipeA = this.equipes[0];
-			this.equipeB = this.equipes[1];
-			this.ptsmarquesA = 0;
-			this.ptsmarquesB = 0;
 
 			window.removeEventListener('scroll', this.scrollTo);
 		};
 
 		TournoiView.prototype.ajouterMatch = function ajouterMatch() {
-			var _this4 = this;
+			var _this5 = this;
 
-			this.serviceTournois.postMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(function () {
-				_this4.matchs.push(_this4.nouveauMatch);
-				_this4.ajoutMatchAffiche = false;
-				_this4.nouveauMatch = new Match();
-				_this4.equipeA = _this4.equipes[0];
-				_this4.equipeB = _this4.equipes[1];
+			this.serviceTournois.ajouterMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(function () {
+				_this5.matchs.push(_this5.nouveauMatch);
+				_this5.ajoutMatchAffiche = false;
 
-				window.removeEventListener('scroll', _this4.scrollTo);
+				window.removeEventListener('scroll', _this5.scrollTo);
 			});
 		};
 
 		TournoiView.prototype.afficherModificationTournoi = function afficherModificationTournoi() {
+			this.optionsAffiche = false;
 			this.modificationTournoiAffiche = true;
 
 			window.addEventListener('scroll', this.scrollTo);
@@ -2305,16 +2392,17 @@ define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/to
 		};
 
 		TournoiView.prototype.modifierTournoi = function modifierTournoi() {
-			var _this5 = this;
+			var _this6 = this;
 
 			this.serviceTournois.modifier(this.tournoi).then(function () {
-				_this5.modificationTournoiAffiche = false;
+				_this6.modificationTournoiAffiche = false;
 
-				window.removeEventListener('scroll', _this5.scrollTo);
+				window.removeEventListener('scroll', _this6.scrollTo);
 			});
 		};
 
 		TournoiView.prototype.afficherModificationMatch = function afficherModificationMatch(match) {
+			this.optionsAffiche = false;
 			this.matchAModifier = match;
 			this.modificationMatchAffiche = true;
 
@@ -2328,12 +2416,38 @@ define('views/tournoi/index',['exports', 'aurelia-framework', '../../services/to
 		};
 
 		TournoiView.prototype.modifierMatch = function modifierMatch() {
-			var _this6 = this;
+			var _this7 = this;
 
 			this.serviceMatchs.modifierMatch(this.matchAModifier).then(function () {
-				_this6.modificationMatchAffiche = false;
+				_this7.modificationMatchAffiche = false;
 
-				window.removeEventListener('scroll', _this6.scrollTo);
+				window.removeEventListener('scroll', _this7.scrollTo);
+			});
+		};
+
+		TournoiView.prototype.afficherAjoutCommanditaire = function afficherAjoutCommanditaire() {
+			this.optionsAffiche = false;
+			this.ajoutCommanditaireAffiche = true;
+			this.nouveauCommanditaire = new _commanditaire.Commanditaire();
+
+			window.addEventListener('scroll', this.scrollTo);
+		};
+
+		TournoiView.prototype.cancelerAjoutCommanditaire = function cancelerAjoutCommanditaire() {
+			this.ajoutCommanditaireAffiche = false;
+
+			window.removeEventListener('scroll', this.scrollTo);
+		};
+
+		TournoiView.prototype.ajouterCommanditaire = function ajouterCommanditaire() {
+			var _this8 = this;
+
+			this.nouveauCommanditaire.idtournoi = this.tournoi.idtournoi;
+			this.serviceTournois.ajouterCommanditaire(this.nouveauCommanditaire).then(function () {
+				_this8.commanditaires.push(_this8.nouveauCommanditaire);
+				_this8.ajoutCommanditaireAffiche = false;
+
+				window.removeEventListener('scroll', _this8.scrollTo);
 			});
 		};
 
@@ -2546,29 +2660,29 @@ define('resources/value-converters/date',['exports'], function (exports) {
     return DateValueConverter;
   }();
 });
-define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #444;\n  font-size: 16px;\n\tfont-family: 'Arial';\n  background-color: #fff;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n\tmargin-bottom: 10px;\n}\n\n.container {\n  position: relative;\n  width: 100%;\n}\n\n.height-hundred {\n\theight: 100px;\n}\n\nbutton {\n  margin: 0;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #008080;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #006666;\n}\n\n.nav-bar li a {\n\tfont-size: 14px;\n  display: block;\n  height: 50px;\n\tline-height: 50px;\n\tpadding: 0 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #004d4d;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n  margin-top: 50px;\n}\n\nfooter {\n  background-color: #004d4d;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border-radius: 5px;\n  background-color: #008080;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  box-shadow: 1px 1px 5px #222;\n  text-align: center;\n  font-size: 14px;\n  border: none;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n  text-shadow: 1px 1px 5px #222;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  background-color: #008080;\n  border-left: none;\n}\n\n.search-bar button .material-icons {\n  color: #fff;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\nselect {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n  background-color: #fff;\n}\n\n.delete-btn {\n  background: none;\n  border: none;\n  height: 20px;\n}\n\n.top-right, .bottom-right, .top-left, .bottom-left {\n  position: absolute;\n}\n\n.top-right {\n  right: 10px;\n  top: 10px;\n}\n\n.bottom-right {\n  right: 10px;\n  bottom: 10px;\n}\n\n.top-left {\n  left: 10px;\n  top: 10px;\n}\n\n.bottom-left {\n  left: 10px;\n  bottom: 10px;\n}\n\n.space-evenly {\n  display: inline-flex;\n  justify-content: space-between;\n}\n\n.btn-inscription {\n  float: right;\n}\n\n.popup-background {\n  position: fixed;\n  background-color: rgba(0, 0, 0, .7);\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  bottom: 0;\n  z-index: 1;\n  overflow: hidden;\n}\n\n.popup-background .popup {\n  position: fixed;\n  top: 100px;\n  left: 50%;\n  margin-left: -300px;\n  width: 600px;\n  box-shadow: 1px 1px 10px #222;\n  border-radius: 5px;\n  z-index: 2;\n  padding: 20px;\n  background-color: #fff;\n  opacity: 1;\n\toverflow: hidden;\n}\n\n.popup input, .popup select {\n  margin-bottom: 5px;\n\tdisplay: block;\n\twidth: 400px;\n\theight: 40px;\n  padding: 5px 15px;\n}\n\n.popup .icon-btn {\n  float: right;\n}\n\n.icon-btn {\n  background: none;\n  border: none;\n}\n\n.btn-inscription-container {\n  height: 75px;\n}\n\n.btn-flotante {\n  background-color: #008080;\n  padding: 15px;\n  border-radius: 100%;\n  border: none;\n  box-shadow: 1px 1px 5px #222; \n\tmargin-top: 110px;\n\tmargin-right: 40px;\n\tmargin-left: 40px;\n\tmargin-bottom: 50px;\n}\n\n.fixed {\n  position: fixed;\n}\n\n.btn-flotante i.material-icons {\n  color: #fff;\n  font-size: 28px;\n}\n\n.list {\n  list-style-type: none;\n}\n\n.list li {\n  position: relative;\n  display: block;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 3px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.list li ul li {\n\tpadding: 10px;\n\tmargin-bottom: 20px;\n}\n\n.list strong {\n\tmargin-right: 5px;\n}\n\nli span {\n\tmargin-bottom: 10px;\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\nli span i {\n  margin-right: 10px;\n}\n\n.icon-text {\n  display: inline-flex;\n  vertical-align: middle;\n\tmargin-right: 10px;\n\tmargin-bottom: 10px;\n}\n\n.icon-text i {\n\tmargin-right: 10px;\n}\n\n.list h3 {\n\tmargin-top: 0;\n}\n\n.half-width {\n\tposition: relative;\n\twidth: 500px;\n\theight: 100%;\n\tdisplay: table-cell;\n\tpadding-right: 15px;\n}\n\n.equipes-match {\n\theight: 50px;\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\twidth: 100%;\n\tpadding: 30px;\n}\n\ninput[type=checkbox] {\n\tpadding: 0;\n\tmargin-left: 5px;\n\twidth: auto;\n\tvertical-align: middle;\n}\n\nlabel {\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\theight: 50px;\n\tline-height: 50px;\n}\n\n.options {\n\tbox-shadow: 1px 1px 5px #222;\n\tlist-style-type: none;\n\tposition: absolute;\n\tright: 0;\n}\n\n.options li {\n\tborder-bottom: 1px solid #aaa;\n\twidth: 200px;\n}\n\n.options li:hover button {\n\tbackground-color: #006666;\n\tcolor: #fff;\n}\n\n.options li button {\n\tpadding: 10px;\n\tborder: none;\n\tbackground: none;\n\twidth: 100%;\n\theight: 100%;\n\ttext-align: left;\n\tfont-size: 16px;\n}\n\nselect, option, input {\n\tfont-size: 16px;\n}\n"; });
+define('text!styles.css', ['module'], function(module) { module.exports = "html, body {\n  width: 100%;\n  margin: 0;\n  padding: 0;\n  color: #444;\n  font-size: 16px;\n\tfont-family: 'Arial';\n  background-color: #fff;\n}\n\n* {\n  box-sizing: border-box;\n}\n\n.title {\n\tmargin-bottom: 10px;\n}\n\n.container {\n  position: relative;\n  width: 100%;\n}\n\n.height-hundred {\n\theight: 100px;\n}\n\nbutton {\n  margin: 0;\n}\n\n#mainTitle {\n  float: left;\n}\n\ninput {\n  padding: 5px;\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  font-size: 14px;\n  width: 300px;\n}\n\nheader, footer {\n  margin: 0 auto;\n  width: 100%;\n}\n\n.nav-bar, section {\n  margin: 0 auto;\n  width: 1000px;\n}\n\nheader {\n  margin: 0;\n  padding: 0;\n  background-color: #008080;\n  box-shadow: 1px 1px 5px #222;\n  height: 50px;\n}\n\nnav {\n  margin: 0 auto;\n  padding: 0;\n  width: 1000px;\n}\n\nul, li {\n  padding: 0;\n  margin: 0;\n}\n\n.nav-bar {\n  list-style-type: none;\n  height: 50px;\n  float: right;\n  width: 800px;\n}\n\n.nav-bar li {\n  display: inline-block;\n  height: 50px;\n}\n\n.nav-bar li:hover a {\n  background-color: #006666;\n}\n\n.nav-bar li a {\n\tfont-size: 14px;\n  display: block;\n  height: 50px;\n\tline-height: 50px;\n\tpadding: 0 30px;\n  margin: 0;\n  text-decoration: none;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  transition: background-color 0.2s;\n}\n\n.active, .nav-bar li.active:hover {\n  background-color: #004d4d;\n}\n\n#main {\n  padding: 0;\n  margin: 0 auto;\n  min-height: 800px;\n  padding-bottom: 200px;\n  margin-bottom: -100px;\n  margin-top: 50px;\n}\n\nfooter {\n  background-color: #004d4d;\n  height: 100px;\n}\n\n.icon-btn {\n  background-color: transparent;\n  border: none;\n}\n\n.left-section {\n  width: 700px;\n  height: 100%;\n  display: inline-block;\n}\n\n.right-section {\n  width: 300px;\n  padding: 15px;\n  display: inline-block;\n  background-color: #333;\n  height: 100%;\n  color: #fff;\n}\n\n.btn {\n  padding: 15px;\n  border-radius: 5px;\n  background-color: #008080;\n  color: #fff;\n  text-shadow: 1px 1px 5px #222;\n  box-shadow: 1px 1px 5px #222;\n  text-align: center;\n  font-size: 14px;\n  border: none;\n}\n\n#logo {\n  margin: 0;\n  float: left;\n  color: #fff;\n  line-height: 50px;\n  text-shadow: 1px 1px 5px #222;\n}\n\n#logo span {\n  font-size: 15px;\n}\n\nh1 { font-size: 2em; }\nh2 { font-size: 1.5em; }\nh3 { font-size: 1.3em; }\nh4 { font-size: 1em; }\nh5 { font-size: 0.8em; }\nh6 { font-size: 0.7em; }\n\n.search-bar {\n  position: absolute;\n  left: 0;\n  top: 0;\n  height: 40px;\n  width: 500px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-bar input {\n  border-top-left-radius: 5px;\n  border-bottom-left-radius: 5px;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0; \n  width: 400px;\n  margin: 0;\n  padding: 5px 15px;\n  height: 100%;\n}\n\n.search-bar button {\n  padding: 5px;\n  margin: 0;\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n  border-top-right-radius: 5px;\n  border-bottom-right-radius: 5px; \n  height: 100%;\n  width: 100px;\n  border: 1px solid #aaa;\n  background-color: #008080;\n  border-left: none;\n}\n\n.search-bar button .material-icons {\n  color: #fff;\n}\n\n.search-bar-container {\n  height: 75px;\n}\n\n.sort-list {\n  position: absolute;\n  right: 0;\n  top: 0;\n  height: 40px;\n  width: 300px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.sort-list label {\n  display: inline-block;\n  width: 50px;\n  height: 40px;\n  line-height: 40px;\n  font-weight: bold;\n}\n\nselect {\n  border: 1px solid #aaa;\n  border-radius: 5px;\n  width: 250px;\n  height: 40px;\n  padding: 5px 15px;\n  background-color: #fff;\n}\n\n.delete-btn {\n  background: none;\n  border: none;\n  height: 20px;\n}\n\n.top-right, .bottom-right, .top-left, .bottom-left {\n  position: absolute;\n}\n\n.top-right {\n  right: 10px;\n  top: 10px;\n}\n\n.bottom-right {\n  right: 10px;\n  bottom: 10px;\n}\n\n.top-left {\n  left: 10px;\n  top: 10px;\n}\n\n.bottom-left {\n  left: 10px;\n  bottom: 10px;\n}\n\n.space-evenly {\n  display: inline-flex;\n  justify-content: space-between;\n}\n\n.btn-inscription {\n  float: right;\n}\n\n.popup-background {\n  position: fixed;\n  background-color: rgba(0, 0, 0, .7);\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  bottom: 0;\n  z-index: 1;\n  overflow: hidden;\n}\n\n.popup-background .popup {\n  position: fixed;\n  top: 100px;\n  left: 50%;\n  margin-left: -300px;\n  width: 600px;\n  box-shadow: 1px 1px 10px #222;\n  border-radius: 5px;\n  z-index: 2;\n  padding: 20px;\n  background-color: #fff;\n  opacity: 1;\n\toverflow: hidden;\n}\n\n.popup input, .popup select {\n  margin-bottom: 5px;\n\tdisplay: block;\n\twidth: 400px;\n\theight: 40px;\n  padding: 5px 15px;\n}\n\n.popup .icon-btn {\n  float: right;\n}\n\n.icon-btn {\n  background: none;\n  border: none;\n}\n\n.btn-inscription-container {\n  height: 75px;\n}\n\n.btn-flotante {\n  background-color: #008080;\n  padding: 15px;\n  border-radius: 100%;\n  border: none;\n  box-shadow: 1px 1px 5px #222; \n\tmargin-top: 110px;\n\tmargin-right: 40px;\n\tmargin-left: 40px;\n\tmargin-bottom: 50px;\n}\n\n.fixed {\n  position: fixed;\n}\n\n.btn-flotante i.material-icons {\n  color: #fff;\n  font-size: 28px;\n}\n\n.list {\n  list-style-type: none;\n}\n\n.list li {\n  position: relative;\n  display: block;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 3px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.list li ul li {\n\tpadding: 5px;\n\tmargin-bottom: 20px;\n}\n\n.list strong {\n\tmargin-right: 5px;\n}\n\nli span {\n\tmargin-bottom: 10px;\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\nli span i {\n  margin-right: 10px;\n}\n\n.icon-text {\n  display: inline-flex;\n  vertical-align: middle;\n\tmargin-right: 10px;\n\tmargin-bottom: 10px;\n}\n\n.icon-text i {\n\tmargin-right: 10px;\n}\n\n.list h3 {\n\tmargin-top: 0;\n}\n\n.half-width {\n\tposition: relative;\n\twidth: 500px;\n\theight: 100%;\n\tdisplay: table-cell;\n\tpadding-right: 15px;\n}\n\n.equipes-match {\n\theight: 50px;\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\twidth: 100%;\n\tpadding: 30px;\n}\n\ninput[type=checkbox] {\n\tpadding: 0;\n\tmargin-left: 5px;\n\twidth: auto;\n\tvertical-align: middle;\n}\n\nlabel {\n\tdisplay: inline-flex;\n\tjustify-content: space-between;\n\theight: 50px;\n\tline-height: 50px;\n}\n\n.options {\n\tbox-shadow: 1px 1px 5px #222;\n\tlist-style-type: none;\n\tposition: absolute;\n\tz-index: 1;\n\tright: 0;\n}\n\n.options li {\n\tborder-bottom: 1px solid #aaa;\n\tbackground-color: #fff;\n\twidth: 200px;\n}\n\n.options li:hover button {\n\tbackground-color: #006666;\n\tcolor: #fff;\n}\n\n.options li button {\n\tpadding: 10px;\n\tborder: none;\n\tbackground: none;\n\twidth: 100%;\n\theight: 100%;\n\ttext-align: left;\n\tfont-size: 16px;\n}\n\nselect, option, input {\n\tfont-size: 16px;\n}\n\nlabel {\n\tmargin-bottom: -10px;\n\tfont-weight: bold;\n}\n"; });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <header>\n    <nav>\n      <h1 id=\"logo\">T<span>ournois</span>S<span>ports</span></h1>\n      <ul class=\"nav-bar\">\n        <li repeat.for=\"route of router.navigation\" class=\"${route.isActive ? 'active' : ''}\">\n          <a href.bind=\"route.href\">${route.title}</a>\n        </li>\n      </ul>\n    </nav>\n  </header>\n  <section id=\"main\">\n    <router-view></router-view>\n  </section>\n  <footer></footer>\n</template>\n"; });
 define('text!views/accueil/styles.css', ['module'], function(module) { module.exports = "#sectionAccueil {\n\twidth: 100%;\n}\n\n#sectionAccueil h1 {\n\tmargin: 0 auto;\n\twidth: 1000px;\n\ttext-align: center;\n\tmargin-top: 150px;\n\tfont-size: 50px;\n}\n\n#sectionAccueil p {\n\ttext-align: center;\n\tmargin: 0 auto;\n\twidth: 100%;\n\tmargin-top: 15px;\n}\n\n#sectionAccueil a {\n\ttext-decoration: none;\n\tdisplay: block;\n\ttext-align: center;\n\tpadding: 15px;\n\tcolor: #fff;\n\ttext-shadow: 1px 1px 5px #222;\n\tbackground-color: #008080;\n\twidth: 250px;\n\tmargin: 75px auto;\n\tborder-radius: 3px;\n\tbox-shadow: 1px 1px 5px #222;\n}\n"; });
 define('text!views/accueil/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section id=\"sectionAccueil\">\n\t\t<h1>Bienvenue à Tournois Sports!</h1>\n\t\t<p>Tournois sports, l'application qui éveille le directeur sportif en vous.</p>\n\t\t<a href=\"/#/usagers\">INSCRIVEZ-VOUS</a>\n  </section>\n</template>\n"; });
 define('text!views/employes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Employés</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEmployes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEmployes()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"employe of employes\">\n        <h3>${employe.nom}, ${employe.prenom}</h3>\n        <p>${employe.role}</p>\n\t\t\t\t<span if.bind=\"employe.role==='Arbitre'\"><strong>Nombre d'années:</strong>${employe.nbrannees}</span>\n\t\t\t\t<span if.bind=\"employe.role==='Gestionnaire' && employe.numtel !== 'undefined'\"><i class=\"material-icons\">phone</i>${employe.numtel}</span>\n\t\t\t\t<span if.bind=\"employe.role==='Gestionnaire' && employe.courriel !== 'undefined'\"><i class=\"material-icons\">email</i>${employe.courriel}</span>\n\t\t\t\t<div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(employe)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, employe)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un employe -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un employé</h3>\n\t\t\t\t<input value.bind=\"nouveauEmploye.idemploye\" placeholder=\"IDEmploye\" required/>\n        <input value.bind=\"nouveauEmploye.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"nouveauEmploye.prenom\" placeholder=\"Prénom\" required/>\n        <input value.bind=\"nouveauEmploye.role\" placeholder=\"Role\" required/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Arbitre'\" type=\"number\" value.bind=\"nouveauEmploye.nbrannees\" placeholder=\"Nombre d'années\" required/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Gestionnaire' && employe.numtel !== 'undefined'\" value.bind=\"nouveauEmploye.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<input if.bind=\"nouveauEmploye.role==='Gestionnaire' && employe.courriel !== 'undefined'\" value.bind=\"nouveauEmploye.courriel\" placeholder=\"example@gmail.com\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<!-- Modifier un employe -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier l'employé ${employeAModifier.idemploye}</h3>\n        <input value.bind=\"employeAModifier.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"employeAModifier.prenom\" placeholder=\"Prénom\" required/>\n        <input value.bind=\"employeAModifier.role\" placeholder=\"Role\" required/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Arbitre'\" type=\"number\" value.bind=\"employeAModifier.nbrannees\" placeholder=\"Nombre d'années\" required/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Gestionnaire'\" value.bind=\"employeAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<input if.bind=\"employeAModifier.role==='Gestionnaire'\" value.bind=\"employeAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"modifier()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/employes/styles.css', ['module'], function(module) { module.exports = ".employes {\n  list-style-type: none;\n}\n\n.employes li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.employes li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.employes li span i {\n  margin-right: 10px;\n}\n\n.employes a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
-define('text!views/equipe/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<div>\n\t\t<h1>${equipe.nom}</h1>\n\t\t<h2>Joueurs</h2>\n\t\t<button class=\"btn-flotante fixed top-right\" click.trigger=\"afficherModification()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<ul class=\"list\">\n\t\t\t<li>\n\t\t\t\t<h3>${gerant.nom}, ${gerant.prenom}</h3>\n\t\t\t\t<p>Gérant</p>\n\t\t\t\t<span><i class=\"material-icons\">school</i>${gerant.diplomesportif}</span>\n\t\t\t\t<span if.bind=\"gerant.courriel\"><i class=\"material-icons\">email</i>${gerant.courriel}</span>\n        <span if.bind=\"gerant.numtel\"><i class=\"material-icons\">phone</i>${gerant.numtel}</span>\n\t\t\t</li>\n\t\t\t<li repeat.for=\"joueur of joueurs\">\n\t\t\t\t<h3>${joueur.nom}, ${joueur.prenom}</h3>\n\t\t\t\t<span if.bind=\"joueur.courriel\"><i class=\"material-icons\">email</i>${joueur.courriel}</span>\n        <span if.bind=\"joueur.numtel\"><i class=\"material-icons\">phone</i>${joueur.numtel}</span>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerJoueur($index, joueur.idusager)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t</li>\n\t\t</ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un joueur -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un joueur</h3>\n        <select value.bind=\"nouveauJoueur\">\n\t\t\t\t\t<option repeat.for=\"usager of usagersLibres\" model.bind=\"usager\">${usager.idusager}</option>\n        </select>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t <!-- Modifier un equipe -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'équipe ${equipe.nom} du ligue ${equipe.idlige}</h3>\n        <input value.bind=\"equipe.nom\" placeholder=\"Nom\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
+define('text!views/equipe/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section class=\"container\">\n\t\t<div>\n\t\t<h1>${equipe.nom}</h1>\n\t\t<h2>Joueurs</h2>\n\t\t<div class=\"top-right\">\n\t\t\t<button class=\"icon-btn\" click.trigger=\"optionsAffiche=!optionsAffiche\">\n\t\t\t\t<i class=\"material-icons\">menu</i>\n\t\t\t</button>\n\t\t\t<ul class=\"options\" if.bind=\"optionsAffiche\">\n\t\t\t\t<li><button click.trigger=\"afficherModification()\">Modifier l'équipe</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjout()\">Ajouter un joueur</button></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<ul class=\"list\">\n\t\t\t<li>\n\t\t\t\t<h3>${gerant.nom}, ${gerant.prenom}</h3>\n\t\t\t\t<p>Gérant</p>\n\t\t\t\t<span><i class=\"material-icons\">school</i>${gerant.diplomesportif}</span>\n\t\t\t\t<span if.bind=\"gerant.courriel\"><i class=\"material-icons\">email</i>${gerant.courriel}</span>\n        <span if.bind=\"gerant.numtel\"><i class=\"material-icons\">phone</i>${gerant.numtel}</span>\n\t\t\t</li>\n\t\t\t<li repeat.for=\"joueur of joueurs\">\n\t\t\t\t<h3>${joueur.nom}, ${joueur.prenom}</h3>\n\t\t\t\t<span if.bind=\"joueur.courriel\"><i class=\"material-icons\">email</i>${joueur.courriel}</span>\n        <span if.bind=\"joueur.numtel\"><i class=\"material-icons\">phone</i>${joueur.numtel}</span>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerJoueur($index, joueur)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t</li>\n\t\t</ul>\n   \n    <!-- Ajouter un joueur -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un joueur</h3>\n        <select value.bind=\"nouveauJoueur\">\n\t\t\t\t\t<option repeat.for=\"usager of usagersLibres\" model.bind=\"usager\">${usager.idusager}</option>\n        </select>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t <!-- Modifier un equipe -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'équipe ${equipe.nom} du ligue ${equipe.idlige}</h3>\n        <input value.bind=\"equipe.nom\" placeholder=\"Nom\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVERGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
 define('text!views/equipes/styles.css', ['module'], function(module) { module.exports = ""; });
 define('text!views/equipes/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Équipes</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getEquipes()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getEquipes()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"equipe of equipes\">\n        <h3>${equipe.nom}</h3>\n\t\t\t\t<p><strong>Ligue</strong> <a href=\"/#/sports/ligue/${equipe.idligue}\">${equipe.idligue}</a></p>\n\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirer($index, equipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idligue}/${equipe.nom}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
 define('text!views/ligue/styles.css', ['module'], function(module) { module.exports = "#ligueTitle {\n\tmargin: 0;\n}\n\n#difficulteLigue {\n\tmargin: 10px 0;\n}\n"; });
-define('text!views/ligue/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./styles.css\"></require>\n\t<section>\n\t\t<h1 id=\"ligueTitle\">${title}</h1>\n\t\t<h4 id=\"difficulteLigue\">${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Saisons</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"saison of saisons\">\n\t\t\t\t\t<h3>${saison.idsaison}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerSaison($index, saison.idsaison)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>Date limite de paiement: ${saison.datelimitepaiement.split('T')[0]}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">date_range</i>Durée: ${saison.datecommencement.split('T')[0]} - ${saison.datefin.split('T')[0]}</span>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/saison/${saison.idsaison}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Équipes</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"equipe of equipes\">\n\t\t\t\t\t<h3>${equipe.nom}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerEquipe($index, equipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idligue}/${equipe.nom}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjoutEquipe()\">\n\t\t\t\t<i class=\"material-icons\">add</i>\n\t\t\t</button>\n\t\t</div>\n\n\t\t <!-- Ajouter un equipe -->\n    <div class=\"popup-background\" if.bind=\"ajoutEquipeAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutEquipe()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un équipe</h3>\n\t\t\t\t<input value.bind=\"nouveauEquipe.nom\" placeholder=\"Nom\"/>\n\t\t\t\t<select value.bind=\"nouveauEquipe.idusager\">\n\t\t\t\t\t<option value=\"\">Gerant</option>\n\t\t\t\t\t<option repeat.for=\"gerant of gerants\" model.bind=\"gerant.idusager\">${gerant.idusager}</option>\n\t\t\t\t</select>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrmaxjoueurs\" placeholder=\"Nombre maximums de joueurs\"/>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrminjoueurs\" placeholder=\"Nombre minimums de joueurs\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterEquipe()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
+define('text!views/ligue/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./styles.css\"></require>\n\t<section class=\"container\">\n\t\t<h1 id=\"ligueTitle\">${title}</h1>\n\t\t<h4 id=\"difficulteLigue\">${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n\t\t<div class=\"top-right\">\n\t\t\t<button class=\"icon-btn\" click.trigger=\"optionsAffiche=!optionsAffiche\">\n\t\t\t\t<i class=\"material-icons\">menu</i>\n\t\t\t</button>\n\t\t\t<ul class=\"options\" if.bind=\"optionsAffiche\">\n\t\t\t\t<li><button click.trigger=\"afficherModificationLigue()\">Modifier le ligue</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutSaison()\">Ajouter une saison</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutEquipe()\">Ajouter une equipe</button></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Saisons</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"saison of saisons\">\n\t\t\t\t\t<h3>${saison.idsaison}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerSaison($index, saison)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>Date limite de paiement: ${saison.datelimitepaiement.split('T')[0]}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">date_range</i>Durée: ${saison.datecommencement.split('T')[0]} - ${saison.datefin.split('T')[0]}</span>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/saison/${saison.idsaison}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Équipes</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"equipe of equipes\">\n\t\t\t\t\t<h3>${equipe.nom}</h3>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerEquipe($index, equipe)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t\t<a class=\"bottom-right\" href=\"/#/equipe/${equipe.idligue}/${equipe.nom}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\n\t\t<!-- Modifier la ligue -->\n    <div class=\"popup-background\" if.bind=\"modificationLigueAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationLigue()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le ligue ${ligue.idligue}</h3>\n\t\t\t\t<select value.bind=\"ligue.niveaudifficulte\">\t\t\n\t\t\t\t\t<option value=\"C\">Compétitive</option>\n\t\t\t\t\t<option value=\"R\">Récréative</option>\n\t\t\t\t</select>\n\t\t\t\t<button class=\"btn btn-inscription\" click.trigger=\"modifierLigue()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t\t<!-- Ajouter une saison -->\n    <div class=\"popup-background\" if.bind=\"ajoutSaisonAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutSaison()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter une saison</h3>\n\t\t\t\t<input value.bind=\"nouveauSaison.idsaison\" placeholder=\"IDSaison\"/>\n\t\t\t\t<label>Date limite de paiement:</label><input type=\"date\" value.bind=\"nouveauSaison.datelimitepaiement\"/>\n\t\t\t\t<label>Date de commencement:</label><input type=\"date\" value.bind=\"nouveauSaison.datecommencement\"/>\n\t\t\t\t<label>Date de fin:</label><input type=\"date\" value.bind=\"nouveauSaison.datefin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterSaison()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t <!-- Ajouter unw equipe -->\n    <div class=\"popup-background\" if.bind=\"ajoutEquipeAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutEquipe()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un équipe</h3>\n\t\t\t\t<input value.bind=\"nouveauEquipe.nom\" placeholder=\"Nom\"/>\n\t\t\t\t<select value.bind=\"nouveauEquipe.idusager\">\n\t\t\t\t\t<option value=\"\">Gerant</option>\n\t\t\t\t\t<option repeat.for=\"gerant of gerants\" model.bind=\"gerant.idusager\">${gerant.idusager}</option>\n\t\t\t\t</select>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrmaxjoueurs\" placeholder=\"Nombre maximums de joueurs\"/>\n\t\t\t\t<input type=\"number\" value.bind=\"nouveauEquipe.nbrminjoueurs\" placeholder=\"Nombre minimums de joueurs\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterEquipe()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
 define('text!views/ligues/styles.css', ['module'], function(module) { module.exports = ".ligues {\n  list-style-type: none;\n}\n\n.ligues li {\n  display: block;\n  border-bottom: 1px solid #333;\n  padding: 20px;\n  margin-bottom: 10px;\n  background-color: #fff;\n  border-radius: 5px;\n  box-shadow: 1px 1px 5px #222;\n}\n\n.ligues li span {\n  margin-right: 30px;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n.ligues li span i {\n  margin-right: 10px;\n}\n\n.ligues a {\n  float: right;\n  text-decoration: none;\n  color: #333;\n  display: inline-flex;\n  vertical-align: middle;\n}\n"; });
-define('text!views/ligues/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getLigues()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getLigues()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"ligue of ligues\">\n        <h3>${ligue.idligue}</h3>\n        <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n        <button class=\"icon-btn top-right\" click.trigger=\"retirer($index, ligue.idligue)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/sports/ligue/${ligue.idligue}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter une ligue</h3>\n        <input value.bind=\"nouveauLigue.idligue\" placeholder=\"IDLigue\"/>\n\t\t\t\t<select value.bind=\"nouveauLigue.niveaudifficulte\">\t\t\n\t\t\t\t\t<option value=\"C\">Compétitive</option>\n\t\t\t\t\t<option value=\"R\">Récréative</option>\n\t\t\t\t</select>\t\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
+define('text!views/ligues/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getLigues()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getLigues()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"ligue of ligues\">\n        <h3>${ligue.idligue}</h3>\n        <h4>${ligue.niveaudifficulte === 'C' ? 'Compétitive' : 'Récréative'}</h4>\n        <button class=\"icon-btn top-right\" click.trigger=\"retirer($index, ligue.idligue)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t<a class=\"bottom-right\" href=\"/#/sports/ligue/${ligue.idligue}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t<!-- Ajouter une ligue -->\n\n\t\t <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter une ligue</h3>\n        <input value.bind=\"nouveauLigue.idligue\" placeholder=\"IDLigue\"/>\n\t\t\t\t<select value.bind=\"nouveauLigue.niveaudifficulte\">\t\t\n\t\t\t\t\t<option value=\"C\">Compétitive</option>\n\t\t\t\t\t<option value=\"R\">Récréative</option>\n\t\t\t\t</select>\t\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/liste-sports/styles.css', ['module'], function(module) { module.exports = ""; });
 define('text!views/liste-sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Sports</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getSports()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getSports()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"sport of sports\">\n        <h3>${sport.nom}</h3>\n\t\t\t\t<p>${sport.description}</p>\n\t\t\t\t<div class=\"top-right\">\n      \t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(sport)\"><i class=\"material-icons\">edit</i></button>\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"retirerSport($index, sport)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</div>\n\t\t\t\t<span><a href=\"/#/sports/ligues/${sport.idsport}\">Ligues</a></span>\n        <span><a href=\"/#/sports/tournois/${sport.idsport}\">Tournois</a></span>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <form class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un sport</h3>\n        <input value.bind=\"nouveauSport.idsport\" placeholder=\"IDSport\" required/>\n        <input value.bind=\"nouveauSport.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"nouveauSport.description\" placeholder=\"Description\" required/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </form>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <form class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le sport ${sportAModifier.idsport}</h3>\n        <input value.bind=\"sportAModifier.idsport\" placeholder=\"IDSport\" required/>\n        <input value.bind=\"sportAModifier.nom\" placeholder=\"Nom\" required/>\n        <input value.bind=\"sportAModifier.description\" placeholder=\"Description\" required/>\n        <button type=\"submit\" class=\"btn btn-inscription\" click.trigger=\"sauvegarder()\">SAUVEGARDER</button>\n      </form>\n    </div>\n\n  </section>\n</template>\n"; });
 define('text!views/requetes/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/requetes/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<h1>Requêtes</h1>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"requete of requetes\">\n\t\t\t\t<p>${requete}</p>\n\t\t\t\t<button if.bind=\"($index + 1) !== requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"executer($index + 1)\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_down</i>\n\t\t\t\t</button>\n\t\t\t\t<button if.bind=\"($index + 1) === requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"requeteExecute = -1\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_up</i>\n\t\t\t\t</button>\n\t\t\t\t<div if.bind=\"($index + 1) === requeteExecute\" class=\"resultats\">\n\t\t\t\t\t<h3>Résultats</h3>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 1\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.nom}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 2 || ($index + 1) === 4 || ($index + 1) === 7 || ($index + 1) === 8 ||\n\t\t\t\t\t\t($index + 1) === 9 || ($index + 1) === 10 || ($index + 1) === 11 || ($index + 1) === 12\" \n\t\t\t\t\t\tclass=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.requete_2}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 3\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.idtournoi}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t\t<ul if.bind=\"($index + 1) === 5 || ($index + 1) === 6\" class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat.nom}, ${resultat.prenom}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t</section>\n</template>\n"; });
+define('text!views/requetes/index.html', ['module'], function(module) { module.exports = "<template>\n\t<section>\n\t\t<h1>Requêtes</h1>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"requete of requetes\">\n\t\t\t\t<p>${requete}</p>\n\t\t\t\t<button if.bind=\"($index + 1) !== requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"executer($index + 1)\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_down</i>\n\t\t\t\t</button>\n\t\t\t\t<button if.bind=\"($index + 1) === requeteExecute\" class=\"icon-btn bottom-right\" click.trigger=\"requeteExecute = -1\">\n\t\t\t\t\t<i class=\"material-icons\">keyboard_arrow_up</i>\n\t\t\t\t</button>\n\t\t\t\t<div if.bind=\"($index + 1) === requeteExecute\" class=\"resultats\">\n\t\t\t\t\t<h4>Résultats</h3>\n\t\t\t\t\t<ul class=\"list\">\n\t\t\t\t\t\t<li repeat.for=\"resultat of resultats\">\n\t\t\t\t\t\t\t<h4>${resultat}</h4>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t</section>\n</template>\n"; });
 define('text!views/sports/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/saison/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<section>\n\t\t<h1>${title}</h1>\n\t\t<div><i class=\"material-icons icon-text\">today</i>Date limite de paiement: ${saison.datelimitepaiement | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${saison.datecommencement | date} - ${saison.datefin | date}</div>\n\t\t<button class=\"btn-flotante fixed top-right\" click.trigger=\"afficherModificationSaison()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<h2>Matchs</h2>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModificationMatch(match)\"><i class=\"material-icons\">edit</i></button>\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"retirerMatch($index, match)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un match</h3>\n        <input value.bind=\"nouveauMatch.idmatch\" placeholder=\"IDMatch\"/>\n        <input type=\"date\" value.bind=\"nouveauMatch.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"nouveauMatch.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"nouveauMatch.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<select value.bind=\"equipeA\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n\t\t\t\t<input if.bind=\"equipeA.nom !== ''\" type=\"number\" value.bind=\"equipeA.ptsmarques\" placeholder=\"Nombre de points A\"/>\n\t\t\t\t<select value.bind=\"equipeB\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n        <input if.bind=\"equipeB.nom !== ''\" type=\"number\" value.bind=\"equipeB.ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterMatch()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationSaisonAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationSaison()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le saison ${saison.idsaison}</h3>\n        <input type=\"date\" value.bind=\"saison.datelimitepaiement | date\" placeholder=\"Date limite de paiement\"/>\n        <input type=\"date\" value.bind=\"saison.datecommencement | date\" placeholder=\"Date de commencement\"/>\n        <input type=\"date\" value.bind=\"saison.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierSaison()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationMatchAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationMatch()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le match ${matchAModifier.idmatch}</h3>\n        <input type=\"date\" value.bind=\"matchAModifier.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"matchAModifier.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"matchAModifier.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<input type=\"number\" value.bind=\"matchAModifier.equipes[0].ptsmarques\" placeholder=\"Nombre de points A\"/>\n        <input type=\"number\" value.bind=\"matchAModifier.equipes[1].ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierMatch()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
+define('text!views/saison/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<section class=\"container\">\n\t\t<h1>${title}</h1>\n\t\t<div><i class=\"material-icons icon-text\">today</i>Date limite de paiement: ${saison.datelimitepaiement | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${saison.datecommencement | date} - ${saison.datefin | date}</div>\n\t\t<div class=\"top-right\">\n\t\t\t<button class=\"icon-btn\" click.trigger=\"optionsAffiche=!optionsAffiche\">\n\t\t\t\t<i class=\"material-icons\">menu</i>\n\t\t\t</button>\n\t\t\t<ul class=\"options\" if.bind=\"optionsAffiche\">\n\t\t\t\t<li><button click.trigger=\"afficherModificationSaison()\">Modifier le saison</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutMatch()\">Ajouter un match</button></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<h2>Matchs</h2>\n\t\t<ul class=\"list\">\n\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModificationMatch(match)\"><i class=\"material-icons\">edit</i></button>\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"retirerMatch($index, match)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutMatchAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutMatch()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un match</h3>\n        <input value.bind=\"nouveauMatch.idmatch\" placeholder=\"IDMatch\"/>\n        <input type=\"date\" value.bind=\"nouveauMatch.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"nouveauMatch.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"nouveauMatch.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<select value.bind=\"match.equipes[0]\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===match.equipes[1].nom && equipe.idligue===match.equipes[1].idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n\t\t\t\t<input if.bind=\"match.equipes[0].nom !== ''\" type=\"number\" value.bind=\"match.equipes[0].ptsmarques\" placeholder=\"Nombre de points A\"/>\n\t\t\t\t<select value.bind=\"match.equipes[1]\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===match.equipes[0].nom && equipe.idligue===match.equipes[0].idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n        <input if.bind=\"match.equipes[1].nom !== ''\" type=\"number\" value.bind=\"match.equipes[1].ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterMatch()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationSaisonAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationSaison()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le saison ${saison.idsaison}</h3>\n        <input type=\"date\" value.bind=\"saison.datelimitepaiement | date\" placeholder=\"Date limite de paiement\"/>\n        <input type=\"date\" value.bind=\"saison.datecommencement | date\" placeholder=\"Date de commencement\"/>\n        <input type=\"date\" value.bind=\"saison.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierSaison()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationMatchAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationMatch()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le match ${matchAModifier.idmatch}</h3>\n        <input type=\"date\" value.bind=\"matchAModifier.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"matchAModifier.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"matchAModifier.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<input type=\"number\" value.bind=\"matchAModifier.equipes[0].ptsmarques\" placeholder=\"Nombre de points A\"/>\n        <input type=\"number\" value.bind=\"matchAModifier.equipes[1].ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierMatch()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t</section>\n</template>\n"; });
 define('text!views/tournoi/styles.css', ['module'], function(module) { module.exports = "#oeuvreCharite {\n\tmargin-top: 0;\n}\n"; });
 define('text!views/sports/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <router-view></router-view>\n  </section>\n</template>\n"; });
 define('text!views/tournois/styles.css', ['module'], function(module) { module.exports = ""; });
-define('text!views/tournoi/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<require from=\"./styles.css\"></require>\n\t<section class=\"container\">\n\t\t<h1 class=\"title\">${title}</h1>\n\t\t<h3 id=\"oeuvreCharite\">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">attach_money</i>${tournoi.fondsaccumules}</div>\n\t\t<div class=\"top-right\">\n\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherOptions=!afficherOptions\">\n\t\t\t\t<i class=\"material-icons\">menu</i>\n\t\t\t</button>\n\t\t\t<ul class=\"options\" if.bind=\"afficherOptions\">\n\t\t\t\t<li><button click.trigger=\"afficherModificationTournoi()\">Modifier le tournoi</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutMatch()\">Ajouter un match</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutCommanditaire()\">Ajouter un commanditaire</button></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<button class=\"btn-flotante top-right\" click.trigger=\"afficherModificationTournoi()\">\n      <i class=\"material-icons\">edit</i>\n    </button>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Matchs</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t\t</div>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerMatch($index, match.idmatch)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Commanditaires</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"commanditaire of commanditaires\">\n\t\t\t\t\t<h3>${commanditaire.nom}</h3>\n\t\t\t\t\t<span>Contribution: $${commanditaire.contribution}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">phone</i>${commanditaire.numtel}</span>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerCommanditaire($index, commanditaire.idcommanditaire)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationTournoiAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationTournoi()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le tournoi ${tournoi.idtournoi}</h3>\n        <input value.bind=\"tournoi.oeuvrecharite\" placeholder=\"Oeuvre de charité\"/>\n        <input type=\"date\" value.bind=\"tournoi.datedebut | date\" placeholder=\"Date de début\"/>\n        <input type=\"date\" value.bind=\"tournoi.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierTournoi()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutMatchAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutMatch()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un match</h3>\n        <input value.bind=\"nouveauMatch.idmatch\" placeholder=\"IDMatch\"/>\n        <input type=\"date\" value.bind=\"nouveauMatch.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"nouveauMatch.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"nouveauMatch.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<select value.bind=\"equipeA\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n\t\t\t\t<input if.bind=\"equipeA.nom !== ''\" type=\"number\" value.bind=\"equipeA.ptsmarques\" placeholder=\"Nombre de points A\"/>\n\t\t\t\t<select value.bind=\"equipeB\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n        <input if.bind=\"equipeB.nom !== ''\" type=\"number\" value.bind=\"equipeB.ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterMatch()\">AJOUTER</button>\n      </div>\n    </div>\n\t\n\t</section>\n</template>\n"; });
+define('text!views/tournoi/index.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"../../resources/value-converters/date\"></require>\n\t<require from=\"./styles.css\"></require>\n\t<section class=\"container\">\n\t\t<h1 class=\"title\">${title}</h1>\n\t\t<h3 id=\"oeuvreCharite\">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>\n\t\t<div><i class=\"material-icons icon-text\">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>\n\t\t<div><i class=\"material-icons icon-text\">attach_money</i>${tournoi.fondsaccumules}</div>\n\t\t<div class=\"top-right\">\n\t\t\t<button class=\"icon-btn\" click.trigger=\"optionsAffiche=!optionsAffiche\">\n\t\t\t\t<i class=\"material-icons\">menu</i>\n\t\t\t</button>\n\t\t\t<ul class=\"options\" if.bind=\"optionsAffiche\">\n\t\t\t\t<li><button click.trigger=\"afficherModificationTournoi()\">Modifier le tournoi</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutMatch()\">Ajouter un match</button></li>\n\t\t\t\t<li><button click.trigger=\"afficherAjoutCommanditaire()\">Ajouter un commanditaire</button></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Matchs</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"match of matchs\">\n\t\t\t\t\t<span><i class=\"material-icons\">today</i>${match.date | date}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">access_time</i>${match.heure}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">location_on</i>${match.lieu}</span>\n\t\t\t\t\t<div class=\"equipes-match\">\n\t\t\t\t\t\t<span><h3>${match.equipes[0].nom}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>\n\t\t\t\t\t\t<span><h3>${match.equipes[1].nom}</h3></span>\n\t\t\t\t\t</div>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerMatch($index, match)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class=\"half-width\">\n\t\t\t<h3>Commanditaires</h3>\n\t\t\t<hr/>\n\t\t\t<ul class=\"list\">\n\t\t\t\t<li repeat.for=\"commanditaire of commanditaires\">\n\t\t\t\t\t<h3>${commanditaire.nom}</h3>\n\t\t\t\t\t<span>Contribution: $${commanditaire.contribution}</span>\n\t\t\t\t\t<span><i class=\"material-icons\">phone</i>${commanditaire.numtel}</span>\n\t\t\t\t\t<button class=\"icon-btn top-right\" click.trigger=\"retirerCommanditaire($index, commanditaire)\"><i class=\"material-icons\">clear</i></button>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\n\t\t<div class=\"popup-background\" if.bind=\"modificationTournoiAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModificationTournoi()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modifier le tournoi ${tournoi.idtournoi}</h3>\n        <input value.bind=\"tournoi.oeuvrecharite\" placeholder=\"Oeuvre de charité\"/>\n        <input type=\"date\" value.bind=\"tournoi.datedebut | date\" placeholder=\"Date de début\"/>\n        <input type=\"date\" value.bind=\"tournoi.datefin | date\" placeholder=\"Date de fin\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifierTournoi()\">SAUVEGARDER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutMatchAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutMatch()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un match</h3>\n        <input value.bind=\"nouveauMatch.idmatch\" placeholder=\"IDMatch\"/>\n        <input type=\"date\" value.bind=\"nouveauMatch.date | date\" placeholder=\"Date\"/>\n        <input type=\"time\" value.bind=\"nouveauMatch.heure\" placeholder=\"Heure\"/>\n        <input value.bind=\"nouveauMatch.lieu\" placeholder=\"Lieu\"/>\n\t\t\t\t<select value.bind=\"equipeA\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n\t\t\t\t<input if.bind=\"equipeA.nom !== ''\" type=\"number\" value.bind=\"equipeA.ptsmarques\" placeholder=\"Nombre de points A\"/>\n\t\t\t\t<select value.bind=\"equipeB\">\n\t\t\t\t\t<option repeat.for=\"equipe of equipes\" disabled.bind=\"equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue\" model.bind=\"equipe\">${equipe.nom}</option>\n\t\t\t\t</select>\n        <input if.bind=\"equipeB.nom !== ''\" type=\"number\" value.bind=\"equipeB.ptsmarques\" placeholder=\"Nombre de points B\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterMatch()\">AJOUTER</button>\n      </div>\n    </div>\n\n\t\t<div class=\"popup-background\" if.bind=\"ajoutCommanditaireAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjoutCommanditaire()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajouter un commanditaire</h3>\n        <input value.bind=\"nouveauCommanditaire.idcommanditaire\" placeholder=\"IDCommanditaire\"/>\n        <input value.bind=\"nouveauCommanditaire.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"nouveauCommanditaire.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <input value.bind=\"nouveauCommanditaire.contribution\" placeholder=\"Contribution\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouterCommanditaire()\">AJOUTER</button>\n      </div>\n    </div>\n\t\n\t</section>\n</template>\n"; });
 define('text!views/usagers/styles.css', ['module'], function(module) { module.exports = ""; });
 define('text!views/tournois/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>${title}</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getTournois()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getTournois()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"tournoi of tournois\">\n        <h3>${tournoi.oeuvrecharite}</h3>\n        <span><i class=\"material-icons\">date_range</i>${tournoi.datedebut.split('T')[0]} - ${tournoi.datefin.split('T')[0]}</span>\n        <span><i class=\"material-icons\">attach_money</i> ${tournoi.fondsaccumules}</span>\n        <div class=\"top-right\">\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, tournoi)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n        <a class=\"bottom-right\" href=\"/#/sports/tournoi/${tournoi.idtournoi}\"><i class=\"material-icons\">keyboard_arrow_right</i></a>\n      </li>\n    </ul>\n  </section>\n</template>\n"; });
 define('text!views/usagers/index.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./styles.css\"></require>\n  <section>\n    <h1>Usagers</h1>\n    <div class=\"container search-bar-container\">\n      <form class=\"search-bar\">\n        <input type=\"text\" placeholder=\"Mots clés\" value.bind=\"query\" />\n        <button type=\"submit\" click.trigger=\"getUsagers()\"><i class=\"material-icons\">search</i></button>\n      </form>\n      <div class=\"sort-list\">\n        <label>Trier:</label>\n        <select value.bind=\"sort\" change.trigger=\"getUsagers()\">\n          <option value=\"ASC\">Ascendante</option>\n          <option value=\"DESC\">Descendante</option>\n        </select>\n      </div>\n    </div>\n    <ul class=\"list\">\n      <li repeat.for=\"usager of usagers\">\n        <h3>${usager.nom}, ${usager.prenom}</h3>\n        <span if.bind=\"usager.courriel\"><i class=\"material-icons\">email</i>${usager.courriel}</span>\n        <span if.bind=\"usager.numtel\"><i class=\"material-icons\">phone</i>${usager.numtel}</span>\n        <div class=\"top-right\">\n\t\t\t\t\t<button class=\"icon-btn\" click.trigger=\"afficherModification(usager)\"><i class=\"material-icons\">edit</i></button>\n          <button class=\"icon-btn\" click.trigger=\"retirer($index, usager)\"><i class=\"material-icons\">clear</i></button>\n        </div>\n      </li>\n    </ul>\n\n\t\t<button class=\"btn-flotante fixed bottom-right\" click.trigger=\"afficherAjout()\">\n      <i class=\"material-icons\">add</i>\n    </button>\n   \n    <!-- Ajouter un usager -->\n    <div class=\"popup-background\" if.bind=\"ajoutAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerAjout()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Ajout</h3>\n        <input value.bind=\"nouveauUsager.idusager\" placeholder=\"IDUsager\"/>\n        <input value.bind=\"nouveauUsager.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"nouveauUsager.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"nouveauUsager.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"nouveauUsager.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n\t\t\t\t<label>Gérant <input type=\"checkbox\" checked.bind=\"nouveauUsager.estGerant\"/></label>\n        <input if.bind=\"nouveauUsager.estGerant\" value.bind=\"nouveauUsager.diplomesportif\" placeholder=\"Diplome sportif\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"ajouter()\">AJOUTER</button>\n      </div>\n    </div>\n\n    <!-- Modifier un usager -->\n    <div class=\"popup-background\" if.bind=\"modificationAffiche\">\n      <div class=\"popup\">\n        <button class=\"icon-btn\" click.trigger=\"cancelerModification()\"><i class=\"material-icons\">clear</i></button>\n        <h3>Modification de l'usager ${usagerAModifier.idusager}</h3>\n        <input value.bind=\"usagerAModifier.nom\" placeholder=\"Nom\"/>\n        <input value.bind=\"usagerAModifier.prenom\" placeholder=\"Prénom\"/>\n        <input value.bind=\"usagerAModifier.courriel\" placeholder=\"example@gmail.com\"/>\n        <input value.bind=\"usagerAModifier.numtel\" placeholder=\"(XXX) XXX-XXXX\"/>\n        <button class=\"btn btn-inscription\" click.trigger=\"modifier()\">SAUVERGARDER</button>\n      </div>\n    </div>\n  </section>\n</template>\n"; });

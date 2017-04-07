@@ -1,11 +1,17 @@
 <template>
-	<section>
+	<section class="container">
 		<div>
 		<h1>${equipe.nom}</h1>
 		<h2>Joueurs</h2>
-		<button class="btn-flotante fixed top-right" click.trigger="afficherModification()">
-      <i class="material-icons">edit</i>
-    </button>
+		<div class="top-right">
+			<button class="icon-btn" click.trigger="optionsAffiche=!optionsAffiche">
+				<i class="material-icons">menu</i>
+			</button>
+			<ul class="options" if.bind="optionsAffiche">
+				<li><button click.trigger="afficherModification()">Modifier l'équipe</button></li>
+				<li><button click.trigger="afficherAjout()">Ajouter un joueur</button></li>
+			</ul>
+		</div>
 		<ul class="list">
 			<li>
 				<h3>${gerant.nom}, ${gerant.prenom}</h3>
@@ -18,13 +24,9 @@
 				<h3>${joueur.nom}, ${joueur.prenom}</h3>
 				<span if.bind="joueur.courriel"><i class="material-icons">email</i>${joueur.courriel}</span>
         <span if.bind="joueur.numtel"><i class="material-icons">phone</i>${joueur.numtel}</span>
-				<button class="icon-btn top-right" click.trigger="retirerJoueur($index, joueur.idusager)"><i class="material-icons">clear</i></button>
+				<button class="icon-btn top-right" click.trigger="retirerJoueur($index, joueur)"><i class="material-icons">clear</i></button>
 			</li>
 		</ul>
-
-		<button class="btn-flotante fixed bottom-right" click.trigger="afficherAjout()">
-      <i class="material-icons">add</i>
-    </button>
    
     <!-- Ajouter un joueur -->
     <div class="popup-background" if.bind="ajoutAffiche">

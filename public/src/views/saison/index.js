@@ -57,7 +57,7 @@ export class SaisonView {
 	}
 
 	retirerMatch(index, match) {
-		this.serviceSaisons.deleteMatch(match).then(() => {
+		this.serviceSaisons.retirerMatch(match).then(() => {
 			this.matchs.splice(index, 1);
 		}); 
 	}
@@ -66,19 +66,15 @@ export class SaisonView {
 	 * Ajouter un match
 	 */
 
-	afficherAjoutNatch() {
-		this.ajoutAffiche = true;
+	afficherAjoutMatch() {
+		this.ajoutMatchAffiche = true;
+		this.optionsAffiche = false;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
 	}
 
 	cancelerAjoutMatch() {
-		this.ajoutAffiche = false;
-		this.nouveauMatch = new Match();
-		this.equipeA = this.equipes[0];
-		this.equipeB = this.equipes[1];
-		this.ptsmarquesA = 0;
-		this.ptsmarquesB = 0;
+		this.ajoutMatchAffiche = false;
 		// add listener to disable scroll
 		window.removeEventListener('scroll', this.scrollTo);
 	}
@@ -86,10 +82,7 @@ export class SaisonView {
 	ajouterMatch() {
 		this.serviceSaisons.ajouterMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(() => {
 			this.matchs.push(this.nouveauMatch);
-			this.ajoutAffiche = false;
-			this.nouveauMatch = new Match();
-			this.equipeA = this.equipes[0];
-			this.equipeB = this.equipes[1];
+			this.ajoutMatchAffiche = false;
 			// add listener to disable scroll
 			window.removeEventListener('scroll', this.scrollTo);
 		});
@@ -101,6 +94,7 @@ export class SaisonView {
 
 	afficherModificationSaison() {
 		this.modificationSaisonAffiche = true;
+		this.optionsAffiche = false;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
 	}

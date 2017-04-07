@@ -56,17 +56,38 @@ export class ServiceTournois {
     });
   }
 
-  retirerMatch(idmatch) {
+	ajouterMatch(match) {
     return this.http.fetch('tournoi/match', {
-      method: 'delete',
-      body: json(idmatch)
+      method: 'post',
+      body: json(match)
     });
   }
+
+  retirerMatch(match) {
+    return this.http.fetch('tournoi/match', {
+      method: 'delete',
+      body: json(match)
+    });
+  }
+
+	ajouterCommanditaire(commanditaire) {
+		return this.http.fetch('tournoi/commanditaire', {
+      method: 'post',
+      body: json(commanditaire)
+    });
+	}
+
+	modifierCommanditaire(commanditaire) {
+		return this.http.fetch('tournoi/commanditaire', {
+      method: 'put',
+      body: json(commanditaire)
+    });
+	}
   
-  retirerCommanditaire(idcommanditaire) {
+  retirerCommanditaire(commanditaire) {
     return this.http.fetch('tournoi/commanditaire', {
       method: 'delete',
-      body: json(idcommanditaire)
+      body: json(commanditaire)
     });
   }
 
@@ -77,6 +98,14 @@ export class ServiceTournois {
       }) || [];
     });
   }
+
+	getEquipesTournoi(idtournoi) {
+		return this.http.fetch(`tournoi/equipes?idtournoi=${idtournoi}`).then(response => response.json()).then(data => {
+      return data.map(equipe => {
+        return new Equipe(equipe);
+      }) || [];
+    });
+	}
 
   getPoints(idmatch, idligue, nom) {
     return this.http.fetch(`match/equipe/points?idmatch=${idmatch}&idligue=${idligue}&nom=${nom}`).then(response => response.json()).then(data => {

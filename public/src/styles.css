@@ -361,7 +361,7 @@ select {
 }
 
 .list li ul li {
-	padding: 10px;
+	padding: 5px;
 	margin-bottom: 20px;
 }
 
@@ -429,11 +429,13 @@ label {
 	box-shadow: 1px 1px 5px #222;
 	list-style-type: none;
 	position: absolute;
+	z-index: 1;
 	right: 0;
 }
 
 .options li {
 	border-bottom: 1px solid #aaa;
+	background-color: #fff;
 	width: 200px;
 }
 
@@ -454,4 +456,9 @@ label {
 
 select, option, input {
 	font-size: 16px;
+}
+
+label {
+	margin-bottom: -10px;
+	font-weight: bold;
 }

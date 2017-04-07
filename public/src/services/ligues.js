@@ -57,6 +57,13 @@ export class ServiceLigues {
     });
 	}
 
+	modifierLigue(ligue) {
+		return this.http.fetch('ligue', {
+      method: 'put',
+      body: json(ligue)
+    });
+	}
+
  	retirerEquipe(equipe) {
     return this.http.fetch('ligue/equipe', {
       method: 'delete',
@@ -71,10 +78,17 @@ export class ServiceLigues {
     });
 	}
 	
-	retirerSaison(idsaison) {
+	retirerSaison(saison) {
     return this.http.fetch('ligue/saison', {
       method: 'delete',
-      body: json(idsaison)
+      body: json(saison)
+    });
+  }
+
+	ajouterSaison(saison) {
+    return this.http.fetch('ligue/saison', {
+      method: 'post',
+      body: json(saison)
     });
   }
 

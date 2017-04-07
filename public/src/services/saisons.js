@@ -32,7 +32,7 @@ export class ServiceSaisons {
     });
   }
 
-	modifier(saison) {
+	modifierSaison(saison) {
     return this.http.fetch('saison', {
       method: 'put',
       body: json(saison)
@@ -53,14 +53,10 @@ export class ServiceSaisons {
     });
 	}
 
-	ajouterMatch(match, equipeA, equipeB) {
+	ajouterMatch(match) {
 		return this.http.fetch('saison/match', {
 			method: 'post',
-			body: json({
-				match: match,
-				equipeA: equipeA,
-				equipeB: equipeB
-			})
+			body: json(match)
 		});
 	}
 

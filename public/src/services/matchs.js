@@ -25,14 +25,10 @@ export class ServiceMatchs {
     });
   }
 
-	modifierMatch(match, equipeA, equipeB) {
+	modifierMatch(match) {
     return this.http.fetch('match', {
       method: 'put',
-      body: json({
-				match: match,
-				equipeA: equipeA,
-				equipeB: equipeB
-			})
+      body: json(match)
     });
   }
 

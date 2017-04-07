@@ -38,6 +38,7 @@ export class Requetes {
 		this.serviceRequetes.executer(numero).then(resultats => {
 			this.requeteExecute = numero;
 			this.resultats = resultats;
+			console.log(JSON.stringify(resultats));
 		});
 	}
 

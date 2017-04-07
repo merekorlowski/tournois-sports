@@ -11,27 +11,10 @@
 					<i class="material-icons">keyboard_arrow_up</i>
 				</button>
 				<div if.bind="($index + 1) === requeteExecute" class="resultats">
-					<h3>Résultats</h3>
-					<ul if.bind="($index + 1) === 1" class="list">
+					<h4>Résultats</h3>
+					<ul class="list">
 						<li repeat.for="resultat of resultats">
-							<h4>${resultat.nom}</h4>
-						</li>
-					</ul>
-					<ul if.bind="($index + 1) === 2 || ($index + 1) === 4 || ($index + 1) === 7 || ($index + 1) === 8 ||
-						($index + 1) === 9 || ($index + 1) === 10 || ($index + 1) === 11 || ($index + 1) === 12" 
-						class="list">
-						<li repeat.for="resultat of resultats">
-							<h4>${resultat.requete_2}</h4>
-						</li>
-					</ul>
-					<ul if.bind="($index + 1) === 3" class="list">
-						<li repeat.for="resultat of resultats">
-							<h4>${resultat.idtournoi}</h4>
-						</li>
-					</ul>
-					<ul if.bind="($index + 1) === 5 || ($index + 1) === 6" class="list">
-						<li repeat.for="resultat of resultats">
-							<h4>${resultat.nom}, ${resultat.prenom}</h4>
+							<h4>${resultat}</h4>
 						</li>
 					</ul>
 				</div>

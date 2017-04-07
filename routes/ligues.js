@@ -103,6 +103,34 @@ router.post('/ligue', (req, res, next) => {
   });
 });
 
+router.put('/ligue', (req, res, next) => {
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      UPDATE  
+      SPORTSDB.Ligue
+      SET
+        niveaudifficulte = '${req.body.niveaudifficulte}'
+      WHERE idligue = '${req.body.idligue}'
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json();
+    });
+
+  });
+});
+
 router.post('/ligue/equipe', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
@@ -270,6 +298,38 @@ router.get('/ligue/saisons', (req, res, next) => {
     query.on('end', () => {
       done();
       return res.json(results);
+    });
+
+  });
+});
+
+router.post('/ligue/saison', (req, res, next) => {
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      INSERT
+      INTO SPORTSDB.Saison
+      VALUES (
+        '${req.body.idsaison}',
+        (to_date('${req.body.datelimitepaiement}', 'YYYY-MM-DD')),
+        (to_date('${req.body.datecommencement}', 'YYYY-MM-DD')),
+        (to_date('${req.body.datefin}', 'YYYY-MM-DD')),
+        '${req.body.idligue}'
+      );
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json();
     });
 
   });

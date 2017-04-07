@@ -7,18 +7,15 @@
 		<div><i class="material-icons icon-text">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>
 		<div><i class="material-icons icon-text">attach_money</i>${tournoi.fondsaccumules}</div>
 		<div class="top-right">
-			<button class="icon-btn" click.trigger="afficherOptions=!afficherOptions">
+			<button class="icon-btn" click.trigger="optionsAffiche=!optionsAffiche">
 				<i class="material-icons">menu</i>
 			</button>
-			<ul class="options" if.bind="afficherOptions">
+			<ul class="options" if.bind="optionsAffiche">
 				<li><button click.trigger="afficherModificationTournoi()">Modifier le tournoi</button></li>
 				<li><button click.trigger="afficherAjoutMatch()">Ajouter un match</button></li>
 				<li><button click.trigger="afficherAjoutCommanditaire()">Ajouter un commanditaire</button></li>
 			</ul>
 		</div>
-		<button class="btn-flotante top-right" click.trigger="afficherModificationTournoi()">
-      <i class="material-icons">edit</i>
-    </button>
 		<div class="half-width">
 			<h3>Matchs</h3>
 			<hr/>
@@ -32,7 +29,7 @@
 						<span><h3>${match.equipes[0].ptsmarques} - ${match.equipes[1].ptsmarques}</h3></span>
 						<span><h3>${match.equipes[1].nom}</h3></span>
 					</div>
-					<button class="icon-btn top-right" click.trigger="retirerMatch($index, match.idmatch)"><i class="material-icons">clear</i></button>
+					<button class="icon-btn top-right" click.trigger="retirerMatch($index, match)"><i class="material-icons">clear</i></button>
 				</li>
 			</ul>
 		</div>
@@ -44,7 +41,7 @@
 					<h3>${commanditaire.nom}</h3>
 					<span>Contribution: $${commanditaire.contribution}</span>
 					<span><i class="material-icons">phone</i>${commanditaire.numtel}</span>
-					<button class="icon-btn top-right" click.trigger="retirerCommanditaire($index, commanditaire.idcommanditaire)"><i class="material-icons">clear</i></button>
+					<button class="icon-btn top-right" click.trigger="retirerCommanditaire($index, commanditaire)"><i class="material-icons">clear</i></button>
 				</li>
 			</ul>
 		</div>
@@ -77,6 +74,18 @@
 				</select>
         <input if.bind="equipeB.nom !== ''" type="number" value.bind="equipeB.ptsmarques" placeholder="Nombre de points B"/>
         <button class="btn btn-inscription" click.trigger="ajouterMatch()">AJOUTER</button>
+      </div>
+    </div>
+
+		<div class="popup-background" if.bind="ajoutCommanditaireAffiche">
+      <div class="popup">
+        <button class="icon-btn" click.trigger="cancelerAjoutCommanditaire()"><i class="material-icons">clear</i></button>
+        <h3>Ajouter un commanditaire</h3>
+        <input value.bind="nouveauCommanditaire.idcommanditaire" placeholder="IDCommanditaire"/>
+        <input value.bind="nouveauCommanditaire.nom" placeholder="Nom"/>
+        <input value.bind="nouveauCommanditaire.numtel" placeholder="(XXX) XXX-XXXX"/>
+        <input value.bind="nouveauCommanditaire.contribution" placeholder="Contribution"/>
+        <button class="btn btn-inscription" click.trigger="ajouterCommanditaire()">AJOUTER</button>
       </div>
     </div>
 	

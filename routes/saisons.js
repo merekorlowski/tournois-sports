@@ -149,6 +149,7 @@ router.get('/saison/matchs', (req, res, next) => {
         FROM SPORTSDB.MatchSaison
         WHERE idsaison = '${req.query.idsaison}'
       )
+      ORDER BY date;
     `);
 
     query.on('row', row => {
@@ -166,8 +167,6 @@ router.get('/saison/matchs', (req, res, next) => {
 
 router.post('/saison/match', (req, res, next) => {
 
-  const results = [];
-
   pg.connect(connectionString, (err, client, done) => {
 
     // Handle connection errors
@@ -181,42 +180,42 @@ router.post('/saison/match', (req, res, next) => {
       INSERT
       INTO SPORTSDB.Match
       VALUES (
-        '${req.body.match.idmatch}',
-        (to_date('${req.body.match.date}', 'YYYY-MM-DD')),
-        '${req.body.match.heure}',
-        '${req.body.match.lieu}'
+        '${req.body.idmatch}',
+        (to_date('${req.body.date}', 'YYYY-MM-DD')),
+        '${req.body.heure}',
+        '${req.body.lieu}'
       );
 
       INSERT
       INTO SPORTSDB.MatchSaison
       VALUES (
-        '${req.body.match.idmatch}',
-        '${req.body.match.idsaison}'
+        '${req.body.idmatch}',
+        '${req.body.idsaison}'
       );
 
       INSERT
       INTO SPORTSDB.EquipeMatch
       VALUES (
-        '${req.body.equipeA.idligue}',
-        '${req.body.equipeA.nom}',
-        '${req.body.match.idmatch}',
-        '${req.body.equipeA.ptsmarques}'
+        '${req.body.equipes[0].idligue}',
+        '${req.body.equipes[0].nom}',
+        '${req.body.idmatch}',
+        '${req.body.equipes[0].ptsmarques}'
       );
 
       INSERT
       INTO SPORTSDB.EquipeMatch
       VALUES (
-        '${req.body.equipeB.idligue}',
-        '${req.body.equipeB.nom}',
-        '${req.body.match.idmatch}',
-        '${req.body.equipeB.ptsmarques}'
+        '${req.body.equipes[1].idligue}',
+        '${req.body.equipes[1].nom}',
+        '${req.body.idmatch}',
+        '${req.body.equipes[1].ptsmarques}'
       );
     `);
 
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json(results);
+      return res.json();
     });
 
   });

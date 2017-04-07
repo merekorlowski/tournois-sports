@@ -32,7 +32,6 @@ router.get('/requete', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      console.log(JSON.stringify(results));
       return res.json(results);
     });
 
@@ -57,7 +56,7 @@ router.post('/requete', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json();
+      return res.json({message: `Requete ${req.body.numero} executé avec succès.`});
     });
 
   });
@@ -81,7 +80,7 @@ router.delete('/requete', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json();
+      return res.json({message: `Requete ${req.body.numero} executé avec succès.`});
     });
 
   });
@@ -105,7 +104,7 @@ router.put('/requete', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      return res.json();
+      return res.json({message: `Requete ${req.body.numero} executé avec succès.`});
     });
 
   });

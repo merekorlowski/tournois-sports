@@ -122,22 +122,22 @@ router.put('/match', (req, res, next) => {
       UPDATE
       SPORTSDB.Match
       SET
-        date = (to_date('${req.body.match.date}', 'YYYY-MM-DD')),
-        heure = '${req.body.match.heure}',
-        lieu = '${req.body.match.lieu}'
-      WHERE idmatch = '${req.body.match.idmatch}';
+        date = (to_date('${req.body.date}', 'YYYY-MM-DD')),
+        heure = '${req.body.heure}',
+        lieu = '${req.body.lieu}'
+      WHERE idmatch = '${req.body.idmatch}';
 
       UPDATE
       SPORTSDB.EquipeMatch
       SET
-        ptsmarques = '${req.body.equipeA.ptsmarques}'
-      WHERE idmatch = '${req.body.match.idmatch}' AND idligue = '${req.body.equipeA.idligue}' AND nom = '${req.body.equipeA.nom}';
+        ptsmarques = ${req.body.equipes[0].ptsmarques}
+      WHERE idmatch = '${req.body.idmatch}' AND idligue = '${req.body.equipes[0].idligue}' AND nom = '${req.body.equipes[0].nom}';
 
       UPDATE
       SPORTSDB.EquipeMatch
       SET
-        ptsmarques = '${req.body.equipeB.ptsmarques}'
-      WHERE idmatch = '${req.body.match.idmatch}' AND idligue = '${req.body.equipeB.idligue}' AND nom = '${req.body.equipeB.nom}';
+        ptsmarques = ${req.body.equipes[1].ptsmarques}
+      WHERE idmatch = '${req.body.idmatch}' AND idligue = '${req.body.equipes[1].idligue}' AND nom = '${req.body.equipes[1].nom}';
     `);
 
     // After all data is returned, close connection and return results

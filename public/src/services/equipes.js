@@ -70,10 +70,10 @@ export class ServiceEquipes {
     });
 	}
 
-	retirerJoueur(idusager) {
+	retirerJoueur(joueur) {
 		return this.http.fetch('equipe/joueur', {
       method: 'delete',
-      body: json(idusager)
+      body: json(joueur)
     });
 	}
 

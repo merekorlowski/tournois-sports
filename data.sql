@@ -40,6 +40,16 @@
   INSERT INTO SPORTSDB.Usager VALUES('U038', 'Dulce', 'Wardlaw', 'dwardlaw@gmail.com');
   INSERT INTO SPORTSDB.Usager VALUES('U039', 'Deandre', 'Stupka', 'dstupka@gmail.com');
   INSERT INTO SPORTSDB.Usager VALUES('U040', 'Lon', 'Kral', 'lkral@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U041', 'Sabra', 'Pricer', 'spricer@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U042', 'Shawnda', 'Houchens', 'shouchens@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U043', 'Dulce', 'Wardlaw', 'dwardlaw@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U044', 'Deandre', 'Stupka', 'dstupka@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U045', 'Lon', 'Kral', 'lkral@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U046', 'Billye', 'Marcelino', 'bmarcelino@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U047', 'Emilie', 'Jones', 'ejones@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U048', 'John', 'Smith', 'jsmith@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U049', 'Mary', 'Smith', 'msmith@gmail.com');
+  INSERT INTO SPORTSDB.Usager VALUES('U050', 'Tommie', 'Imboden', 'timboden@gmail.com');
   
   -- Employés
   
@@ -88,6 +98,16 @@
   INSERT INTO SPORTSDB.UsagerEquipe VALUES('U008', 'L007', 'Titans');
   INSERT INTO SPORTSDB.UsagerEquipe VALUES('U009', 'L007', 'Titans');
   INSERT INTO SPORTSDB.UsagerEquipe VALUES('U010', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U031', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U032', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U033', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U034', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U035', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U036', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U037', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U038', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U039', 'L007', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U040', 'L007', 'Titans');
   
   -- Équipe 2
   
@@ -178,6 +198,16 @@
   INSERT INTO SPORTSDB.UsagerEquipe VALUES('U008', 'L040', 'Titans');
   INSERT INTO SPORTSDB.UsagerEquipe VALUES('U009', 'L040', 'Titans');
   INSERT INTO SPORTSDB.UsagerEquipe VALUES('U010', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U041', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U042', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U043', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U044', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U045', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U046', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U047', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U048', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U049', 'L040', 'Titans');
+  INSERT INTO SPORTSDB.UsagerEquipe VALUES('U050', 'L040', 'Titans');
   
   -- Équipe 2
   
@@ -407,7 +437,10 @@
   
   INSERT INTO SPORTSDB.Tournoi VALUES('T110', 'Diabetes', 0.00, (to_date('2016-05-01', 'YYYY-MM-DD')), (to_date('2016-06-01', 'YYYY-MM-DD')), 'SP01');
   INSERT INTO SPORTSDB.Tournoi VALUES('T001', 'Cancer', 0.00, (to_date('2016-07-01', 'YYYY-MM-DD')), (to_date('2016-08-01', 'YYYY-MM-DD')), 'SP02');
-  
+  INSERT INTO SPORTSDB.Tournoi VALUES('T002', 'Enfants malades', 0.00, (to_date('2016-07-01', 'YYYY-MM-DD')), (to_date('2016-08-01', 'YYYY-MM-DD')), 'SP02');
+  INSERT INTO SPORTSDB.Tournoi VALUES('T003', 'Pauvreté', 0.00, (to_date('2016-07-01', 'YYYY-MM-DD')), (to_date('2016-08-01', 'YYYY-MM-DD')), 'SP01');
+
+
   
   -- Commanditaire pour tournoi
   
@@ -415,6 +448,8 @@
   INSERT INTO SPORTSDB.Commanditaire VALUES('C002', 'Redbull', '(613) 434-5353');
   INSERT INTO SPORTSDB.Commanditaire VALUES('C003', 'Starbucks', '(613) 123-5573');
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C001', 'T110', 1000.00);
+  INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C001', 'T002', 1500.00);
+  INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C001', 'T003', 1200.00);
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C002', 'T001', 2000.00);
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C003', 'T001', 3700.00);
   

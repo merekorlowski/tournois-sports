@@ -67,6 +67,7 @@ export class EquipeView {
 
 	afficherAjout() {
 		this.ajoutAffiche = true;
+		this.optionsAffiche = false;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
 		this.getUsagersLibres();
@@ -94,6 +95,7 @@ export class EquipeView {
 
 	afficherModification() {
     this.modificationAffiche = true;
+		this.optionsAffiche = false;
 		// add listener to disable scroll
 		window.addEventListener('scroll', this.scrollTo);
   }
