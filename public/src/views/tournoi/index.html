@@ -5,7 +5,7 @@
 		<h1 class="title">${title}</h1>
 		<h3 id="oeuvreCharite">Oeuvre de charité: ${tournoi.oeuvrecharite}</h3>
 		<div><i class="material-icons icon-text">date_range</i>Durée: ${tournoi.datedebut | date} - ${tournoi.datefin | date}</div>
-		<div><i class="material-icons icon-text">attach_money</i>${tournoi.fondsaccumules}</div>
+		<div><i class="material-icons icon-text">attach_money</i>Fonds accumulés: $${tournoi.fondsaccumules}</div>
 		<div class="top-right">
 			<button class="icon-btn" click.trigger="optionsAffiche=!optionsAffiche">
 				<i class="material-icons">menu</i>

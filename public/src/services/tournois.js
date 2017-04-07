@@ -52,7 +52,7 @@ export class ServiceTournois {
 
   getFondsAccumules(idtournoi) {
     return this.http.fetch(`tournoi/fondsaccumules?idtournoi=${idtournoi}`).then(response => response.json()).then(data => {
-      return data[0].sum;
+      return data[0].fondsaccumules;
     });
   }
 

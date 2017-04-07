@@ -375,8 +375,8 @@ router.get('/tournoi/fondsaccumules', (req, res, next) => {
     }
 
     const query = client.query(`
-      SELECT SUM(contribution) 
-      FROM SPORTSDB.CommanditaireTournoi
+      SELECT fondsaccumules 
+      FROM SPORTSDB.Tournoi
       WHERE idtournoi = '${req.query.idtournoi}'`
     );
 

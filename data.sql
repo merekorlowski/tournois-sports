@@ -447,11 +447,13 @@
   INSERT INTO SPORTSDB.Commanditaire VALUES('C001', 'Ballons Inc.', '(613) 252-9589');
   INSERT INTO SPORTSDB.Commanditaire VALUES('C002', 'Redbull', '(613) 434-5353');
   INSERT INTO SPORTSDB.Commanditaire VALUES('C003', 'Starbucks', '(613) 123-5573');
+  INSERT INTO SPORTSDB.Commanditaire VALUES('C004', 'Burger King', '(613) 163-0000');
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C001', 'T110', 1000.00);
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C001', 'T002', 1500.00);
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C001', 'T003', 1200.00);
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C002', 'T001', 2000.00);
   INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C003', 'T001', 3700.00);
+  INSERT INTO SPORTSDB.CommanditaireTournoi VALUES ('C004', 'T110', 5200.00);
   
   -- Matchs
   
