@@ -39,14 +39,14 @@
         <input type="date" value.bind="nouveauMatch.date | date" placeholder="Date"/>
         <input type="time" value.bind="nouveauMatch.heure" placeholder="Heure"/>
         <input value.bind="nouveauMatch.lieu" placeholder="Lieu"/>
-				<select value.bind="match.equipes[0]">
-					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===match.equipes[1].nom && equipe.idligue===match.equipes[1].idligue" model.bind="equipe">${equipe.nom}</option>
+				<select value.bind="nouveauMatch.equipes[0]">
+					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===nouveauMatch.equipes[1].nom && equipe.idligue===nouveauMatch.equipes[1].idligue" model.bind="equipe">${equipe.nom}</option>
 				</select>
-				<input if.bind="match.equipes[0].nom !== ''" type="number" value.bind="match.equipes[0].ptsmarques" placeholder="Nombre de points A"/>
-				<select value.bind="match.equipes[1]">
-					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===match.equipes[0].nom && equipe.idligue===match.equipes[0].idligue" model.bind="equipe">${equipe.nom}</option>
+				<input if.bind="nouveauMatch.equipes[0].nom !== ''" type="number" value.bind="nouveauMatch.equipes[0].ptsmarques" placeholder="Nombre de points A"/>
+				<select value.bind="nouveauMatch.equipes[1]">
+					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===nouveauMatch.equipes[0].nom && equipe.idligue===nouveauMatch.equipes[0].idligue" model.bind="equipe">${equipe.nom}</option>
 				</select>
-        <input if.bind="match.equipes[1].nom !== ''" type="number" value.bind="match.equipes[1].ptsmarques" placeholder="Nombre de points B"/>
+        <input if.bind="nouveauMatch.equipes[1].nom !== ''" type="number" value.bind="nouveauMatch.equipes[1].ptsmarques" placeholder="Nombre de points B"/>
         <button class="btn btn-inscription" click.trigger="ajouterMatch()">AJOUTER</button>
       </div>
     </div>

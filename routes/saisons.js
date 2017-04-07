@@ -176,6 +176,8 @@ router.post('/saison/match', (req, res, next) => {
       return res.status(500).json({success: false, data: err});
     }
 
+    console.log(JSON.stringify(req.body));
+
     const query = client.query(`
       INSERT
       INTO SPORTSDB.Match
@@ -199,7 +201,7 @@ router.post('/saison/match', (req, res, next) => {
         '${req.body.equipes[0].idligue}',
         '${req.body.equipes[0].nom}',
         '${req.body.idmatch}',
-        '${req.body.equipes[0].ptsmarques}'
+        ${req.body.equipes[0].ptsmarques}
       );
 
       INSERT
@@ -208,7 +210,7 @@ router.post('/saison/match', (req, res, next) => {
         '${req.body.equipes[1].idligue}',
         '${req.body.equipes[1].nom}',
         '${req.body.idmatch}',
-        '${req.body.equipes[1].ptsmarques}'
+        ${req.body.equipes[1].ptsmarques}
       );
     `);
 

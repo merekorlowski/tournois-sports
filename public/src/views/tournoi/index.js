@@ -45,10 +45,14 @@ export class TournoiView {
 					});
 				}
 			});
-			this.serviceTournois.getFondsAccumules(idtournoi).then(fondsaccumules => {
-				tournoi.fondsaccumules = fondsaccumules;
-			});
+			this.getFondsAccumules();
     });
+	}
+
+	getFondsAccumules() {
+		this.serviceTournois.getFondsAccumules(this.tournoi.idtournoi).then(fondsaccumules => {
+			this.tournoi.fondsaccumules = fondsaccumules;
+		});
 	}
 
 	retirerMatch(index, idmatch) {
@@ -60,6 +64,7 @@ export class TournoiView {
 	retirerCommanditaire(index, commanditaire) {
 		this.serviceTournois.retirerCommanditaire(commanditaire).then(() => {
 			this.commanditaires.splice(index, 1);
+			this.getFondsAccumules();
 		});
 	}
 
@@ -170,6 +175,7 @@ export class TournoiView {
 		this.serviceTournois.ajouterCommanditaire(this.nouveauCommanditaire).then(() => {
 			this.commanditaires.push(this.nouveauCommanditaire);
 			this.ajoutCommanditaireAffiche = false;
+			this.getFondsAccumules();
 			// add listener to disable scroll
 			window.removeEventListener('scroll', this.scrollTo);
 		});

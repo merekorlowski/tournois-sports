@@ -173,9 +173,24 @@ CREATE OR REPLACE FUNCTION SPORTSDB.fondsAccumules_contributionupdate() RETURNS 
     END;
 $fondsAccumules_contributionupdate$ LANGUAGE plpgsql;
 
---The trigger is activated after insertion to make sure that the row was valid
+--The trigger is activated after insert or update to make sure that the row was valid
 CREATE TRIGGER fondsAccumules_contributionupdate AFTER INSERT OR UPDATE ON SPORTSDB.CommanditaireTournoi
     FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_contributionupdate();
+
+-- Trigger for delete of contribution 
+CREATE OR REPLACE FUNCTION SPORTSDB.fondsAccumules_contributiondelete() RETURNS trigger AS $fondsAccumules_contributiondelete$
+    BEGIN
+	--update the fondsAccumules value
+	UPDATE SPORTSDB.Tournoi
+	SET fondsAccumules = fondsAccumules - OLD.contribution
+	WHERE IDTournoi = NEW.IDTournoi;
+	RETURN NEW;
+    END;
+$fondsAccumules_contributiondelete$ LANGUAGE plpgsql;
+
+--The trigger is activated before delete to make sure that the row was valid
+CREATE TRIGGER fondsAccumules_contributiondelete BEFORE DELETE ON SPORTSDB.CommanditaireTournoi
+    FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_contributiondelete();
 
 --Trigger on table EquipeTournoi
 
@@ -202,6 +217,21 @@ CREATE OR REPLACE FUNCTION SPORTSDB.fondsAccumules_inscriptionupdate() RETURNS t
     END;
 $fondsAccumules_inscriptionupdate$ LANGUAGE plpgsql;
 
---The trigger is activated after insertion to make sure that the row was valid
-CREATE TRIGGER fondsAccumules_inscriptionupdate  AFTER INSERT OR UPDATE ON SPORTSDB.EquipeTournoi
+-- The trigger is activated after insertion to make sure that the row was valid
+CREATE TRIGGER fondsAccumules_inscriptionupdate AFTER INSERT OR UPDATE ON SPORTSDB.EquipeTournoi
     FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_inscriptionupdate();
+
+-- Trigger for delete of inscription
+CREATE OR REPLACE FUNCTION SPORTSDB.fondsAccumules_inscriptiondelete() RETURNS trigger AS $fondsAccumules_inscriptiondelete$
+    BEGIN
+	--update the fondsAccumules value
+	UPDATE SPORTSDB.Tournoi
+	SET fondsAccumules = fondsAccumules + NEW.frais
+	WHERE IDTournoi = NEW.IDTournoi;
+	RETURN NEW;
+    END;
+$fondsAccumules_inscriptiondelete$ LANGUAGE plpgsql;
+
+--The trigger is activated after insertion to make sure that the row was valid
+CREATE TRIGGER fondsAccumules_inscriptiondelete BEFORE DELETE ON SPORTSDB.EquipeTournoi
+    FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_inscriptiondelete();

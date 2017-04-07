@@ -16,8 +16,6 @@ export class SaisonView {
 
 	activate(params, navigation) {
 		this.getSaison(params.id);
-		this.nouveauMatch = new Match();
-		this.nouveauMatch.idsaison = params.id;
 	}
 
 	detached() {
@@ -27,7 +25,6 @@ export class SaisonView {
 
 	getSaison(idsaison) {
 		this.serviceSaisons.getSaison(idsaison).then(saison => {
-			console.log(JSON.stringify(saison));
 			this.saison = saison;
 			this.title = `Saison ${saison.idsaison}`;
 			this.getEquipes(saison.idligue);
@@ -51,8 +48,6 @@ export class SaisonView {
 	getEquipes(idligue) {
 		this.serviceLigues.getEquipes(idligue).then(equipes => {
 			this.equipes = equipes;
-			this.equipeA = this.equipes[0];
-			this.equipeB = this.equipes[1];
 		});
 	}
 
@@ -67,6 +62,12 @@ export class SaisonView {
 	 */
 
 	afficherAjoutMatch() {
+		this.nouveauMatch = new Match();
+		this.nouveauMatch.idsaison = this.saison.idsaison;
+		this.nouveauMatch.equipes = [
+			this.equipes[0],
+			this.equipes[1]
+		];
 		this.ajoutMatchAffiche = true;
 		this.optionsAffiche = false;
 		// add listener to disable scroll
@@ -80,7 +81,7 @@ export class SaisonView {
 	}
 
 	ajouterMatch() {
-		this.serviceSaisons.ajouterMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(() => {
+		this.serviceSaisons.ajouterMatch(this.nouveauMatch).then(() => {
 			this.matchs.push(this.nouveauMatch);
 			this.ajoutMatchAffiche = false;
 			// add listener to disable scroll

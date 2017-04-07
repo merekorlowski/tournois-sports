@@ -1,13 +1,21 @@
 'use strict';
 
+/**
+ * Charger les dépendances
+ */
 const express = require('express');
 const router = express.Router();
 const pg = require('pg');
 
+/**
+ * Definir le URL pour le base de données
+ */
 const config = require('../config');
-
 const connectionString = process.env.DATABASE_URL || config.dbUrl;
 
+/**
+ * 
+ */
 router.get('/employes', (req, res, next) => {
 
   const results = [];
