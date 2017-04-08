@@ -3,5 +3,5 @@
  */
 
 module.exports = {
-    dbUrl: 'postgres://postgres:Woodlergh17!@localhost:5432/tournois_sports'
+    dbUrl: 'postgres://postgres:password@localhost:5432/tournois_sports'
 }
