@@ -12,7 +12,7 @@ export class Tournois {
   activate(params, navigation) {
     this.query = '';
     this.sort = 'ASC';
-    this.title = `Tournois de ${params.id}`;
+    this.title = `Tournois de ${params.nom}`;
 		this.idsport = params.id;
     this.getTournois(params.id);
   }

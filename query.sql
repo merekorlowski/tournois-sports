@@ -1,17 +1,11 @@
 --1. Quelles sont les équipes qui comportent plus de 17 joueurs, toutes ligues
 --  confondues? Lister les équipes en ordre alphabétique selon le nom de léquipe.
 
-CREATE OR REPLACE FUNCTION SPORTSDB.requete_1()
-    RETURNS (IDLigue, nom) AS $$
-    BEGIN
-        SELECT IDLigue AS Ligue, nom AS Equipe INTO resultat
-        FROM SPORTSDB.UsagerEquipe
-        GROUP BY IDLigue, nom
-        HAVING COUNT(IDUsager) > 17
-        ORDER BY nom;
-        RETURN resultat;
-    END;
-$$ LANGUAGE plpgsql;
+SELECT IDLigue AS Ligue, nom AS Equipe INTO resultat
+FROM SPORTSDB.UsagerEquipe
+GROUP BY IDLigue, nom
+HAVING COUNT(IDUsager) > 17
+ORDER BY nom;
 
 -- 2. Combien de joueurs ont le nom de famille « Smith »?
 

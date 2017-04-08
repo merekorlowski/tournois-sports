@@ -12,7 +12,7 @@ export class Ligues {
   activate(params, navigation) {
     this.query = '';
     this.sort = 'ASC';
-    this.title = `Ligues de ${params.id}`;
+    this.title = `Ligues de ${params.nom}`;
 		this.ajoutAffiche = false;
 		this.idsport = params.id;
     this.getLigues(params.id);

@@ -5,10 +5,11 @@ import {ServiceMatchs} from '../../services/matchs';
 import {Match} from '../../models/match';
 import {Commanditaire} from '../../models/commanditaire';
 
-@inject(ServiceTournois)
+@inject(ServiceTournois, ServiceMatchs)
 export class TournoiView {
-  constructor(serviceTournois) {
+  constructor(serviceTournois, serviceMatchs) {
     this.serviceTournois = serviceTournois;
+		this.serviceMatchs = serviceMatchs;
   }
 
   activate(params, navigation) {
@@ -21,30 +22,16 @@ export class TournoiView {
 		window.removeEventListener('scroll', this.scrollTo);
 	}
 
+	/**
+	 * Retourner les informations du tournoi
+	 * @param {string} idtournoi 
+	 */
+
   getTournoi(idtournoi) {
     this.serviceTournois.getTournoi(idtournoi).then(tournoi => {
       this.tournoi = tournoi;
-			this.serviceTournois.getMatchs(idtournoi).then(matchs => {
-				this.matchs = matchs;
-				for (let match of this.matchs) {
-					this.serviceTournois.getEquipes(match.idmatch).then(equipes => {
-						match.equipes = equipes;
-						for (let equipe of match.equipes) {
-							this.serviceTournois.getPoints(match.idmatch, equipe.idligue, equipe.nom).then(ptsmarques => {
-								equipe.ptsmarques = ptsmarques;
-							});
-						}
-					});
-				}
-			});
-			this.serviceTournois.getCommanditaires(idtournoi).then(commanditaires => {
-				this.commanditaires = commanditaires;
-				for (let commanditaire of this.commanditaires) {
-					this.serviceTournois.getContribution(idtournoi, commanditaire.idcommanditaire).then(contribution => {
-						commanditaire.contribution = contribution;
-					});
-				}
-			});
+			this.getMatchs();
+			this.getCommanditaires();
 			this.getFondsAccumules();
     });
 	}
@@ -55,8 +42,55 @@ export class TournoiView {
 		});
 	}
 
-	retirerMatch(index, idmatch) {
-		this.serviceTournois.retirerMatch(idmatch).then(() => {
+	/**
+	 * Retourner les informations des matchs
+	 */
+
+	getMatchs() {
+		this.serviceTournois.getMatchs(this.tournoi.idtournoi).then(matchs => {
+			this.matchs = matchs;
+			for (let match of this.matchs) {
+				this.getEquipesMatch(match);
+			}
+		});
+	}
+
+	getEquipesMatch(match) {
+		this.serviceMatchs.getEquipes(match.idmatch).then(equipes => {
+			match.equipes = equipes;
+			for (let equipe of match.equipes) {
+				this.getPoints(match, equipe);
+			}
+		});
+	}
+
+	getPoints(match, equipe) {
+		this.serviceMatchs.getPoints(match, equipe).then(ptsmarques => {
+			equipe.ptsmarques = ptsmarques;
+		});
+	}
+
+	/**
+	 * Retourner les informations des commanditaires
+	 */
+
+	getCommanditaires() {
+		this.serviceTournois.getCommanditaires(this.tournoi.idtournoi).then(commanditaires => {
+			this.commanditaires = commanditaires;
+			for (let commanditaire of this.commanditaires) {
+				this.getContribution(commanditaire);
+			}
+		});
+	}
+
+	getContribution(commanditaire) {
+		this.serviceTournois.getContribution(this.tournoi.idtournoi, commanditaire.idcommanditaire).then(contribution => {
+			commanditaire.contribution = contribution;
+		});
+	}
+
+	retirerMatch(index, match) {
+		this.serviceMatchs.retirerMatch(match).then(() => {
 			this.matchs.splice(index, 1);
 		});
 	}
@@ -93,7 +127,7 @@ export class TournoiView {
 	}
 
 	ajouterMatch() {
-		this.serviceTournois.ajouterMatch(this.nouveauMatch, this.equipeA, this.equipeB).then(() => {
+		this.serviceTournois.ajouterMatch(this.nouveauMatch).then(() => {
 			this.matchs.push(this.nouveauMatch);
 			this.ajoutMatchAffiche = false;
 			// add listener to disable scroll

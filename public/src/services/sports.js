@@ -11,13 +11,27 @@ export class ServiceSports {
     });
   }
 
+	/**
+	 * Retourner tous les sports
+	 * @param {string} query 
+	 * @param {string} sort 
+	 */
+
   get(query, sort) {
-    return this.http.fetch(`sports?query=${query}&sort=${sort}`).then(response => response.json()).then(data => {
-      return data.map(sport => {
-        return new Sport(sport);
-      }) || [];
-    });
+    return this.http
+			.fetch(`sports?query=${query}&sort=${sort}`)
+			.then(response => response.json())
+			.then(data => {
+				return data.map(sport => {
+					return new Sport(sport);
+				}) || [];
+			});
   }
+
+	/**
+	 * Ajouter un sport
+	 * @param {Sport} sport 
+	 */
 
   ajouter(sport) {
     return this.http.fetch('sport', {
@@ -26,12 +40,22 @@ export class ServiceSports {
     });
   }
 
+	/**
+	 * Modifier un sport
+	 * @param {Sport} sport 
+	 */
+
   modifier(sport) {
     return this.http.fetch('sport', {
       method: 'put',
       body: json(sport)
     });
   }
+
+	/**
+	 * Retirer un sport
+	 * @param {Sport} sport 
+	 */
 
 	retirerSport(sport) {
 		return this.http.fetch('sport', {

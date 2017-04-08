@@ -3,8 +3,4 @@ export class Commanditaire {
     Object.assign(this, commanditaire);
     this.contributions = [];
   }
-
-  getContributions() {
-    
-  }
 }

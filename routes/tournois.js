@@ -24,7 +24,7 @@ router.get('/tournois', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM SPORTSDB.Tournoi
-      WHERE idsport = '${req.query.idsport}' AND oeuvrecharite LIKE '%${req.query.query}%'
+      WHERE idsport = '${req.query.idsport}' AND LOWER(oeuvrecharite) LIKE LOWER('%${req.query.query}%')
       ORDER BY oeuvrecharite ${req.query.sort}
     `);
 
@@ -313,8 +313,6 @@ router.put('/tournoi', (req, res, next) => {
       console.log(err);
       return res.status(500).json({success: false, data: err});
     }
-
-    console.log(JSON.stringify(req.body));
 
     const query = client.query(`
       UPDATE 

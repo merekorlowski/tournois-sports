@@ -9,20 +9,39 @@ export class ServiceEmployes {
     });
   }
 
+	/**
+	 * Retourner tous les employes
+	 * @param {string} query 
+	 * @param {string} sort 
+	 */
+
   get(query, sort) {
-    return this.http.fetch(`employes?query=${query}&sort=${sort}`).then(response => response.json()).then(data => {
-      return data.map(employe => {
-        return new Employe(employe);
-      }) || [];
+    return this.http
+			.fetch(`employes?query=${query}&sort=${sort}`)
+			.then(response => response.json())
+			.then(data => {
+				return data.map(employe => {
+					return new Employe(employe);
+				}) || [];
+			});
+  }
+
+	/**
+	 * Retirer un employe
+	 * @param {Employe} employe 
+	 */
+
+	retirer(employe) {
+    return this.http.fetch('employe', {
+      method: 'delete',
+      body: json(employe)
     });
   }
 
-	retirer(idemploye) {
-    return this.http.fetch('employe', {
-      method: 'delete',
-      body: json(idemploye)
-    });
-  }
+	/**
+	 * Ajouter un employe
+	 * @param {Employe} employe 
+	 */
 
   ajouter(employe) {
     return this.http.fetch('employe', {
@@ -30,6 +49,11 @@ export class ServiceEmployes {
       body: json(employe)
     });
   }
+
+	/**
+	 * Modifier un employe
+	 * @param {Employe} employe 
+	 */
 
 	modifier(employe) {
     return this.http.fetch('employe', {

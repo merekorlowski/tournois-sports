@@ -47,8 +47,8 @@ header, footer {
 }
 
 .nav-bar, section {
-  margin: 0 auto;
-  width: 1000px;
+	margin: 0 auto;
+	width: 1000px;
 }
 
 header {

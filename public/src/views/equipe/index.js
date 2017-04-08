@@ -11,8 +11,10 @@ export class EquipeView {
 	activate(params, navigation) {
 		this.getEquipe({
 			idligue: params.id,
-			nom: params.id2
+			nom: params.nom
 		});
+		this.query = '';
+		this.sort = 'ASC';
 	}
 
 	detached() {
@@ -28,19 +30,19 @@ export class EquipeView {
 		this.serviceEquipes.getEquipe(equipe).then(equipe => {
 			this.equipe = equipe;
 			this.equipe.nomOriginal = equipe.nom;
-			this.getGerant(equipe);
-			this.getJoueurs(equipe);
+			this.getGerant();
+			this.getJoueurs();
 		}); 
 	}
 
-	getGerant(equipe) {
-		this.serviceEquipes.getGerant(equipe).then(gerant => {
+	getGerant() {
+		this.serviceEquipes.getGerant(this.equipe).then(gerant => {
 			this.gerant = gerant;
 		});
 	}
 
-	getJoueurs(equipe) {
-		this.serviceEquipes.getJoueurs(equipe).then(joueurs => {
+	getJoueurs() {
+		this.serviceEquipes.getJoueurs(this.equipe, this.query, this.sort).then(joueurs => {
 			this.joueurs = joueurs;
 		});
 	}

@@ -1,12 +1,23 @@
 'use strict';
 
+/**
+ * Charger les dépendances
+ */
+
 const express = require('express');
 const router = express.Router();
 const pg = require('pg');
 
-const config = require('../config');
+/**
+ * Definir le URL pour le base de données
+ */
 
+const config = require('../config');
 const connectionString = process.env.DATABASE_URL || config.dbUrl;
+
+/**
+ * Retourner tous les équipes qui match la valeur de recherche
+ */
 
 router.get('/equipes', (req, res, next) => {
 
@@ -24,7 +35,7 @@ router.get('/equipes', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM SPORTSDB.Equipe
-      WHERE nom LIKE '%${req.query.query}%'
+      WHERE LOWER(nom) LIKE LOWER('%${req.query.query}%')
       ORDER BY nom ${req.query.sort}
     `);
 
@@ -40,6 +51,10 @@ router.get('/equipes', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retourner une équipe spécifique
+ */
 
 router.get('/equipe', (req, res, next) => {
 
@@ -73,6 +88,10 @@ router.get('/equipe', (req, res, next) => {
   });
 });
 
+/**
+ * Modifier une équipe
+ */
+
 router.put('/equipe', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
@@ -101,6 +120,10 @@ router.put('/equipe', (req, res, next) => {
   });
 });
 
+/**
+ * Retourner tous les joueurs d'une équipe
+ */
+
 router.get('/equipe/joueurs', (req, res, next) => {
 
   const results = [];
@@ -124,7 +147,8 @@ router.get('/equipe/joueurs', (req, res, next) => {
       ) AND idusager NOT IN (
         SELECT idusager
         FROM SPORTSDB.Gerant
-      )
+      ) AND (LOWER(nom) LIKE LOWER('%${req.query.query}%') OR LOWER(prenom) LIKE LOWER('%${req.query.query}%')
+      ORDER BY nom ${req.query.sort};
     `);
 
     query.on('row', row => {
@@ -140,6 +164,10 @@ router.get('/equipe/joueurs', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retourner le gérant d'une équipe
+ */
 
 router.get('/equipe/gerant', (req, res, next) => {
 
@@ -178,6 +206,10 @@ router.get('/equipe/gerant', (req, res, next) => {
   });
 });
 
+/**
+ * Retourner tous les usagers qui ne sont pas dans une équipe
+ */
+
 router.get('/equipe/usagers-libres', (req, res, next) => {
 
   const results = [];
@@ -207,12 +239,15 @@ router.get('/equipe/usagers-libres', (req, res, next) => {
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
-      console.log(JSON.stringify(results));
       return res.json(results);
     });
 
   });
 });
+
+/**
+ * Ajouter un joueur à une équipe
+ */
 
 router.post('/equipe/joueur', (req, res, next) => {
 
@@ -245,6 +280,10 @@ router.post('/equipe/joueur', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retirer un joueur d'une équipe
+ */
 
 router.delete('/equipe/joueur', (req, res, next) => {
 

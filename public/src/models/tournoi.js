@@ -12,20 +12,4 @@ export class Tournoi {
     }
   }
 
-  getSport() {
-    
-  }
-
-  getMatchs() {
-
-  }
-
-  getCommanditaires() {
-
-  }
-
-  getEquipes() {
-    
-  }
-
 }

@@ -2,9 +2,6 @@ export class Usager {
   constructor(usager) {
     if (usager) {
       Object.assign(this, usager);
-      this.sports = [];
-      this.equipes = [];
-      this.afficherProfile = false;
     } else {
       this.idusager = '';
       this.nom = '';
@@ -13,13 +10,4 @@ export class Usager {
       this.numtel = '';
     }
   }
-
-  getSports() {
-
-  }
-
-  getEquipes() {
-
-  }
-
 }

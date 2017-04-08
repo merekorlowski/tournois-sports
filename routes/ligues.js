@@ -1,12 +1,23 @@
 'use strict';
 
+/**
+ * Charger les dépendances
+ */
+
 const express = require('express');
 const router = express.Router();
 const pg = require('pg');
 
-const config = require('../config');
+/**
+ * Definir le URL pour le base de données
+ */
 
+const config = require('../config');
 const connectionString = process.env.DATABASE_URL || config.dbUrl;
+
+/**
+ * Retourner tous les ligues
+ */
 
 router.get('/ligues', (req, res, next) => {
 
@@ -24,7 +35,7 @@ router.get('/ligues', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM SPORTSDB.Ligue
-      WHERE idsport = '${req.query.idsport}' AND (idligue LIKE '%${req.query.query}%' OR niveaudifficulte LIKE '%${req.query.query}%')
+      WHERE idsport = '${req.query.idsport}' AND (LOWER(idligue) LIKE LOWER('%${req.query.query}%') OR LOWER(niveaudifficulte) LIKE LOWER('%${req.query.query}%'))
       ORDER BY idligue ${req.query.sort}
     `);
 
@@ -40,6 +51,10 @@ router.get('/ligues', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retourner un ligue spécifique
+ */
 
 router.get('/ligue', (req, res, next) => {
 
@@ -73,6 +88,10 @@ router.get('/ligue', (req, res, next) => {
   });
 });
 
+/**
+ * Ajouter un ligue
+ */
+
 router.post('/ligue', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
@@ -103,6 +122,10 @@ router.post('/ligue', (req, res, next) => {
   });
 });
 
+/**
+ * Modifier un ligue
+ */
+
 router.put('/ligue', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
@@ -130,6 +153,40 @@ router.put('/ligue', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retirer un ligue
+ */
+
+router.delete('/ligue', (req, res, next) => {
+  
+  pg.connect(connectionString, (err, client, done) => {
+
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    const query = client.query(`
+      DELETE
+      FROM SPORTSDB.Ligue
+      WHERE idligue = '${req.query.idligue}'
+    `);
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      return res.json();
+    });
+
+  });
+});
+
+/**
+ * Ajouter une équipe à un ligue
+ */
 
 router.post('/ligue/equipe', (req, res, next) => {
 
@@ -171,31 +228,9 @@ router.post('/ligue/equipe', (req, res, next) => {
   });
 });
 
-router.delete('/ligue', (req, res, next) => {
-  
-  pg.connect(connectionString, (err, client, done) => {
-
-    // Handle connection errors
-    if(err) {
-      done();
-      console.log(err);
-      return res.status(500).json({success: false, data: err});
-    }
-
-    const query = client.query(`
-      DELETE
-      FROM SPORTSDB.Ligue
-      WHERE idligue = '${req.query.idligue}'
-    `);
-
-    // After all data is returned, close connection and return results
-    query.on('end', () => {
-      done();
-      return res.json();
-    });
-
-  });
-});
+/**
+ * Retourner tous les gestionnaires d'un ligue
+ */
 
 router.get('/ligues/gestionnaires', (req, res, next) => {
 
@@ -234,6 +269,10 @@ router.get('/ligues/gestionnaires', (req, res, next) => {
   });
 });
 
+/**
+ * Retourner tous les arbitres d'un ligue
+ */
+
 router.get('/ligues/arbitres', (req, res, next) => {
 
   const results = [];
@@ -271,6 +310,10 @@ router.get('/ligues/arbitres', (req, res, next) => {
   });
 });
 
+/**
+ * Retouner tous les saisons d'un ligue
+ */
+
 router.get('/ligue/saisons', (req, res, next) => {
 
   const results = [];
@@ -302,6 +345,10 @@ router.get('/ligue/saisons', (req, res, next) => {
 
   });
 });
+
+/**
+ * Ajouter un saison à un ligue
+ */
 
 router.post('/ligue/saison', (req, res, next) => {
 
@@ -335,6 +382,10 @@ router.post('/ligue/saison', (req, res, next) => {
   });
 });
 
+/**
+ * Retirer un saison d'un ligue
+ */
+
 router.delete('/ligue/saison', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
@@ -360,6 +411,10 @@ router.delete('/ligue/saison', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retourner tous les équipes d'un ligue
+ */
 
 router.get('/ligue/equipes', (req, res, next) => {
 
@@ -392,6 +447,10 @@ router.get('/ligue/equipes', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retirer une équipe d'un ligue
+ */
 
 router.delete('/ligue/equipe', (req, res, next) => {
 

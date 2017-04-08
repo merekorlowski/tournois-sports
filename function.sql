@@ -177,21 +177,6 @@ $fondsAccumules_contributionupdate$ LANGUAGE plpgsql;
 CREATE TRIGGER fondsAccumules_contributionupdate AFTER INSERT OR UPDATE ON SPORTSDB.CommanditaireTournoi
     FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_contributionupdate();
 
--- Trigger for delete of contribution 
-CREATE OR REPLACE FUNCTION SPORTSDB.fondsAccumules_contributiondelete() RETURNS trigger AS $fondsAccumules_contributiondelete$
-    BEGIN
-	--update the fondsAccumules value
-	UPDATE SPORTSDB.Tournoi
-	SET fondsAccumules = fondsAccumules - OLD.contribution
-	WHERE IDTournoi = NEW.IDTournoi;
-	RETURN NEW;
-    END;
-$fondsAccumules_contributiondelete$ LANGUAGE plpgsql;
-
---The trigger is activated before delete to make sure that the row was valid
-CREATE TRIGGER fondsAccumules_contributiondelete BEFORE DELETE ON SPORTSDB.CommanditaireTournoi
-    FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_contributiondelete();
-
 --Trigger on table EquipeTournoi
 
 CREATE OR REPLACE FUNCTION SPORTSDB.fondsAccumules_inscriptionupdate() RETURNS trigger AS $fondsAccumules_inscriptionupdate$
@@ -221,17 +206,32 @@ $fondsAccumules_inscriptionupdate$ LANGUAGE plpgsql;
 CREATE TRIGGER fondsAccumules_inscriptionupdate AFTER INSERT OR UPDATE ON SPORTSDB.EquipeTournoi
     FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_inscriptionupdate();
 
--- Trigger for delete of inscription
-CREATE OR REPLACE FUNCTION SPORTSDB.fondsAccumules_inscriptiondelete() RETURNS trigger AS $fondsAccumules_inscriptiondelete$
+
+--Trigger on table CommanditaireTournoi delete
+
+CREATE FUNCTION fondsAccumules_contributiondelete() RETURNS trigger AS $fondsAccumules_contributiondelete$
     BEGIN
+        -- Check that IDTournoi and contribution were not null
+        IF OLD.IDTournoi IS NULL THEN
+            RAISE EXCEPTION 'IDTournoi cannot be null';
+        END IF;
+        IF OLD.contribution IS NULL THEN
+            RAISE EXCEPTION '% cannot have null contribution for', OLD.IDTournoi;
+        END IF;
+
+        -- The contribution could not have been negative
+        IF OLD.contribution < 0 THEN
+            RAISE EXCEPTION '% cannot have a negative contribution for', OLD.IDTournoi;
+        END IF;
+
 	--update the fondsAccumules value
 	UPDATE SPORTSDB.Tournoi
-	SET fondsAccumules = fondsAccumules + NEW.frais
-	WHERE IDTournoi = NEW.IDTournoi;
-	RETURN NEW;
+	SET fondsAccumules = fondsAccumules - OLD.contribution
+	WHERE IDTournoi = OLD.IDTournoi;
+	RETURN OLD;
     END;
-$fondsAccumules_inscriptiondelete$ LANGUAGE plpgsql;
+$fondsAccumules_contributiondelete$ LANGUAGE plpgsql;
 
---The trigger is activated after insertion to make sure that the row was valid
-CREATE TRIGGER fondsAccumules_inscriptiondelete BEFORE DELETE ON SPORTSDB.EquipeTournoi
-    FOR EACH ROW EXECUTE PROCEDURE SPORTSDB.fondsAccumules_inscriptiondelete();
+--The trigger is activated after delete to make sure that the row was successfully deleted
+CREATE TRIGGER fondsAccumules_contributiondelete AFTER DELETE ON SPORTSDB.CommanditaireTournoi
+    FOR EACH ROW EXECUTE PROCEDURE fondsAccumules_contributiondelete ();

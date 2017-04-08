@@ -3,6 +3,7 @@
 /**
  * Charger les dépendances
  */
+
 const express = require('express');
 const router = express.Router();
 const pg = require('pg');
@@ -10,12 +11,14 @@ const pg = require('pg');
 /**
  * Definir le URL pour le base de données
  */
+
 const config = require('../config');
 const connectionString = process.env.DATABASE_URL || config.dbUrl;
 
 /**
- * 
+ * Retourner tous les employes qui match la valeur de recherche
  */
+
 router.get('/employes', (req, res, next) => {
 
   const results = [];
@@ -31,8 +34,14 @@ router.get('/employes', (req, res, next) => {
 
     const query = client.query(`
       SELECT * 
-      FROM SPORTSDB.Employe NATURAL LEFT OUTER JOIN SPORTSDB.Gestionnaire NATURAL LEFT OUTER JOIN SPORTSDB.Arbitre
-      WHERE nom LIKE '%${req.query.query}%' OR prenom LIKE '%${req.query.query}' OR role LIKE '%${req.query.query}'
+      FROM SPORTSDB.Employe 
+        NATURAL LEFT OUTER JOIN 
+        SPORTSDB.Gestionnaire 
+        NATURAL LEFT OUTER JOIN 
+        SPORTSDB.Arbitre
+      WHERE LOWER(nom) LIKE LOWER('%${req.query.query}%')
+        OR LOWER(prenom) LIKE LOWER('%${req.query.query}%')
+        OR LOWER(role) LIKE LOWER('%${req.query.query}%')
       ORDER BY nom ${req.query.sort}
     `);
 
@@ -40,7 +49,6 @@ router.get('/employes', (req, res, next) => {
       results.push(row);
     });
 
-    // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
       return res.json(results);
@@ -48,6 +56,10 @@ router.get('/employes', (req, res, next) => {
 
   });
 });
+
+/**
+ * Ajouter un employé
+ */
 
 router.post('/employe', (req, res, next) => {
 
@@ -102,6 +114,10 @@ router.post('/employe', (req, res, next) => {
   });
 });
 
+/**
+ * Modifier un employé
+ */
+
 router.put('/employe', (req, res, next) => {
 
   pg.connect(connectionString, (err, client, done) => {
@@ -155,6 +171,10 @@ router.put('/employe', (req, res, next) => {
 
   });
 });
+
+/**
+ * Retirer un employé
+ */
 
 router.delete('/employe', (req, res, next) => {
 

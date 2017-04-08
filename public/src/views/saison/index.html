@@ -32,47 +32,50 @@
 		</ul>
 
 		<div class="popup-background" if.bind="ajoutMatchAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerAjoutMatch()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="ajouterMatch()">
+        <button type="button" class="icon-btn" click.trigger="cancelerAjoutMatch()"><i class="material-icons">clear</i></button>
         <h3>Ajouter un match</h3>
-        <input value.bind="nouveauMatch.idmatch" placeholder="IDMatch"/>
-        <input type="date" value.bind="nouveauMatch.date | date" placeholder="Date"/>
-        <input type="time" value.bind="nouveauMatch.heure" placeholder="Heure"/>
+        <input value.bind="nouveauMatch.idmatch" placeholder="IDMatch" required/>
+        <input type="date" value.bind="nouveauMatch.date | date" placeholder="Date" required/>
+        <input type="time" value.bind="nouveauMatch.heure" placeholder="Heure" required/>
         <input value.bind="nouveauMatch.lieu" placeholder="Lieu"/>
-				<select value.bind="nouveauMatch.equipes[0]">
+				<select value.bind="nouveauMatch.equipes[0]" required>
 					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===nouveauMatch.equipes[1].nom && equipe.idligue===nouveauMatch.equipes[1].idligue" model.bind="equipe">${equipe.nom}</option>
 				</select>
-				<input if.bind="nouveauMatch.equipes[0].nom !== ''" type="number" value.bind="nouveauMatch.equipes[0].ptsmarques" placeholder="Nombre de points A"/>
-				<select value.bind="nouveauMatch.equipes[1]">
+				<input if.bind="nouveauMatch.equipes[0].nom !== ''" type="number" value.bind="nouveauMatch.equipes[0].ptsmarques" placeholder="Nombre de points A" min="0" required/>
+				<select value.bind="nouveauMatch.equipes[1]" required>
 					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===nouveauMatch.equipes[0].nom && equipe.idligue===nouveauMatch.equipes[0].idligue" model.bind="equipe">${equipe.nom}</option>
 				</select>
-        <input if.bind="nouveauMatch.equipes[1].nom !== ''" type="number" value.bind="nouveauMatch.equipes[1].ptsmarques" placeholder="Nombre de points B"/>
-        <button class="btn btn-inscription" click.trigger="ajouterMatch()">AJOUTER</button>
-      </div>
+        <input if.bind="nouveauMatch.equipes[1].nom !== ''" type="number" value.bind="nouveauMatch.equipes[1].ptsmarques" placeholder="Nombre de points B" min="0" required/>
+        <button type="submit" class="btn btn-inscription">AJOUTER</button>
+      </form>
     </div>
 
 		<div class="popup-background" if.bind="modificationSaisonAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerModificationSaison()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="modifierSaison()">
+        <button type="button" class="icon-btn" click.trigger="cancelerModificationSaison()"><i class="material-icons">clear</i></button>
         <h3>Modifier le saison ${saison.idsaison}</h3>
-        <input type="date" value.bind="saison.datelimitepaiement | date" placeholder="Date limite de paiement"/>
-        <input type="date" value.bind="saison.datecommencement | date" placeholder="Date de commencement"/>
-        <input type="date" value.bind="saison.datefin | date" placeholder="Date de fin"/>
-        <button class="btn btn-inscription" click.trigger="modifierSaison()">SAUVEGARDER</button>
-      </div>
+				<label>Date limite de paiement</label>
+        <input type="date" value.bind="saison.datelimitepaiement | date" placeholder="Date limite de paiement" required/>
+				<label>Date de commencement</label>
+        <input type="date" value.bind="saison.datecommencement | date" placeholder="Date de commencement" required/>
+				<label>Date de fin</label>
+        <input type="date" value.bind="saison.datefin | date" placeholder="Date de fin" required/>
+        <button type="submit" class="btn btn-inscription">SAUVEGARDER</button>
+      </form>
     </div>
 
 		<div class="popup-background" if.bind="modificationMatchAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerModificationMatch()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="modifierMatch()">
+        <button type="button" class="icon-btn" click.trigger="cancelerModificationMatch()"><i class="material-icons">clear</i></button>
         <h3>Modifier le match ${matchAModifier.idmatch}</h3>
-        <input type="date" value.bind="matchAModifier.date | date" placeholder="Date"/>
-        <input type="time" value.bind="matchAModifier.heure" placeholder="Heure"/>
-        <input value.bind="matchAModifier.lieu" placeholder="Lieu"/>
-				<input type="number" value.bind="matchAModifier.equipes[0].ptsmarques" placeholder="Nombre de points A"/>
-        <input type="number" value.bind="matchAModifier.equipes[1].ptsmarques" placeholder="Nombre de points B"/>
-        <button class="btn btn-inscription" click.trigger="modifierMatch()">SAUVEGARDER</button>
-      </div>
+        <input type="date" value.bind="matchAModifier.date | date" placeholder="Date" required/>
+        <input type="time" value.bind="matchAModifier.heure" placeholder="Heure" required/>
+        <input value.bind="matchAModifier.lieu" placeholder="Lieu" required/>
+				<input type="number" value.bind="matchAModifier.equipes[0].ptsmarques" placeholder="Nombre de points A" min="0" required/>
+        <input type="number" value.bind="matchAModifier.equipes[1].ptsmarques" placeholder="Nombre de points B" min="0" required/>
+        <button type="submit" class="btn btn-inscription">SAUVEGARDER</button>
+      </form>
     </div>
 
 	</section>

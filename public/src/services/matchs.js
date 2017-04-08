@@ -10,13 +10,26 @@ export class ServiceMatchs {
     });
   }
 
+	/**
+	 * Retourner les équipes d'un match
+	 * @param {string} idmatch 
+	 */
+
   getEquipes(idmatch) {
-    return this.http.fetch(`match/equipes?idmatch=${idmatch}`).then(response => response.json()).then(data => {
-      return data.map(equipe => {
-        return new Equipe(equipe);
-      }) || [];
-    });
+    return this.http
+			.fetch(`match/equipes?idmatch=${idmatch}`)
+			.then(response => response.json())
+			.then(data => {
+				return data.map(equipe => {
+					return new Equipe(equipe);
+				}) || [];
+			});
   }
+
+	/**
+	 * Retirer un match
+	 * @param {Match} match 
+	 */
 
   retirerMatch(match) {
     return this.http.fetch('match', {
@@ -25,6 +38,11 @@ export class ServiceMatchs {
     });
   }
 
+	/**
+	 * Modifier un match
+	 * @param {Match} match 
+	 */
+
 	modifierMatch(match) {
     return this.http.fetch('match', {
       method: 'put',
@@ -32,10 +50,19 @@ export class ServiceMatchs {
     });
   }
 
+	/**
+	 * Retourner les points d'une équipe dans un match
+	 * @param {Match} match 
+	 * @param {Equipe} equipe 
+	 */
+
 	getPoints(match, equipe) {
-		return this.http.fetch(`match/equipe/points?idmatch=${match.idmatch}&idligue=${equipe.idligue}&nom=${equipe.nom}`).then(response => response.json()).then(data => {
-			return data[0].ptsmarques;
-    });
+		return this.http
+			.fetch(`match/equipe/points?idmatch=${match.idmatch}&idligue=${equipe.idligue}&nom=${equipe.nom}`)
+			.then(response => response.json())
+			.then(data => {
+				return data[0].ptsmarques;
+			});
 	}
 
 }

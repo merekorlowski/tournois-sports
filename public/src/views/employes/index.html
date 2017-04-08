@@ -35,8 +35,8 @@
    
     <!-- Ajouter un employe -->
     <div class="popup-background" if.bind="ajoutAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerAjout()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="ajouter()">
+        <button type="button" class="icon-btn" click.trigger="cancelerAjout()"><i class="material-icons">clear</i></button>
         <h3>Ajouter un employé</h3>
 				<input value.bind="nouveauEmploye.idemploye" placeholder="IDEmploye" required/>
         <input value.bind="nouveauEmploye.nom" placeholder="Nom" required/>
@@ -45,14 +45,14 @@
 				<input if.bind="nouveauEmploye.role==='Arbitre'" type="number" value.bind="nouveauEmploye.nbrannees" placeholder="Nombre d'années" required/>
 				<input if.bind="nouveauEmploye.role==='Gestionnaire' && employe.numtel !== 'undefined'" value.bind="nouveauEmploye.numtel" placeholder="(XXX) XXX-XXXX"/>
 				<input if.bind="nouveauEmploye.role==='Gestionnaire' && employe.courriel !== 'undefined'" value.bind="nouveauEmploye.courriel" placeholder="example@gmail.com"/>
-        <button class="btn btn-inscription" click.trigger="ajouter()">AJOUTER</button>
-      </div>
+        <button class="btn btn-inscription">AJOUTER</button>
+      </form>
     </div>
 
 		<!-- Modifier un employe -->
     <div class="popup-background" if.bind="modificationAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerModification()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="modifier()">
+        <button type="button" class="icon-btn" click.trigger="cancelerModification()"><i class="material-icons">clear</i></button>
         <h3>Modifier l'employé ${employeAModifier.idemploye}</h3>
         <input value.bind="employeAModifier.nom" placeholder="Nom" required/>
         <input value.bind="employeAModifier.prenom" placeholder="Prénom" required/>
@@ -60,8 +60,8 @@
 				<input if.bind="employeAModifier.role==='Arbitre'" type="number" value.bind="employeAModifier.nbrannees" placeholder="Nombre d'années" required/>
 				<input if.bind="employeAModifier.role==='Gestionnaire'" value.bind="employeAModifier.numtel" placeholder="(XXX) XXX-XXXX"/>
 				<input if.bind="employeAModifier.role==='Gestionnaire'" value.bind="employeAModifier.courriel" placeholder="example@gmail.com"/>
-        <button type="submit" class="btn btn-inscription" click.trigger="modifier()">SAUVEGARDER</button>
-      </div>
+        <button type="submit" class="btn btn-inscription">SAUVEGARDER</button>
+      </form>
     </div>
 
   </section>

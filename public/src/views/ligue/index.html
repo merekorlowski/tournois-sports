@@ -40,44 +40,46 @@
 
 		<!-- Modifier la ligue -->
     <div class="popup-background" if.bind="modificationLigueAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerModificationLigue()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="modifierLigue()">
+        <button type="button" class="icon-btn" click.trigger="cancelerModificationLigue()"><i class="material-icons">clear</i></button>
         <h3>Modifier le ligue ${ligue.idligue}</h3>
-				<select value.bind="ligue.niveaudifficulte">		
+				<select value.bind="ligue.niveaudifficulte" required>		
 					<option value="C">Compétitive</option>
 					<option value="R">Récréative</option>
 				</select>
-				<button class="btn btn-inscription" click.trigger="modifierLigue()">SAUVEGARDER</button>
-      </div>
+				<button type="submit" class="btn btn-inscription">SAUVEGARDER</button>
+      </form>
     </div>
 
 		<!-- Ajouter une saison -->
     <div class="popup-background" if.bind="ajoutSaisonAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerAjoutSaison()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="ajouterSaison()">
+        <button type="button" class="icon-btn" click.trigger="cancelerAjoutSaison()"><i class="material-icons">clear</i></button>
         <h3>Ajouter une saison</h3>
-				<input value.bind="nouveauSaison.idsaison" placeholder="IDSaison"/>
-				<label>Date limite de paiement:</label><input type="date" value.bind="nouveauSaison.datelimitepaiement"/>
-				<label>Date de commencement:</label><input type="date" value.bind="nouveauSaison.datecommencement"/>
-				<label>Date de fin:</label><input type="date" value.bind="nouveauSaison.datefin"/>
-        <button class="btn btn-inscription" click.trigger="ajouterSaison()">AJOUTER</button>
-      </div>
+				<input value.bind="nouveauSaison.idsaison" placeholder="IDSaison" required/>
+				<label>Date limite de paiement</label><input type="date" value.bind="nouveauSaison.datelimitepaiement" required/>
+				<label>Date de commencement</label><input type="date" value.bind="nouveauSaison.datecommencement" required/>
+				<label>Date de fin</label><input type="date" value.bind="nouveauSaison.datefin"/>
+        <button type="submit" class="btn btn-inscription">AJOUTER</button>
+      </form>
     </div>
 
-		 <!-- Ajouter unw equipe -->
+		 <!-- Ajouter une equipe -->
     <div class="popup-background" if.bind="ajoutEquipeAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerAjoutEquipe()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="ajouterEquipe()">
+        <button type="button" class="icon-btn" click.trigger="cancelerAjoutEquipe()"><i class="material-icons">clear</i></button>
         <h3>Ajouter un équipe</h3>
-				<input value.bind="nouveauEquipe.nom" placeholder="Nom"/>
-				<select value.bind="nouveauEquipe.idusager">
+				<input value.bind="nouveauEquipe.nom" placeholder="Nom" required/>
+				<select value.bind="nouveauEquipe.idusager" required>
 					<option value="">Gerant</option>
 					<option repeat.for="gerant of gerants" model.bind="gerant.idusager">${gerant.idusager}</option>
 				</select>
-				<input type="number" value.bind="nouveauEquipe.nbrmaxjoueurs" placeholder="Nombre maximums de joueurs"/>
-				<input type="number" value.bind="nouveauEquipe.nbrminjoueurs" placeholder="Nombre minimums de joueurs"/>
-        <button class="btn btn-inscription" click.trigger="ajouterEquipe()">AJOUTER</button>
-      </div>
+				<input type="number" value.bind="nouveauEquipe.nbrmaxjoueurs" 
+					placeholder="Nombre maximums de joueurs" min.bind="nouveauEquipe.nbrminjoueurs" max="30" required/>
+				<input type="number" value.bind="nouveauEquipe.nbrminjoueurs" 
+					placeholder="Nombre minimums de joueurs" min="0" max.bind="nouveauEquipe.nbrmaxjoueurs" required/>
+        <button type="submit" class="btn btn-inscription">AJOUTER</button>
+      </form>
     </div>
 
 	</section>

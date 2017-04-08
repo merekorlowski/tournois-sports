@@ -13,35 +13,46 @@ export class ServiceRequetes {
     });
   }
 
+	/**
+	 * Retourner les résultats d'une requête
+	 * @param {number} numero 
+	 */
+
   executer(numero) {
 		if (numero < 10) {
-			return this.http.fetch(`requete?numero=${numero}`).then(response => response.json()).then(data => {
-				return data.map(element => {
-					return element[`requete_${numero}`];
-				}) || [];
-			});
+			return this.http
+				.fetch(`requete?numero=${numero}`)
+				.then(response => response.json())
+				.then(data => {
+					return data.map(element => {
+						return element[`requete_${numero}`];
+					}) || [];
+				});
 		} else {
 			if (numero === 10) {
-				return this.http.fetch('requete', {
-					method: 'post',
-					body: json({numero: numero})
-				}).then(response => response.json()).then(data => {
-					return [data.message];
-				});
+				return this.http
+					.fetch('requete', {
+						method: 'post',
+						body: json({numero: numero})
+					}).then(response => response.json()).then(data => {
+						return [data.message];
+					});
 			} else if (numero === 11) {
-				return this.http.fetch('requete', {
-					method: 'delete',
-					body: json({numero: numero})
-				}).then(response => response.json()).then(data => {
-					return [data.message];
-				});
+				return this.http
+					.fetch('requete', {
+						method: 'delete',
+						body: json({numero: numero})
+					}).then(response => response.json()).then(data => {
+						return [data.message];
+					});
 			} else {
-				return this.http.fetch('requete', {
-					method: 'put',
-					body: json({numero: numero})
-				}).then(response => response.json()).then(data => {
-					return [data.message];
-				});
+				return this.http
+					.fetch('requete', {
+						method: 'put',
+						body: json({numero: numero})
+					}).then(response => response.json()).then(data => {
+						return [data.message];
+					});
 			}
 		}
 	}

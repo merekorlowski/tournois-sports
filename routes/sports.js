@@ -24,7 +24,7 @@ router.get('/sports', (req, res, next) => {
     const query = client.query(`
       SELECT * 
       FROM SPORTSDB.Sport
-      WHERE nom LIKE '%${req.query.query}%'
+      WHERE LOWER(nom) LIKE LOWER('%${req.query.query}%')
       ORDER BY nom ${req.query.sort}
     `);
 

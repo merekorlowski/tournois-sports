@@ -94,8 +94,8 @@ router.delete('/match', (req, res, next) => {
 
     const query = client.query(`
       DELETE
-      FROM SPORTSDB.Saison
-      WHERE idsaison = '${req.body.idsaison}'
+      FROM SPORTSDB.Match
+      WHERE idmatch = '${req.body.idmatch}'
     `);
 
     // After all data is returned, close connection and return results

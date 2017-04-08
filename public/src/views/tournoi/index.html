@@ -47,46 +47,49 @@
 		</div>
 
 		<div class="popup-background" if.bind="modificationTournoiAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerModificationTournoi()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="modifierTournoi()">
+        <button type="button" class="icon-btn" click.trigger="cancelerModificationTournoi()"><i class="material-icons">clear</i></button>
         <h3>Modifier le tournoi ${tournoi.idtournoi}</h3>
-        <input value.bind="tournoi.oeuvrecharite" placeholder="Oeuvre de charité"/>
-        <input type="date" value.bind="tournoi.datedebut | date" placeholder="Date de début"/>
-        <input type="date" value.bind="tournoi.datefin | date" placeholder="Date de fin"/>
-        <button class="btn btn-inscription" click.trigger="modifierTournoi()">SAUVEGARDER</button>
-      </div>
+				<label>Oeuvre de charité</label>
+        <input value.bind="tournoi.oeuvrecharite" placeholder="Oeuvre de charité" required/>
+				<label>Date de début</label>
+        <input type="date" value.bind="tournoi.datedebut | date" placeholder="Date de début" required/>
+				<label>Date de fin</label>
+        <input type="date" value.bind="tournoi.datefin | date" placeholder="Date de fin" required/>
+        <button type="submit" class="btn btn-inscription">SAUVEGARDER</button>
+      </form>
     </div>
 
 		<div class="popup-background" if.bind="ajoutMatchAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerAjoutMatch()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="ajouterMatch()">
+        <button type="button" class="icon-btn" click.trigger="cancelerAjoutMatch()"><i class="material-icons">clear</i></button>
         <h3>Ajouter un match</h3>
-        <input value.bind="nouveauMatch.idmatch" placeholder="IDMatch"/>
-        <input type="date" value.bind="nouveauMatch.date | date" placeholder="Date"/>
-        <input type="time" value.bind="nouveauMatch.heure" placeholder="Heure"/>
-        <input value.bind="nouveauMatch.lieu" placeholder="Lieu"/>
-				<select value.bind="equipeA">
+        <input value.bind="nouveauMatch.idmatch" placeholder="IDMatch" required/>
+        <input type="date" value.bind="nouveauMatch.date | date" placeholder="Date" required/>
+        <input type="time" value.bind="nouveauMatch.heure" placeholder="Heure" required/>
+        <input value.bind="nouveauMatch.lieu" placeholder="Lieu" required/>
+				<select value.bind="equipeA" required>
 					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===equipeB.nom && equipe.idligue===equipeB.idligue" model.bind="equipe">${equipe.nom}</option>
 				</select>
-				<input if.bind="equipeA.nom !== ''" type="number" value.bind="equipeA.ptsmarques" placeholder="Nombre de points A"/>
-				<select value.bind="equipeB">
+				<input if.bind="equipeA.nom !== ''" type="number" value.bind="equipeA.ptsmarques" placeholder="Nombre de points A" min="0" required/>
+				<select value.bind="equipeB" required>
 					<option repeat.for="equipe of equipes" disabled.bind="equipe.nom===equipeA.nom && equipe.idligue===equipeA.idligue" model.bind="equipe">${equipe.nom}</option>
 				</select>
-        <input if.bind="equipeB.nom !== ''" type="number" value.bind="equipeB.ptsmarques" placeholder="Nombre de points B"/>
-        <button class="btn btn-inscription" click.trigger="ajouterMatch()">AJOUTER</button>
-      </div>
+        <input if.bind="equipeB.nom !== ''" type="number" value.bind="equipeB.ptsmarques" placeholder="Nombre de points B" min="0" required/>
+        <button type="submit" class="btn btn-inscription">AJOUTER</button>
+      </form>
     </div>
 
 		<div class="popup-background" if.bind="ajoutCommanditaireAffiche">
-      <div class="popup">
-        <button class="icon-btn" click.trigger="cancelerAjoutCommanditaire()"><i class="material-icons">clear</i></button>
+      <form class="popup" submit.delegate="ajouterCommanditaire()">
+        <button type="button" class="icon-btn" click.trigger="cancelerAjoutCommanditaire()"><i class="material-icons">clear</i></button>
         <h3>Ajouter un commanditaire</h3>
-        <input value.bind="nouveauCommanditaire.idcommanditaire" placeholder="IDCommanditaire"/>
-        <input value.bind="nouveauCommanditaire.nom" placeholder="Nom"/>
-        <input value.bind="nouveauCommanditaire.numtel" placeholder="(XXX) XXX-XXXX"/>
-        <input value.bind="nouveauCommanditaire.contribution" placeholder="Contribution"/>
-        <button class="btn btn-inscription" click.trigger="ajouterCommanditaire()">AJOUTER</button>
-      </div>
+        <input value.bind="nouveauCommanditaire.idcommanditaire" placeholder="IDCommanditaire" required/>
+        <input value.bind="nouveauCommanditaire.nom" placeholder="Nom" required/>
+        <input value.bind="nouveauCommanditaire.numtel" placeholder="(XXX) XXX-XXXX" required/>
+        <input value.bind="nouveauCommanditaire.contribution" placeholder="Contribution" required/>
+        <button type="submit" class="btn btn-inscription">AJOUTER</button>
+      </form>
     </div>
 	
 	</section>
